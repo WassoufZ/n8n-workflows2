@@ -1,0 +1,1807 @@
+[
+  {
+    "id": "C01",
+    "type": "carousel",
+    "slug": "same_behavior_different_reasons",
+    "name": "Same Behavior, Different Reasons",
+    "name_ar": "السلوك نفسه، والأسباب مختلفة",
+    "pillar": "P1",
+    "alt_pillars": [
+      "P6"
+    ],
+    "funnel_stage": "reach",
+    "audience_segment": "Pattern explorer",
+    "cta_tier": "T1",
+    "cta_tier_allowed": [
+      "T0",
+      "T1",
+      "T2"
+    ],
+    "save_share_trigger": "SEND: 'Send this to the friend who always says yes.' Recognition of someone else drives DM sends (IG's strongest reach signal). Secondary: comment 1/2/3.",
+    "variables": {
+      "behavior_bank": "BEHAVIOR_BANK (7 behaviors x 3 reasons, EN + AR)"
+    },
+    "recommended_hook_ids": [
+      "H01",
+      "H02",
+      "H05",
+      "H06",
+      "H07",
+      "H08"
+    ],
+    "ar_notes": "Use the approved AR difference block for 'say no'. Reasons in nominal or third-person form (أحدهم / آخر / ثالث) so no gendered 'you'. Right-aligned; numerals ٠١ ٠٢ ٠٣.",
+    "compliance": [
+      "Reasons are hedged ('may', 'one person'), never diagnoses of the viewer.",
+      "No clinical words (anxiety, trauma, codependency, disorder)."
+    ],
+    "slide_count": 8,
+    "canvas": {
+      "instagram": "1080x1350 JPG",
+      "tiktok_photo": "1080x1920 JPG"
+    },
+    "slides_or_beats": [
+      {
+        "n": 1,
+        "role": "hook",
+        "layout": "L1",
+        "instruction": "Open loop on the shared behavior. Default headline: 'Same behavior. Different reasons.' Sub-line names it: 'Three people struggle to say no.'",
+        "max_chars_en": 60,
+        "max_chars_ar": 54,
+        "visual": "Hero object: three tall crystal points side by side, one lit."
+      },
+      {
+        "n": 2,
+        "role": "rehook_scene",
+        "layout": "L2",
+        "instruction": "The behavior in one everyday second-person moment ('Someone asks for a favor. You say yes before they finish the sentence.'). Must work as a standalone hook: IG re-serves slide 2 to people who skipped slide 1.",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Paper; numeral 02."
+      },
+      {
+        "n": 3,
+        "role": "reason_1",
+        "layout": "L2",
+        "instruction": "Person one: the first reason, one sentence, plus what it may be protecting (<=10 words). Hedge with 'may'.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "Numeral 01; glyph Seed of Life."
+      },
+      {
+        "n": 4,
+        "role": "reason_2",
+        "layout": "L2",
+        "instruction": "Person two: a different reason. Same sentence shape as slide 3 so the contrast is visible.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "Numeral 02; glyph Metatron's Cube."
+      },
+      {
+        "n": 5,
+        "role": "reason_3",
+        "layout": "L2",
+        "instruction": "Person three: the third reason.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "Numeral 03; glyph Transmutation."
+      },
+      {
+        "n": 6,
+        "role": "turn_summary",
+        "layout": "L5",
+        "instruction": "All three side by side. Top band repeats the behavior; then 'The behavior looks the same. The pattern behind it may be completely different.' Each card <=64 chars.",
+        "max_chars_en": 64,
+        "max_chars_ar": 58,
+        "visual": "Scene; three glass cards."
+      },
+      {
+        "n": 7,
+        "role": "reflect",
+        "layout": "L4",
+        "instruction": "Question to the reader: 'Which one sounds closest: 1, 2 or 3?' plus one line on why the same advice ('just set boundaries') may fit one person and backfire for another.",
+        "max_chars_en": 110,
+        "max_chars_ar": 99,
+        "visual": "Quote-question, teal orb."
+      },
+      {
+        "n": 8,
+        "role": "cta",
+        "layout": "L8",
+        "instruction": "Tier copy + 'Your context changes the interpretation.' Disclaimer footer.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "CTA end card."
+      }
+    ],
+    "tiktok_photo_adaptation": "Re-render 1080x1920 from the same fields. Keep all 8 slides. Title (<=90 chars) = slide-1 headline + behavior. Put the search keyword (e.g. 'people pleasing', 'how to say no') on slide 1 or 2: TikTok reads on-image text."
+  },
+  {
+    "id": "C02",
+    "type": "carousel",
+    "slug": "which_line_is_yours",
+    "name": "Which Line Is Yours?",
+    "name_ar": "أي عبارة تشبهك؟",
+    "pillar": "P2",
+    "alt_pillars": [
+      "P6"
+    ],
+    "funnel_stage": "reach",
+    "audience_segment": "Self-discovery seeker",
+    "cta_tier": "T0",
+    "cta_tier_allowed": [
+      "T0",
+      "T2"
+    ],
+    "save_share_trigger": "COMMENT: 'Comment your number.' Numbered options turn a passive swipe into a one-tap comment; people also tag friends ('you're a 3').",
+    "variables": {
+      "question": "one of Q1-Q7, Q11, Q12 from quizContent.{en,ar}.ts (see exclusions)",
+      "options": "4 options + the steadiest option"
+    },
+    "recommended_hook_ids": [
+      "H10",
+      "H11",
+      "H12",
+      "H13",
+      "H14",
+      "H15",
+      "H16",
+      "H17",
+      "H39"
+    ],
+    "ar_notes": "Quote the founder's Arabic options from quizContent.ar.ts verbatim (they are first-person, so no gender issue for the reader). Hedged lines in nominal form.",
+    "compliance": [
+      "Never use the excluded distress options (QUIZ_EXCLUDE).",
+      "Hedged lines describe possibilities, never a verdict ('you have low self-worth' is banned)."
+    ],
+    "slide_count": 8,
+    "canvas": {
+      "instagram": "1080x1350 JPG",
+      "tiktok_photo": "1080x1920 JPG"
+    },
+    "slides_or_beats": [
+      {
+        "n": 1,
+        "role": "hook",
+        "layout": "L1",
+        "instruction": "The quiz question, verbatim or trimmed to <=60 chars ('Someone offers to help you. What usually happens?'). Sub-line: 'Pick the line that feels a little too familiar.'",
+        "max_chars_en": 60,
+        "max_chars_ar": 54,
+        "visual": "Scene; Cormorant italic question."
+      },
+      {
+        "n": 2,
+        "role": "frame",
+        "layout": "L2",
+        "instruction": "'This is 1 of the 12 questions in the MCC questionnaire. No right answers. Notice which line you pause on.'",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Paper."
+      },
+      {
+        "n": 3,
+        "role": "option_1",
+        "layout": "L2",
+        "instruction": "Option 1 verbatim (founder wording) + one hedged line 'For some people, this is about...'.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "Numeral 01."
+      },
+      {
+        "n": 4,
+        "role": "option_2",
+        "layout": "L2",
+        "instruction": "Option 2 + hedged line.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "Numeral 02."
+      },
+      {
+        "n": 5,
+        "role": "option_3",
+        "layout": "L2",
+        "instruction": "Option 3 + hedged line.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "Numeral 03."
+      },
+      {
+        "n": 6,
+        "role": "option_4",
+        "layout": "L2",
+        "instruction": "Option 4 + hedged line.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "Numeral 04."
+      },
+      {
+        "n": 7,
+        "role": "steady_option",
+        "layout": "L4",
+        "instruction": "The steadiest option from the same question ('I can receive it, say thank you, and let it be good.') + 'If this is you, notice what made it possible.' Keeps the post non-pathologizing.",
+        "max_chars_en": 110,
+        "max_chars_ar": 99,
+        "visual": "Scene, teal orb."
+      },
+      {
+        "n": 8,
+        "role": "cta",
+        "layout": "L8",
+        "instruction": "'Comment your number.' + 'One answer is one piece. A reading looks at all twelve together.' + tier copy.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "CTA end card."
+      }
+    ],
+    "tiktok_photo_adaptation": "Re-render 1080x1920. Keep 8 slides. Title = the question. Ask for the number in the description too ('Comment 1-5')."
+  },
+  {
+    "id": "C03",
+    "type": "carousel",
+    "slug": "which_center_is_calling_you",
+    "name": "Which Center Is Calling You?",
+    "name_ar": "أي مركز يطلب انتباهك؟",
+    "pillar": "P4",
+    "alt_pillars": [],
+    "funnel_stage": "trust",
+    "audience_segment": "Energy-curious",
+    "cta_tier": "T2",
+    "cta_tier_allowed": [
+      "T1",
+      "T2"
+    ],
+    "save_share_trigger": "SAVE: a complete 7-card reference set people come back to. Secondary: 'Comment the center you paused on.'",
+    "variables": {
+      "centers": "CENTERS (7, EN + AR: name, theme, 'you might notice', lesson)"
+    },
+    "recommended_hook_ids": [
+      "H25",
+      "H26",
+      "H27"
+    ],
+    "ar_notes": "Use the approved AR center names and themes. Use the neutral AR lessons in CENTERS, not the feminine file, unless the post is explicitly first-person.",
+    "compliance": [
+      "Mandatory L6 footnote: 'Reflective, not a medical measurement.'",
+      "No 'blocked/unblocked'. Never assign a state to the viewer.",
+      "No organ, illness or symptom words on any center card."
+    ],
+    "slide_count": 10,
+    "canvas": {
+      "instagram": "1080x1350 JPG",
+      "tiktok_photo": "1080x1920 JPG"
+    },
+    "slides_or_beats": [
+      {
+        "n": 1,
+        "role": "hook",
+        "layout": "L1",
+        "instruction": "Approved line: 'You know about the seven energy centers. But what about yours?' or 'Which center is asking for your attention?'",
+        "max_chars_en": 60,
+        "max_chars_ar": 54,
+        "visual": "Aligned Chakras glyph as hero, brand gradient."
+      },
+      {
+        "n": 2,
+        "role": "how_to_read",
+        "layout": "L2",
+        "instruction": "'Read each card. Notice the one you pause on.' Support line: 'Reflective and spiritual, not a medical measurement.'",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Paper."
+      },
+      {
+        "n": 3,
+        "role": "center_root",
+        "layout": "L6 single",
+        "instruction": "Root: theme + 'You might notice...' + lesson (one line each).",
+        "max_chars_en": 160,
+        "max_chars_ar": 144,
+        "visual": "Single-centre variant, no state pin."
+      },
+      {
+        "n": 4,
+        "role": "center_sacral",
+        "layout": "L6 single",
+        "instruction": "Sacral: same structure.",
+        "max_chars_en": 160,
+        "max_chars_ar": 144,
+        "visual": ""
+      },
+      {
+        "n": 5,
+        "role": "center_solar_plexus",
+        "layout": "L6 single",
+        "instruction": "Solar Plexus.",
+        "max_chars_en": 160,
+        "max_chars_ar": 144,
+        "visual": ""
+      },
+      {
+        "n": 6,
+        "role": "center_heart",
+        "layout": "L6 single",
+        "instruction": "Heart.",
+        "max_chars_en": 160,
+        "max_chars_ar": 144,
+        "visual": ""
+      },
+      {
+        "n": 7,
+        "role": "center_throat",
+        "layout": "L6 single",
+        "instruction": "Throat.",
+        "max_chars_en": 160,
+        "max_chars_ar": 144,
+        "visual": ""
+      },
+      {
+        "n": 8,
+        "role": "center_third_eye",
+        "layout": "L6 single",
+        "instruction": "Third Eye.",
+        "max_chars_en": 160,
+        "max_chars_ar": 144,
+        "visual": ""
+      },
+      {
+        "n": 9,
+        "role": "center_crown",
+        "layout": "L6 single",
+        "instruction": "Crown.",
+        "max_chars_en": 160,
+        "max_chars_ar": 144,
+        "visual": ""
+      },
+      {
+        "n": 10,
+        "role": "cta",
+        "layout": "L8",
+        "instruction": "'Which one did you pause on?' + 'Your reading maps all seven from your own answers.' + tier copy + footnote.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "CTA end card."
+      }
+    ],
+    "tiktok_photo_adaptation": "TikTok: merge to 8 by pairing Root+Sacral and Third Eye+Crown on two slides (L6 list variant), or keep 10: photo mode allows 35. Title: 'Which energy center is calling you?'"
+  },
+  {
+    "id": "C04",
+    "type": "carousel",
+    "slug": "the_crystal_shortcut",
+    "name": "The Crystal Shortcut",
+    "name_ar": "الطريق المختصر إلى الحجر",
+    "pillar": "P3",
+    "alt_pillars": [],
+    "funnel_stage": "reach",
+    "audience_segment": "Crystal enthusiast",
+    "cta_tier": "T1",
+    "cta_tier_allowed": [
+      "T1",
+      "T2"
+    ],
+    "save_share_trigger": "SAVE + SEND: a myth-flip plus one surprising fact ('most citrine sold today began as amethyst') is classic save material; crystal people send it to the friend who buys stones for everything.",
+    "variables": {
+      "crystal": "CRYSTAL_SHORTCUTS (18 live library stones)",
+      "source": "shared/crystals/<slug>.ts: misunderstood, fit, facts, perspective"
+    },
+    "recommended_hook_ids": [
+      "H18",
+      "H19",
+      "H20",
+      "H21",
+      "H22",
+      "H23",
+      "H24"
+    ],
+    "ar_notes": "Arabic library articles exist for most stones; use their wording. For black obsidian and shungite, do not use 'protection' framing in Arabic (choose another stone).",
+    "compliance": [
+      "Crystals are 'associated with' / 'in contemporary crystal practice'. Never: heals, attracts, protects you from, cleanses, raises your vibration.",
+      "Facts only from the stone's library file; never invent history.",
+      "Do not describe how a reading chooses stones (method stays private)."
+    ],
+    "slide_count": 8,
+    "canvas": {
+      "instagram": "1080x1350 JPG",
+      "tiktok_photo": "1080x1920 JPG"
+    },
+    "slides_or_beats": [
+      {
+        "n": 1,
+        "role": "hook",
+        "layout": "L1",
+        "instruction": "'Before you buy {crystal} for {wish}, read this.' (or the fact as hook).",
+        "max_chars_en": 60,
+        "max_chars_ar": 54,
+        "visual": "Hero crystal cut-out from the library photo, halo."
+      },
+      {
+        "n": 2,
+        "role": "shortcut",
+        "layout": "L2",
+        "instruction": "'The common shortcut: {wish} -> {crystal}.' + 'But the same wish can come from opposite places.' (library wording)",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Paper."
+      },
+      {
+        "n": 3,
+        "role": "person_a",
+        "layout": "L2",
+        "instruction": "For whom the traditional association may be exactly right (from 'misunderstood').",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Numeral 01."
+      },
+      {
+        "n": 4,
+        "role": "person_b",
+        "layout": "L2",
+        "instruction": "For whom it may deepen the very loop they want to leave.",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Numeral 02."
+      },
+      {
+        "n": 5,
+        "role": "may_not_fit",
+        "layout": "L3",
+        "instruction": "'When {crystal} may not be what you need': 2-3 items from the 'fit' section.",
+        "max_chars_en": 56,
+        "max_chars_ar": 50,
+        "visual": "List, 3 items max, 56 chars each."
+      },
+      {
+        "n": 6,
+        "role": "fact",
+        "layout": "L4",
+        "instruction": "One verified fact from 'At a glance' or 'history' only (name origin, mineral, a museum-documented use).",
+        "max_chars_en": 110,
+        "max_chars_ar": 99,
+        "visual": "Scene."
+      },
+      {
+        "n": 7,
+        "role": "mcc_view",
+        "layout": "L4",
+        "instruction": "Founder line: 'In My Crystal Code, the person comes first, the stone second.'",
+        "max_chars_en": 110,
+        "max_chars_ar": 99,
+        "visual": "Scene, Seed of Life ghost."
+      },
+      {
+        "n": 8,
+        "role": "cta",
+        "layout": "L8",
+        "instruction": "T1: 'Read the full {crystal} page in the free Crystal Library. Link in bio.' or T2.",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "CTA end card."
+      }
+    ],
+    "tiktok_photo_adaptation": "Re-render 1080x1920; title = '{crystal} meaning: the shortcut most people take'. Keep 8."
+  },
+  {
+    "id": "C05",
+    "type": "carousel",
+    "slug": "sample_reading_walkthrough",
+    "name": "Sample-Reading Walkthrough",
+    "name_ar": "جولة في قراءة نموذجية",
+    "pillar": "P5",
+    "alt_pillars": [],
+    "funnel_stage": "convert",
+    "audience_segment": "Warm, all segments",
+    "cta_tier": "T2",
+    "cta_tier_allowed": [
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "save_share_trigger": "SAVE: 'Save this to read before you decide.' It is the product tour; pin it to the profile grid.",
+    "variables": {
+      "pages": "lina-01 energy story (Lite+Full), lina-02 pattern under pressure (Full; previewed in Lite), lina-03 energy-center map (Lite light / Full detailed), lina-04 focus centers (Full), lina-05 crystal protocol (Lite+Full), lina-06 seven-day reset (Full)"
+    },
+    "recommended_hook_ids": [
+      "H31",
+      "H32",
+      "H33",
+      "H35"
+    ],
+    "ar_notes": "BLOCKED for Arabic until an Arabic Lina sample is rendered (landing.ar.ts sample.pages is empty). Fallback: EN pages with the label «العيّنة بالإنجليزية حاليًا · لينا شخصية خيالية», or use C07 instead. Never mention the birth chart in Arabic.",
+    "compliance": [
+      "'Illustrative sample · Lina is fictional' on every page slide and in the caption.",
+      "Tier badges must match the tier matrix exactly.",
+      "Delivery is 'within minutes', never a number of minutes."
+    ],
+    "slide_count": 9,
+    "canvas": {
+      "instagram": "1080x1350 JPG",
+      "tiktok_photo": "1080x1920 JPG"
+    },
+    "slides_or_beats": [
+      {
+        "n": 1,
+        "role": "hook",
+        "layout": "L1",
+        "instruction": "'Curious what a personal reading actually looks like?' + pill 'ILLUSTRATIVE SAMPLE'.",
+        "max_chars_en": 60,
+        "max_chars_ar": 54,
+        "visual": "Two-page fan of lina-01 and lina-03."
+      },
+      {
+        "n": 2,
+        "role": "what_it_is",
+        "layout": "L3",
+        "instruction": "4 items: 12 questions in 4 sections; a private web link by email within minutes; nothing physical ships; reflective guidance, not advice.",
+        "max_chars_en": 56,
+        "max_chars_ar": 50,
+        "visual": "List."
+      },
+      {
+        "n": 3,
+        "role": "page_energy_story",
+        "layout": "L7",
+        "instruction": "lina-01. Callout: 'Your energy story'. Tier badge: Lite + Full.",
+        "max_chars_en": 34,
+        "max_chars_ar": 31,
+        "visual": "Mandatory label: ILLUSTRATIVE SAMPLE · LINA IS FICTIONAL."
+      },
+      {
+        "n": 4,
+        "role": "page_pattern",
+        "layout": "L7",
+        "instruction": "lina-02. Callout: 'Your pattern under pressure'. Badge: Full (previewed in Lite).",
+        "max_chars_en": 34,
+        "max_chars_ar": 31,
+        "visual": "Same label."
+      },
+      {
+        "n": 5,
+        "role": "page_map",
+        "layout": "L7",
+        "instruction": "lina-03. Callout: 'Your 7 centers, mapped'. Badge: Lite (light) / Full (detailed).",
+        "max_chars_en": 34,
+        "max_chars_ar": 31,
+        "visual": "Same label."
+      },
+      {
+        "n": 6,
+        "role": "page_focus",
+        "layout": "L7",
+        "instruction": "lina-04. Callout: 'Your focus centers'. Badge: Full.",
+        "max_chars_en": 34,
+        "max_chars_ar": 31,
+        "visual": "Same label."
+      },
+      {
+        "n": 7,
+        "role": "page_crystals",
+        "layout": "L7",
+        "instruction": "lina-05. Callout: 'Your four-crystal protocol'. Badge: Lite + Full.",
+        "max_chars_en": 34,
+        "max_chars_ar": 31,
+        "visual": "Same label."
+      },
+      {
+        "n": 8,
+        "role": "page_reset",
+        "layout": "L7",
+        "instruction": "lina-06. Callout: 'Your seven-day reset'. Badge: Full.",
+        "max_chars_en": 34,
+        "max_chars_ar": 31,
+        "visual": "Same label."
+      },
+      {
+        "n": 9,
+        "role": "cta",
+        "layout": "L8",
+        "instruction": "Two price cards: Lite $8.88 / Full $18.88 launch price (list $24.88) + 'Upgrade later for the difference.' + 'Lina is fictional. Your reading depends on your answers.'",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "CTA end card, two cards."
+      }
+    ],
+    "tiktok_photo_adaptation": "Re-render 1080x1920 with the page at 760px wide. Keep 9. Title: 'What a personal crystal & energy-center reading looks like (sample)'."
+  },
+  {
+    "id": "C06",
+    "type": "carousel",
+    "slug": "the_loop_behind_it",
+    "name": "The Loop Behind It",
+    "name_ar": "الحلقة التي خلفه",
+    "pillar": "P6",
+    "alt_pillars": [
+      "P1"
+    ],
+    "funnel_stage": "convert",
+    "audience_segment": "Pattern explorer + money angle",
+    "cta_tier": "T3",
+    "cta_tier_allowed": [
+      "T0",
+      "T3"
+    ],
+    "save_share_trigger": "SAVE: a named mental model (need, belief, feeling, response, result) that people want to reuse; COMMENT: 'Where does yours get stuck?'",
+    "variables": {
+      "scenario": "SCENARIO_BANK_MONEY",
+      "loop": "A need -> a belief -> a feeling -> a response -> a result (approved)"
+    },
+    "recommended_hook_ids": [
+      "H36",
+      "H37",
+      "H38",
+      "H39",
+      "H40"
+    ],
+    "ar_notes": "Approved AR abundance block exists (حاجة، معتقد، شعور، استجابة، نتيجة). Scenario in Gulf context works well (the bill, family support, setting a price).",
+    "compliance": [
+      "Mandatory: 'not a prediction of your financial future' + 'not financial advice'.",
+      "No income figures, no 'attract', 'manifest', 'abundance flows', '8.88 is lucky'.",
+      "The illustrative loop is labeled 'An example' and never presented as a real person."
+    ],
+    "slide_count": 8,
+    "canvas": {
+      "instagram": "1080x1350 JPG",
+      "tiktok_photo": "1080x1920 JPG"
+    },
+    "slides_or_beats": [
+      {
+        "n": 1,
+        "role": "hook",
+        "layout": "L1",
+        "instruction": "Approved: 'What if your money block isn't where you think it is?'",
+        "max_chars_en": 60,
+        "max_chars_ar": 54,
+        "visual": "Transmutation glyph hero."
+      },
+      {
+        "n": 2,
+        "role": "scene",
+        "layout": "L2",
+        "instruction": "One everyday money moment in second person ('You know what you want to charge. Then you start typing the number.').",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Paper."
+      },
+      {
+        "n": 3,
+        "role": "need",
+        "layout": "L2",
+        "instruction": "01 A need (e.g. 'to feel safe being chosen').",
+        "max_chars_en": 100,
+        "max_chars_ar": 90,
+        "visual": "Numeral 01, loop diagram 1/5 lit."
+      },
+      {
+        "n": 4,
+        "role": "belief",
+        "layout": "L2",
+        "instruction": "02 A belief, in quotes, first person ('If I ask for more, they'll go elsewhere.').",
+        "max_chars_en": 100,
+        "max_chars_ar": 90,
+        "visual": "2/5 lit."
+      },
+      {
+        "n": 5,
+        "role": "feeling",
+        "layout": "L2",
+        "instruction": "03 A feeling ('A tightness while you type the number.').",
+        "max_chars_en": 100,
+        "max_chars_ar": 90,
+        "visual": "3/5 lit."
+      },
+      {
+        "n": 6,
+        "role": "response",
+        "layout": "L2",
+        "instruction": "04 A response ('You lower the price before anyone asks.').",
+        "max_chars_en": 100,
+        "max_chars_ar": 90,
+        "visual": "4/5 lit."
+      },
+      {
+        "n": 7,
+        "role": "result",
+        "layout": "L4",
+        "instruction": "05 A result that quietly confirms the belief. Then: 'Where does yours get stuck: recognizing, committing, asking, or receiving?'",
+        "max_chars_en": 110,
+        "max_chars_ar": 99,
+        "visual": "Loop closes."
+      },
+      {
+        "n": 8,
+        "role": "cta",
+        "layout": "L8",
+        "instruction": "Single offer card Full + mandatory line: 'It's not a prediction of your financial future. It's a different way to understand your relationship with money.'",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "CTA end card, single offer."
+      }
+    ],
+    "tiktok_photo_adaptation": "Re-render 1080x1920. Keep 8. Title: 'Your money block might not be where you think'."
+  },
+  {
+    "id": "C07",
+    "type": "carousel",
+    "slug": "how_deep_lite_vs_full",
+    "name": "How Deep Do You Want to Go? (Lite vs Full)",
+    "name_ar": "ما العمق الذي يناسبك؟",
+    "pillar": "P5",
+    "alt_pillars": [],
+    "funnel_stage": "convert",
+    "audience_segment": "Warm, deciding",
+    "cta_tier": "T2",
+    "cta_tier_allowed": [
+      "T2",
+      "T3"
+    ],
+    "save_share_trigger": "SAVE: a decision aid ('save this for when you're ready'). Pin to profile.",
+    "variables": {
+      "tiers": "landing pricing block (verified tier matrix)"
+    },
+    "recommended_hook_ids": [
+      "H34",
+      "H32",
+      "H35"
+    ],
+    "ar_notes": "Arabic version drops the birth chart and birth crystal entirely (UAE astrology-advertising rule, D 2.3). Lite in AR: energy story, 7 lighter center cards, 4-crystal protocol.",
+    "compliance": [
+      "Prices and contents must match the tier matrix.",
+      "Launch-price deadline only if the owner has committed to a date (A §2)."
+    ],
+    "slide_count": 7,
+    "canvas": {
+      "instagram": "1080x1350 JPG",
+      "tiktok_photo": "1080x1920 JPG"
+    },
+    "slides_or_beats": [
+      {
+        "n": 1,
+        "role": "hook",
+        "layout": "L1",
+        "instruction": "'$8.88 or $18.88: how deeply would you like to explore?'",
+        "max_chars_en": 60,
+        "max_chars_ar": 54,
+        "visual": "Two price glyphs."
+      },
+      {
+        "n": 2,
+        "role": "same_start",
+        "layout": "L2",
+        "instruction": "'Both start with the same 12 questions. You pay only at the end. Your reading arrives as a private link by email within minutes.'",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Paper."
+      },
+      {
+        "n": 3,
+        "role": "lite",
+        "layout": "L3",
+        "instruction": "Lite: energy story & snapshot; 7 center cards (lighter); 4-crystal protocol; birth chart + birth crystal (EN only). 'Best if you want an introduction.'",
+        "max_chars_en": 56,
+        "max_chars_ar": 50,
+        "visual": "List."
+      },
+      {
+        "n": 4,
+        "role": "full",
+        "layout": "L3",
+        "instruction": "Full: 7 detailed center cards + cross-center balance; focus centers; pattern under pressure; the Abundance Pattern; seven-day reset; final message. 'Best if a pattern keeps repeating.'",
+        "max_chars_en": 56,
+        "max_chars_ar": 50,
+        "visual": "List, 5 items."
+      },
+      {
+        "n": 5,
+        "role": "difference",
+        "layout": "L2",
+        "instruction": "One line: 'Deeper pattern sections and the seven-day reset belong to Full.' (EN may add: 'The birth chart belongs to Lite.')",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Paper."
+      },
+      {
+        "n": 6,
+        "role": "no_lose",
+        "layout": "L2",
+        "instruction": "'Start with Lite. Upgrade later for the difference.' + 'Full is $18.88 at launch (list $24.88).'",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Paper."
+      },
+      {
+        "n": 7,
+        "role": "cta",
+        "layout": "L8",
+        "instruction": "Two-card price block + fit note: 'Not a diagnosis or a verdict. A personalized starting point.'",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "CTA end card."
+      }
+    ],
+    "tiktok_photo_adaptation": "Re-render 1080x1920. Keep 7. Title: 'Lite or Full? What each reading includes'."
+  },
+  {
+    "id": "C08",
+    "type": "carousel",
+    "slug": "pattern_profile",
+    "name": "Pattern Profile: The {Pattern} in 5 Quiet Moments",
+    "name_ar": "{النمط} في خمس لحظات صغيرة",
+    "pillar": "P1",
+    "alt_pillars": [
+      "P5"
+    ],
+    "funnel_stage": "reach",
+    "audience_segment": "Pattern explorer",
+    "cta_tier": "T2",
+    "cta_tier_allowed": [
+      "T0",
+      "T2",
+      "T3"
+    ],
+    "save_share_trigger": "SEND + TAG: 'Send this to the {Pattern} in your life.' Identity labels are the most shared format in self-discovery.",
+    "variables": {
+      "pattern": "PATTERNS (7 real report labels from display-labels.ts)"
+    },
+    "recommended_hook_ids": [
+      "H09",
+      "H03",
+      "H04"
+    ],
+    "ar_notes": "Use the neutral form «نمط العطاء المُفرِط» etc. (PATTERNS.ar_public) instead of the gendered persona labels, unless the founder approves a feminine-only post.",
+    "compliance": [
+      "Labels are patterns, never diagnoses or personality verdicts.",
+      "Exclude 'The Exhausted One' from the public rotation (burnout drifts into health)."
+    ],
+    "slide_count": 9,
+    "canvas": {
+      "instagram": "1080x1350 JPG",
+      "tiktok_photo": "1080x1920 JPG"
+    },
+    "slides_or_beats": [
+      {
+        "n": 1,
+        "role": "hook",
+        "layout": "L1",
+        "instruction": "'The {Pattern}, in 5 quiet moments.' Sub: 'A pattern, not a verdict.'",
+        "max_chars_en": 60,
+        "max_chars_ar": 54,
+        "visual": "Owned glyph per pattern."
+      },
+      {
+        "n": 2,
+        "role": "definition",
+        "layout": "L2",
+        "instruction": "One plain-language line on what this pattern tends to look like (seed from the quiz line).",
+        "max_chars_en": 140,
+        "max_chars_ar": 126,
+        "visual": "Paper."
+      },
+      {
+        "n": 3,
+        "role": "moment_1",
+        "layout": "L2",
+        "instruction": "'You may notice...' moment 1: tiny, specific, everyday.",
+        "max_chars_en": 100,
+        "max_chars_ar": 90,
+        "visual": "Numeral 01."
+      },
+      {
+        "n": 4,
+        "role": "moment_2",
+        "layout": "L2",
+        "instruction": "Moment 2.",
+        "max_chars_en": 100,
+        "max_chars_ar": 90,
+        "visual": "Numeral 02."
+      },
+      {
+        "n": 5,
+        "role": "moment_3",
+        "layout": "L2",
+        "instruction": "Moment 3.",
+        "max_chars_en": 100,
+        "max_chars_ar": 90,
+        "visual": "Numeral 03."
+      },
+      {
+        "n": 6,
+        "role": "moment_4",
+        "layout": "L2",
+        "instruction": "Moment 4.",
+        "max_chars_en": 100,
+        "max_chars_ar": 90,
+        "visual": "Numeral 04."
+      },
+      {
+        "n": 7,
+        "role": "moment_5",
+        "layout": "L2",
+        "instruction": "Moment 5.",
+        "max_chars_en": 100,
+        "max_chars_ar": 90,
+        "visual": "Numeral 05."
+      },
+      {
+        "n": 8,
+        "role": "protect_and_steady",
+        "layout": "L4",
+        "instruction": "'What it may be protecting: {need}.' + 'The steadier version can sound like: {steady quiz line}.'",
+        "max_chars_en": 110,
+        "max_chars_ar": 99,
+        "visual": "Scene."
+      },
+      {
+        "n": 9,
+        "role": "cta",
+        "layout": "L8",
+        "instruction": "'A post can't tell you if this is your pattern. Your 12 answers can.' + T2 (or T3: 'your pattern under pressure is a chapter of MCC Full').",
+        "max_chars_en": 120,
+        "max_chars_ar": 108,
+        "visual": "CTA end card."
+      }
+    ],
+    "tiktok_photo_adaptation": "Re-render 1080x1920. Keep 9. Title: 'The Over Giver in 5 quiet moments'."
+  },
+  {
+    "id": "R01",
+    "type": "reel",
+    "slug": "three_people_one_behavior",
+    "name": "Three People, One Behavior",
+    "name_ar": "ثلاثة أشخاص، سلوك واحد",
+    "pillar": "P1",
+    "alt_pillars": [],
+    "funnel_stage": "reach",
+    "audience_segment": "Pattern explorer",
+    "cta_tier": "T0",
+    "cta_tier_allowed": [
+      "T0",
+      "T1"
+    ],
+    "save_share_trigger": "Comment 1/2/3; sends to friends.",
+    "variables": {
+      "behavior_bank": "BEHAVIOR_BANK"
+    },
+    "recommended_hook_ids": [
+      "H01",
+      "H02",
+      "H05",
+      "H07"
+    ],
+    "ar_notes": "Use the approved AR 'say no' reasons; other behaviors from BEHAVIOR_BANK.reasons_ar.",
+    "compliance": [
+      "No AI human faces; crystals as stand-ins.",
+      "AI label on."
+    ],
+    "duration_s": 28,
+    "canvas": "1080x1920 MP4 H.264, 30fps, -14 LUFS",
+    "production_mode": "ai_full",
+    "production_note": "Faceless. Three tall crystal points stand in for the three people (no AI humans). Image-to-video for the crystals, text-on-motion template for type, TTS voiceover.",
+    "voiceover_style": "Warm, unhurried, low-mid female voice; 140-150 wpm EN. AR: calm white MSA, no Egyptian/Levantine markers.",
+    "audio": "Original VO + licensed ambient pad at -22 dB; ends on a loop point.",
+    "slides_or_beats": [
+      {
+        "t": "0.0-1.5",
+        "role": "hook",
+        "on_screen_text": "'3 people can't say no.' (<=7 words)",
+        "voiceover": "'Three people can't say no.'",
+        "visual": "Dark stage, three crystal points; a light snaps onto the first (motion in the first 0.5s).",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "1.5-4.0",
+        "role": "setup",
+        "on_screen_text": "'Same behavior.'",
+        "voiceover": "'Same behavior.'",
+        "visual": "Slow push-in across all three.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "4.0-10.0",
+        "role": "reason_1",
+        "on_screen_text": "Reason 1, max 2 caption lines",
+        "voiceover": "Reason 1, one sentence.",
+        "visual": "Crystal 1 glows violet; others dim.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "10.0-16.0",
+        "role": "reason_2",
+        "on_screen_text": "Reason 2",
+        "voiceover": "Reason 2.",
+        "visual": "Crystal 2 glows.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "16.0-22.0",
+        "role": "reason_3",
+        "on_screen_text": "Reason 3",
+        "voiceover": "Reason 3.",
+        "visual": "Crystal 3 glows teal.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "22.0-26.0",
+        "role": "turn",
+        "on_screen_text": "'Different reasons.'",
+        "voiceover": "'The behavior looks the same. The pattern behind it may be completely different.'",
+        "visual": "All three lit, aura bloom.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "26.0-28.0",
+        "role": "cta_loop",
+        "on_screen_text": "'Which one are you? 1, 2 or 3?'",
+        "voiceover": "(silence or 'Which one are you?')",
+        "visual": "Cut back to the opening frame for a seamless loop.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      }
+    ]
+  },
+  {
+    "id": "R02",
+    "type": "reel",
+    "slug": "the_question_on_screen",
+    "name": "The Question on Screen (1 of 12)",
+    "name_ar": "سؤال واحد من ١٢",
+    "pillar": "P2",
+    "alt_pillars": [
+      "P6"
+    ],
+    "funnel_stage": "reach",
+    "audience_segment": "Self-discovery seeker",
+    "cta_tier": "T0",
+    "cta_tier_allowed": [
+      "T0",
+      "T2"
+    ],
+    "save_share_trigger": "Comment your number.",
+    "variables": {
+      "question": "quiz Q1-Q7, Q11, Q12 (minus QUIZ_EXCLUDE)"
+    },
+    "recommended_hook_ids": [
+      "H10",
+      "H11",
+      "H13",
+      "H14",
+      "H15",
+      "H16",
+      "H17",
+      "H27"
+    ],
+    "ar_notes": "Use the AR quiz wording verbatim. Arabic captions: max 4 words / 24 chars per line (C §3).",
+    "compliance": [
+      "QUIZ_EXCLUDE applies.",
+      "If using Q9/Q10 (body), add on-screen: 'Reflective, not medical.'"
+    ],
+    "duration_s": 18,
+    "canvas": "1080x1920 MP4 H.264, 30fps, -14 LUFS",
+    "production_mode": "ai_full",
+    "production_note": "Text-on-motion over one ambient b-roll loop (C §3 scenes 4, 7 or 10). Fully templated; the only variables are question + 4 options.",
+    "voiceover_style": "Optional. Variant A: VO reads the question only. Variant B: no VO, ambient music only (better for silent scrollers). Test both.",
+    "audio": "Ambient bed; TikTok drafts: human may pick a calm Commercial Music Library track.",
+    "slides_or_beats": [
+      {
+        "t": "0.0-1.5",
+        "role": "hook",
+        "on_screen_text": "The question, trimmed to <=7 words ('Someone compliments you. You say...?')",
+        "voiceover": "Reads the question.",
+        "visual": "Ink drop blooming (scene 7), hard cut on beat.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "1.5-3.0",
+        "role": "frame",
+        "on_screen_text": "'Pick one.'",
+        "voiceover": "-",
+        "visual": "Scene continues.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "3.0-12.0",
+        "role": "options",
+        "on_screen_text": "4 numbered options, ~2.2s each, verbatim from the quiz",
+        "voiceover": "- (or reads each)",
+        "visual": "Options fade in (0.6s), one at a time.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "12.0-15.5",
+        "role": "turn",
+        "on_screen_text": "'The one you paused on is worth noticing.'",
+        "voiceover": "Same line.",
+        "visual": "Slow push-in.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "15.5-18.0",
+        "role": "cta",
+        "on_screen_text": "'Comment your number · 1 of 12 questions'",
+        "voiceover": "-",
+        "visual": "Loop back to the question frame.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      }
+    ]
+  },
+  {
+    "id": "R03",
+    "type": "reel",
+    "slug": "before_you_buy",
+    "name": "Before You Buy {Crystal}",
+    "name_ar": "قبل شراء {الحجر}",
+    "pillar": "P3",
+    "alt_pillars": [],
+    "funnel_stage": "reach",
+    "audience_segment": "Crystal enthusiast",
+    "cta_tier": "T1",
+    "cta_tier_allowed": [
+      "T1",
+      "T2"
+    ],
+    "save_share_trigger": "Save for the fact; send to the friend who buys stones for everything.",
+    "variables": {
+      "crystal": "CRYSTAL_SHORTCUTS"
+    },
+    "recommended_hook_ids": [
+      "H18",
+      "H19",
+      "H20",
+      "H22",
+      "H24"
+    ],
+    "ar_notes": "Pick stones with Arabic library articles. No 'protection' stones in AR.",
+    "compliance": [
+      "Same crystal rules as C04.",
+      "AI label on."
+    ],
+    "duration_s": 26,
+    "canvas": "1080x1920 MP4 H.264, 30fps, -14 LUFS",
+    "production_mode": "ai_full",
+    "production_note": "Image-to-video from the stone's library photo (slow rotation, rack focus). Optional upgrade: founder's hands placing the stone on linen (no face needed).",
+    "voiceover_style": "Curious, lightly conspiratorial ('here's what most people miss'), still calm.",
+    "audio": "Original VO + soft bed.",
+    "slides_or_beats": [
+      {
+        "t": "0.0-1.5",
+        "role": "hook",
+        "on_screen_text": "'Before you buy {crystal} for {wish}...'",
+        "voiceover": "Same line.",
+        "visual": "Macro of the stone turning, light passing through (scene 1/2).",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "1.5-6.0",
+        "role": "shortcut",
+        "on_screen_text": "'{wish} -> {crystal}?'",
+        "voiceover": "'The common shortcut is: {wish}, so {crystal}.'",
+        "visual": "Rack focus.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "6.0-12.0",
+        "role": "person_a",
+        "on_screen_text": "Person A line",
+        "voiceover": "'For one person, that may be exactly right...'",
+        "visual": "Stone on linen, warm light.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "12.0-18.0",
+        "role": "person_b",
+        "on_screen_text": "Person B line",
+        "voiceover": "'For another, it can deepen the very loop they want to leave.'",
+        "visual": "Same stone, cooler light.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "18.0-22.5",
+        "role": "fact",
+        "on_screen_text": "One verified fact",
+        "voiceover": "Reads the fact.",
+        "visual": "Close macro.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "22.5-26.0",
+        "role": "mcc_view_cta",
+        "on_screen_text": "'The person first. The stone second.' + 'Crystal Library: link in bio'",
+        "voiceover": "'In My Crystal Code, the person comes first, the stone second.'",
+        "visual": "Pull back; logo end card.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      }
+    ]
+  },
+  {
+    "id": "R04",
+    "type": "reel",
+    "slug": "one_center_one_lesson",
+    "name": "One Center, One Lesson",
+    "name_ar": "مركز واحد، درس واحد",
+    "pillar": "P4",
+    "alt_pillars": [],
+    "funnel_stage": "trust",
+    "audience_segment": "Energy-curious",
+    "cta_tier": "T1",
+    "cta_tier_allowed": [
+      "T1",
+      "T2"
+    ],
+    "save_share_trigger": "SAVE: 'Save this for the day you need it.' Quote reels are shared to Stories.",
+    "variables": {
+      "center": "CENTERS (image, outgrow from centre_lessons, awareness)"
+    },
+    "recommended_hook_ids": [
+      "H28",
+      "H29",
+      "H30",
+      "H25"
+    ],
+    "ar_notes": "Use the founder's Arabic (centre_lessons_ar) for first-person lines; neutral nominal forms for second-person ones.",
+    "compliance": [
+      "Footnote 'Reflective, not a medical measurement.'",
+      "No religious framing of 'meaning' (Crown): keep it 'within this spiritual view'."
+    ],
+    "duration_s": 24,
+    "canvas": "1080x1920 MP4 H.264, 30fps, -14 LUFS",
+    "production_mode": "ai_full",
+    "production_note": "Metaphor b-roll per center (tree, flowing water, sunlight on a sprout, breath of light, ripple, still water, sky over desert) via image-to-video; quote typography from the template.",
+    "voiceover_style": "Slow, reflective, almost read-aloud; leave 0.5s pauses between lines.",
+    "audio": "VO + soft pad; no beat cuts.",
+    "slides_or_beats": [
+      {
+        "t": "0.0-1.5",
+        "role": "hook",
+        "on_screen_text": "The center's image line, shortened ('A tree doesn't stand firm because the wind is still.')",
+        "voiceover": "Same line.",
+        "visual": "Center's metaphor b-roll (e.g. tree in wind).",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "1.5-6.0",
+        "role": "name",
+        "on_screen_text": "'The {Center} center: {theme}.'",
+        "voiceover": "Same.",
+        "visual": "Aligned Chakras glyph, the center's node glowing.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "6.0-12.0",
+        "role": "outgrow",
+        "on_screen_text": "'The belief it asks you to outgrow:' + a shortened outgrow quote",
+        "voiceover": "Reads the quote softly.",
+        "visual": "Metaphor b-roll, darker grade.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "12.0-19.0",
+        "role": "awareness",
+        "on_screen_text": "'The awareness it invites:' + shortened awareness line",
+        "voiceover": "Reads it.",
+        "visual": "Same scene, light rising.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "19.0-24.0",
+        "role": "cta",
+        "on_screen_text": "'Save this for the day you need it.' + small 'Reflective, not medical.'",
+        "voiceover": "-",
+        "visual": "End card.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      }
+    ]
+  },
+  {
+    "id": "R05",
+    "type": "reel",
+    "slug": "watch_a_reading_open",
+    "name": "Watch a Reading Open",
+    "name_ar": "شاهد القراءة وهي تُفتح",
+    "pillar": "P5",
+    "alt_pillars": [],
+    "funnel_stage": "convert",
+    "audience_segment": "Warm, all segments",
+    "cta_tier": "T2",
+    "cta_tier_allowed": [
+      "T2",
+      "T3"
+    ],
+    "save_share_trigger": "Save to decide later; profile pin candidate.",
+    "variables": {
+      "sections": "the six Lina pages"
+    },
+    "recommended_hook_ids": [
+      "H31",
+      "H32",
+      "H33"
+    ],
+    "ar_notes": "Until an Arabic sample exists: AR variant records the Arabic questionnaire (/ar -> quiz) instead, with the pay-at-the-end line, and shows EN pages only with «العيّنة بالإنجليزية حاليًا».",
+    "compliance": [
+      "'Illustrative sample · Lina is fictional' visible the whole time.",
+      "No invented delivery time; 'within minutes'."
+    ],
+    "duration_s": 40,
+    "canvas": "1080x1920 MP4 H.264, 30fps, -14 LUFS",
+    "production_mode": "screen_capture",
+    "production_note": "Screen recording of the real Lina sample (phone frame), plus a staged inbox notification (blurred). No face. Recorded once, re-cut many times.",
+    "voiceover_style": "Clear, friendly guide; plain words ('this part shows...').",
+    "audio": "VO + light bed.",
+    "slides_or_beats": [
+      {
+        "t": "0.0-1.5",
+        "role": "hook",
+        "on_screen_text": "'What a personal reading actually looks like' + 'Illustrative sample'",
+        "voiceover": "'This is what a reading looks like.'",
+        "visual": "Phone lights up with the reading's first page.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "1.5-6.0",
+        "role": "how",
+        "on_screen_text": "'12 questions -> a private link in your inbox'",
+        "voiceover": "'It starts with 12 questions about how life has actually been feeling.'",
+        "visual": "Scene 9 (phone on nightstand).",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "6.0-14.0",
+        "role": "energy_story",
+        "on_screen_text": "'Your energy story'",
+        "voiceover": "Explains the section in one sentence.",
+        "visual": "Slow scroll.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "14.0-20.0",
+        "role": "pattern",
+        "on_screen_text": "'Your pattern under pressure (Full)'",
+        "voiceover": "One sentence.",
+        "visual": "Scroll, pause 1s on the heading.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "20.0-26.0",
+        "role": "map",
+        "on_screen_text": "'Your 7 centers, mapped'",
+        "voiceover": "One sentence.",
+        "visual": "Scroll.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "26.0-32.0",
+        "role": "crystals",
+        "on_screen_text": "'Your four-crystal protocol'",
+        "voiceover": "One sentence.",
+        "visual": "Scroll.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "32.0-36.0",
+        "role": "reset",
+        "on_screen_text": "'Your seven-day reset (Full)'",
+        "voiceover": "One sentence.",
+        "visual": "Scroll.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "36.0-40.0",
+        "role": "cta",
+        "on_screen_text": "'Lite $8.88 · Full $18.88 launch price' + 'Lina is fictional.'",
+        "voiceover": "'Start with Lite and upgrade later for the difference.'",
+        "visual": "End card.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      }
+    ]
+  },
+  {
+    "id": "R06",
+    "type": "reel",
+    "slug": "founder_note",
+    "name": "Founder Note",
+    "name_ar": "كلمة من المؤسِّسة",
+    "pillar": "P5",
+    "alt_pillars": [
+      "P6",
+      "P1"
+    ],
+    "funnel_stage": "convert",
+    "audience_segment": "Warm, all segments",
+    "cta_tier": "T2",
+    "cta_tier_allowed": [
+      "T1",
+      "T2"
+    ],
+    "save_share_trigger": "Trust builder; follow + profile visit.",
+    "variables": {
+      "angle": "launch transparency | why I built this | comment reply | my own reading"
+    },
+    "recommended_hook_ids": [
+      "H35",
+      "H03",
+      "H31"
+    ],
+    "ar_notes": "Record an Arabic version in her natural register (Gulf-friendly white Arabic). Founder approves her own captions.",
+    "compliance": [
+      "No outcome promises in unscripted speech: brief the founder with the D never-say list.",
+      "If AI-free, the caption still follows D's footer rule as the owner decides."
+    ],
+    "duration_s": 40,
+    "canvas": "1080x1920 MP4 H.264, 30fps, -14 LUFS",
+    "production_mode": "founder",
+    "production_note": "Founder on camera. Batch 6 clips in one 90-minute session: natural window light, eye-level, lav mic, 4K30, modest styling. Variants: 'We just launched', 'Why I built this', 'Reply to a comment', 'I took my own reading' (labeled as hers).",
+    "voiceover_style": "Her own voice, conversational, not scripted-sounding. Open mid-sentence; no 'hi guys'.",
+    "audio": "Natural voice; no music or a very low bed (-26 dB).",
+    "slides_or_beats": [
+      {
+        "t": "0.0-1.5",
+        "role": "hook",
+        "on_screen_text": "'We just launched. No reviews yet.'",
+        "voiceover": "Says it to camera.",
+        "visual": "Close-up, eyes to lens, already mid-gesture.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "1.5-8.0",
+        "role": "turn",
+        "on_screen_text": "'So here's exactly what you get.'",
+        "voiceover": "'So instead of reviews, I'll show you exactly what you get.'",
+        "visual": "Holds phone with the sample.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "8.0-20.0",
+        "role": "what",
+        "on_screen_text": "'Answer -> Decode -> Discover'",
+        "voiceover": "Explains the 12 questions and the private reading.",
+        "visual": "Cutaways to the sample (R05 footage).",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "20.0-30.0",
+        "role": "what_it_isnt",
+        "on_screen_text": "'Not medical. Not a prediction. Nothing ships.'",
+        "voiceover": "States what MCC is not, in her words.",
+        "visual": "Back to face.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "30.0-40.0",
+        "role": "cta",
+        "on_screen_text": "'Questions first. Pay at the end.'",
+        "voiceover": "'Start with Lite, and upgrade later for the difference if you want more.'",
+        "visual": "End card.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      }
+    ]
+  },
+  {
+    "id": "R07",
+    "type": "reel",
+    "slug": "the_receiving_test",
+    "name": "The Receiving Test",
+    "name_ar": "اختبار التلقّي",
+    "pillar": "P6",
+    "alt_pillars": [
+      "P2"
+    ],
+    "funnel_stage": "trust",
+    "audience_segment": "Pattern explorer",
+    "cta_tier": "T0",
+    "cta_tier_allowed": [
+      "T0",
+      "T3"
+    ],
+    "save_share_trigger": "Comment your number; tag the friend who always wins the bill fight.",
+    "variables": {
+      "scenario": "bill | compliment | help offered | gift",
+      "options": "Q5 options"
+    },
+    "recommended_hook_ids": [
+      "H39",
+      "H40",
+      "H36",
+      "H11"
+    ],
+    "ar_notes": "Gulf adaptation: the quoted reply can be Khaleeji («لا لا، ما له داعي») while narration stays white MSA. Options from the AR Q5 wording.",
+    "compliance": [
+      "No money outcomes; it's about receiving, not wealth.",
+      "If CTA = T3: add 'not a prediction of your financial future'."
+    ],
+    "duration_s": 20,
+    "canvas": "1080x1920 MP4 H.264, 30fps, -14 LUFS",
+    "production_mode": "ai_full",
+    "production_note": "Hands only (no faces): two hands reaching for a bill on a café table; a hand offering a small gift. Gulf café styling for AR (karak cups, modest sleeves).",
+    "voiceover_style": "Light, knowing smile in the voice.",
+    "audio": "VO + soft bed; tiny 'ding' on each option is allowed (one sound effect, low).",
+    "slides_or_beats": [
+      {
+        "t": "0.0-1.5",
+        "role": "hook",
+        "on_screen_text": "'Someone insists on paying the bill.'",
+        "voiceover": "Same line.",
+        "visual": "Two hands reach for the bill at once.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "1.5-12.0",
+        "role": "options",
+        "on_screen_text": "4 options from Q5, numbered: 'No, no, it's fine.' / 'Accept, then feel you owe them.' / 'Accept, but wonder what they want.' / 'Say thank you and let it be good.'",
+        "voiceover": "Reads each, quick.",
+        "visual": "Hands react per option.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "12.0-17.0",
+        "role": "turn",
+        "on_screen_text": "'You know how to give. But what happens when it's your turn to receive?'",
+        "voiceover": "Same line (approved).",
+        "visual": "Slow push-in on an open palm.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "17.0-20.0",
+        "role": "cta",
+        "on_screen_text": "'Comment your number.'",
+        "voiceover": "-",
+        "visual": "Loop to the bill frame.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      }
+    ]
+  },
+  {
+    "id": "R08",
+    "type": "reel",
+    "slug": "the_loop",
+    "name": "The Loop (need, belief, feeling, response, result)",
+    "name_ar": "الحلقة",
+    "pillar": "P6",
+    "alt_pillars": [
+      "P1"
+    ],
+    "funnel_stage": "convert",
+    "audience_segment": "Pattern explorer + money angle",
+    "cta_tier": "T3",
+    "cta_tier_allowed": [
+      "T0",
+      "T3"
+    ],
+    "save_share_trigger": "Save the model; comment where yours gets stuck.",
+    "variables": {
+      "mode": "money | pattern",
+      "scenario": "SCENARIO_BANK_MONEY or BEHAVIOR_BANK"
+    },
+    "recommended_hook_ids": [
+      "H38",
+      "H37",
+      "H08"
+    ],
+    "ar_notes": "Use the approved AR loop words. In pattern mode the scenario is from BEHAVIOR_BANK.",
+    "compliance": [
+      "Money mode: both disclaimers on screen and in caption.",
+      "Example loop is illustrative, never 'a client'."
+    ],
+    "duration_s": 26,
+    "canvas": "1080x1920 MP4 H.264, 30fps, -14 LUFS",
+    "production_mode": "ai_full",
+    "production_note": "Kinetic typography on the scene background; a five-node loop diagram draws itself. Mode 'money' (P6) or mode 'pattern' (P1, e.g. pulling back when things go well).",
+    "voiceover_style": "Measured, one beat per line, slight pause before 'Round again.'",
+    "audio": "VO + pulse-like pad; each node lands on a soft downbeat.",
+    "slides_or_beats": [
+      {
+        "t": "0.0-1.5",
+        "role": "hook",
+        "on_screen_text": "'A need. A belief. A feeling. A response. A result.'",
+        "voiceover": "Fast read of the five words.",
+        "visual": "Words snap into a circle.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "1.5-5.0",
+        "role": "scenario",
+        "on_screen_text": "'You're about to send your price.'",
+        "voiceover": "Same.",
+        "visual": "Cursor blinking in a message field (blurred UI).",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "5.0-8.0",
+        "role": "need",
+        "on_screen_text": "'A need: to feel safe being chosen.'",
+        "voiceover": "Reads.",
+        "visual": "Node 1 lights.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "8.0-11.0",
+        "role": "belief",
+        "on_screen_text": "'A belief: if I ask for more, they'll go.'",
+        "voiceover": "Reads.",
+        "visual": "Node 2.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "11.0-14.0",
+        "role": "feeling",
+        "on_screen_text": "'A feeling: tight chest, fast typing.'",
+        "voiceover": "Reads.",
+        "visual": "Node 3.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "14.0-17.0",
+        "role": "response",
+        "on_screen_text": "'A response: lower it before they ask.'",
+        "voiceover": "Reads.",
+        "visual": "Node 4.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "17.0-20.0",
+        "role": "result",
+        "on_screen_text": "'A result: overworked, underpaid.'",
+        "voiceover": "Reads.",
+        "visual": "Node 5.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "20.0-23.5",
+        "role": "turn",
+        "on_screen_text": "'The result confirms the belief. Round again.'",
+        "voiceover": "Same.",
+        "visual": "Loop closes and spins once.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      },
+      {
+        "t": "23.5-26.0",
+        "role": "cta",
+        "on_screen_text": "Money mode: 'The Abundance Pattern · MCC Full' + 'Not a prediction of your financial future.' Pattern mode: 'Where does yours get stuck?'",
+        "voiceover": "-",
+        "visual": "End card.",
+        "caption_limits": {
+          "en": "2 lines, 5 words / 28 chars per line",
+          "ar": "2 lines, 4 words / 24 chars per line"
+        }
+      }
+    ]
+  }
+]

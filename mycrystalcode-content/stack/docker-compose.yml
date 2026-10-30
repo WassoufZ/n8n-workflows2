@@ -1,0 +1,44 @@
+# My Crystal Code content stack: n8n + Gotenberg (slide rendering) + mcc-reel (reel assembly).
+# Run on a small VPS (2 vCPU / 4 GB RAM is plenty):
+#   cp .env.example .env   # then edit it
+#   docker compose up -d
+# n8n reaches the sidecars at http://gotenberg:3000 and http://mcc-reel:3900 (the defaults in
+# the workflow's ⚙️ Settings node). Only n8n is published; put it behind HTTPS (see SETUP.md).
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:${N8N_VERSION:-2.45.7}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5678:5678"
+    environment:
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://${N8N_HOST}/
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - GENERIC_TIMEZONE=Asia/Dubai
+      - TZ=Asia/Dubai
+      - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+      - N8N_PAYLOAD_SIZE_MAX=64
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=336
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      - gotenberg
+      - mcc-reel
+
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    restart: unless-stopped
+    command:
+      - gotenberg
+      - --api-timeout=120s
+
+  mcc-reel:
+    build: ./mcc-reel
+    restart: unless-stopped
+    environment:
+      - PORT=3900
+
+volumes:
+  n8n_data:

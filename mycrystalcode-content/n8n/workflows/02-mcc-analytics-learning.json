@@ -1,0 +1,739 @@
+{
+  "name": "MCC · Analytics & weekly learning loop",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Analytics & learning loop\nDaily: fetches per-post metrics for posts 1-8 days old into **Metrics**.\nWeekly (INSIGHTS_WEEKDAY, 1 = Monday): Claude reads Log + Metrics + Clicks + Sales and writes **Insights**,\nwhich the autopilot's brief reads before writing the next posts.\n\n⚠️ Verify the Upload-Post analytics endpoint and query names in their API docs and adjust **Fetch analytics**.\nUntil then you can type numbers into the Metrics sheet by hand; the weekly review works either way.",
+        "height": 260,
+        "width": 640,
+        "color": 5
+      },
+      "id": "397db589-90e3-561d-a3d3-960dac4ad53f",
+      "name": "README",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -380
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "10 6 * * *"
+            }
+          ]
+        }
+      },
+      "id": "cfab238e-15cd-5d27-aede-519c9ea36396",
+      "name": "Daily 06:10",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "055c6e10-1dad-56b8-a4fc-9ea1cdcedf13",
+      "name": "Run now (test)",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "38a7621c-b96c-50cd-ab75-ea44cf0fe703",
+              "name": "SHEET_ID",
+              "value": "PASTE_GOOGLE_SHEET_ID",
+              "type": "string"
+            },
+            {
+              "id": "5eaed149-61d1-5ab3-8c63-3391ca927cea",
+              "name": "TELEGRAM_CHAT_ID",
+              "value": "PASTE_TELEGRAM_CHAT_ID",
+              "type": "string"
+            },
+            {
+              "id": "064ae61f-771f-5d00-a825-51c73d1e9cc4",
+              "name": "ADMIN_TELEGRAM_IDS",
+              "value": "PASTE_YOUR_TELEGRAM_USER_ID",
+              "type": "string"
+            },
+            {
+              "id": "c7ddf6b4-79f9-5035-8f77-8430fb2d3cd8",
+              "name": "SITE",
+              "value": "https://www.mycrystalcode.com",
+              "type": "string"
+            },
+            {
+              "id": "a310fbb5-83fb-57f2-97c7-b5d97e69609d",
+              "name": "TIMEZONE",
+              "value": "Asia/Dubai",
+              "type": "string"
+            },
+            {
+              "id": "6ed9b1b9-3318-5965-a14c-6e82a8f2b71b",
+              "name": "GOTENBERG_URL",
+              "value": "http://gotenberg:3000",
+              "type": "string"
+            },
+            {
+              "id": "247a1d95-fffd-5cc1-9a80-c202e15ca112",
+              "name": "REEL_URL",
+              "value": "http://mcc-reel:3900",
+              "type": "string"
+            },
+            {
+              "id": "950a4689-c5fa-52e4-882d-91f5b41d5fd0",
+              "name": "UPLOADPOST_USER",
+              "value": "PASTE_UPLOAD_POST_PROFILE_NAME",
+              "type": "string"
+            },
+            {
+              "id": "3b162cf2-7819-5bf9-9ca9-eeac6945261f",
+              "name": "UPLOADPOST_ANALYTICS_URL",
+              "value": "https://api.upload-post.com/api/analytics",
+              "type": "string"
+            },
+            {
+              "id": "8814ab73-e34b-5632-adba-1e4b2ebec140",
+              "name": "TIKTOK_POST_MODE",
+              "value": "MEDIA_UPLOAD",
+              "type": "string"
+            },
+            {
+              "id": "783967e2-9a86-5ecb-8a35-912d312a7e06",
+              "name": "REEL_TIER",
+              "value": "standard",
+              "type": "string"
+            },
+            {
+              "id": "cf20683b-9776-5557-b861-963cb944fa1c",
+              "name": "FAL_MODEL",
+              "value": "PASTE_FAL_MODEL_ID",
+              "type": "string"
+            },
+            {
+              "id": "4e293e8c-2b2c-58d2-9ae8-3840ad5074ef",
+              "name": "FAL_INPUT_JSON",
+              "value": "{\"aspect_ratio\":\"9:16\",\"duration\":\"8s\",\"generate_audio\":false}",
+              "type": "string"
+            },
+            {
+              "id": "cd1772e7-dd1e-5305-b982-f9febe316a5e",
+              "name": "ELEVEN_VOICE_EN",
+              "value": "PASTE_ELEVENLABS_VOICE_ID_EN",
+              "type": "string"
+            },
+            {
+              "id": "965b3022-a1a1-59de-9506-cfb79576b613",
+              "name": "ELEVEN_VOICE_AR",
+              "value": "PASTE_ELEVENLABS_VOICE_ID_AR",
+              "type": "string"
+            },
+            {
+              "id": "5b1f9ace-68eb-56fc-94d6-073f0c4bb4bb",
+              "name": "ELEVEN_MODEL",
+              "value": "eleven_v3",
+              "type": "string"
+            },
+            {
+              "id": "4783d7b7-d155-5d7c-9e10-ebbef90c4839",
+              "name": "COPY_MODEL",
+              "value": "claude-sonnet-5-5",
+              "type": "string"
+            },
+            {
+              "id": "2afd7071-3545-59b8-8375-49d6406804fc",
+              "name": "QA_MODEL",
+              "value": "claude-sonnet-5-5",
+              "type": "string"
+            },
+            {
+              "id": "4c0bfc79-8888-501e-8d52-7334d94fcaed",
+              "name": "AUTO_PUBLISH_EN",
+              "value": "false",
+              "type": "string"
+            },
+            {
+              "id": "4c596df1-20cf-5fbd-885d-bbeec767b5ae",
+              "name": "LAUNCH_END_DATE",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "828e72af-9fec-5ecc-9588-87733b24b28f",
+              "name": "INSIGHTS_WEEKDAY",
+              "value": "1",
+              "type": "string"
+            },
+            {
+              "id": "033c4957-3c93-5b89-9ae4-545c0905c171",
+              "name": "PROMPT_VERSION",
+              "value": "26ca0efdae",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2e7659af-6223-5ac6-b362-c72201645e2c",
+      "name": "⚙️ Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Log",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "05405d0d-cc8d-5dfb-a7d7-b765cf871515",
+      "name": "Read Log",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        480,
+        100
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Posts published 1-8 days ago, one item per post + platform.\nconst S = $('⚙️ Settings').first().json;\nconst now = $now.setZone(S.TIMEZONE);\nreturn $input.all().map((i) => i.json)\n  .filter((r) => r.post_id && ['published', 'tiktok_draft'].includes(r.status))\n  .map((r) => ({ ...r, age_days: Math.floor(now.diff(DateTime.fromISO(r.created_at), 'days').days) }))\n  .filter((r) => r.age_days >= 1 && r.age_days <= 8)\n  .map((r) => ({ json: { post_id: r.post_id, platform: r.platform, age_days: r.age_days, upload_response: r.upload_response } }));"
+      },
+      "id": "afca3939-b812-5253-a593-7f18d6049226",
+      "name": "Posts to measure",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('⚙️ Settings').first().json.UPLOADPOST_ANALYTICS_URL }}",
+        "options": {
+          "timeout": 120000
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user",
+              "value": "={{ $('⚙️ Settings').first().json.UPLOADPOST_USER }}"
+            },
+            {
+              "name": "platform",
+              "value": "={{ $json.platform }}"
+            },
+            {
+              "name": "request_id",
+              "value": "={{ (() => { try { const r = JSON.parse($json.upload_response); return r.request_id || r.id || ''; } catch (e) { return ''; } })() }}"
+            }
+          ]
+        }
+      },
+      "id": "95b0fe8a-8162-5ef8-877a-5d19e4ea80e4",
+      "name": "Fetch analytics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        100
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalises whatever the analytics endpoint returns into one Metrics row per post+platform.\n// Unknown shapes are kept raw, so nothing is silently lost while the endpoint is being wired.\nconst S = $('⚙️ Settings').first().json;\nconst posts = $('Posts to measure').all();\nconst pick = (o, keys) => { for (const k of keys) { const v = k.split('.').reduce((a, p) => (a == null ? a : a[p]), o); if (v != null && v !== '') return Number(v) || 0; } return ''; };\nreturn $input.all().map((res, i) => {\n  const p = posts[i].json; const r = res.json || {};\n  return { json: {\n    key: `${p.post_id}|${p.platform}`, post_id: p.post_id, platform: p.platform, measured_at: $now.setZone(S.TIMEZONE).toISO(), age_days: p.age_days,\n    views: pick(r, ['views', 'video_views', 'plays', 'metrics.views']), reach: pick(r, ['reach', 'metrics.reach']),\n    likes: pick(r, ['likes', 'like_count', 'metrics.likes']), comments: pick(r, ['comments', 'comments_count', 'metrics.comments']),\n    shares: pick(r, ['shares', 'share_count', 'metrics.shares']), saves: pick(r, ['saved', 'saves', 'metrics.saved']),\n    profile_visits: pick(r, ['profile_visits', 'metrics.profile_visits']), follows: pick(r, ['follows', 'metrics.follows']),\n    raw: JSON.stringify(r).slice(0, 1500),\n  } };\n});\n"
+      },
+      "id": "d2df7dd1-7ea7-54fd-85cd-1888bce109a4",
+      "name": "Normalize metrics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Metrics",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "key"
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "428b418e-4858-5283-9f7e-88f9dd146b9f",
+      "name": "Write Metrics",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1440,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Metrics",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "1376aa93-1872-51dd-b8f1-f360a8d2f7d4",
+      "name": "Read Metrics",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1680,
+        100
+      ],
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Clicks",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "61a68270-8af2-5a66-a865-541770a98675",
+      "name": "Read Clicks",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1920,
+        100
+      ],
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sales",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "c486c550-ffc9-5c1f-9557-399fbbcf8011",
+      "name": "Read Sales",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2160,
+        100
+      ],
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Weekly learning loop: joins the Log, Metrics, Clicks and Sales sheets and asks Claude what to\n// do more and less of. The autopilot's brief reads the newest Insights row.\nconst S = $('⚙️ Settings').first().json;\nif ($now.setZone(S.TIMEZONE).weekday !== Number(S.INSIGHTS_WEEKDAY || 1)) return [];\nconst all = (n) => { try { return $(n).all().map((i) => i.json); } catch (e) { return []; } };\nconst log = all('Read Log').filter((r) => r.post_id);\nconst metrics = all('Read Metrics').filter((r) => r.post_id);\nconst clicks = all('Read Clicks').filter((r) => r.post_id);\nconst sales = all('Read Sales').filter((r) => r.date || r.utm_content);\nconst byPost = {};\nlog.forEach((r) => { byPost[r.post_id] = { post_id: r.post_id, lang: r.lang, format: r.format, pillar: r.pillar, formula: r.formula, cta_tier: r.cta_tier, hook: r.hook, platforms: [] }; });\nmetrics.forEach((m) => { if (byPost[m.post_id]) byPost[m.post_id].platforms.push(m); });\nclicks.forEach((c) => { if (byPost[c.post_id]) byPost[c.post_id].clicks = (byPost[c.post_id].clicks || 0) + 1; });\nsales.forEach((s) => { const id = s.utm_content || s.post_id; if (byPost[id]) byPost[id].sales = (byPost[id].sales || 0) + 1; });\nconst rows = Object.values(byPost).slice(-60);\nconst prompt = `You are the growth analyst for My Crystal Code (a $8.88 / $18.88 digital self-discovery reading; Instagram + TikTok; English + Arabic).\nBelow are the last ${rows.length} posts with their metrics, tracked link clicks and attributed sales.\nJudge each post against the account's own median (not industry benchmarks). Prioritise: sales > link clicks > profile visits > shares/sends > saves > views.\nSay which formulas, pillars, hook styles and languages to do MORE and LESS of next week, and name the 3 best hooks to reuse with a new angle.\nIf data is too thin to conclude, say so plainly instead of guessing.\nReturn ONLY JSON: {\"summary\": string (<=600 chars), \"do_more\": string (<=400), \"do_less\": string (<=400), \"top_hooks\": string (<=400)}\n\nDATA:\n${JSON.stringify(rows)}`;\nreturn [{ json: { prompt, week: $now.setZone(S.TIMEZONE).toFormat(\"kkkk-'W'WW\") } }];\n"
+      },
+      "id": "fb431cb1-8400-51a8-ac32-da38f92995a2",
+      "name": "Insights prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "type": "SystemMessagePromptTemplate",
+              "message": "You are a careful growth analyst. Output only the JSON requested."
+            }
+          ]
+        }
+      },
+      "id": "a78713ac-d62f-522c-9383-8a35fb44ecaf",
+      "name": "Weekly review (Claude)",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        2640,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "claude-haiku-5-5"
+        },
+        "options": {
+          "maxTokensToSample": 2000,
+          "temperature": 0.2
+        }
+      },
+      "id": "edd1f166-688e-5712-a446-75de2f64db1e",
+      "name": "Weekly review (Claude) · model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        2560,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n \"type\": \"object\",\n \"required\": [\n  \"summary\",\n  \"do_more\",\n  \"do_less\",\n  \"top_hooks\"\n ],\n \"properties\": {\n  \"summary\": {\n   \"type\": \"string\"\n  },\n  \"do_more\": {\n   \"type\": \"string\"\n  },\n  \"do_less\": {\n   \"type\": \"string\"\n  },\n  \"top_hooks\": {\n   \"type\": \"string\"\n  }\n }\n}"
+      },
+      "id": "02cb3798-5859-5a05-a30c-8dbb01e973d2",
+      "name": "Weekly review (Claude) · JSON",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        2760,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const o = $input.first().json.output || {};\nreturn [{ json: { week: $('Insights prompt').first().json.week, summary: o.summary || '', do_more: o.do_more || '', do_less: o.do_less || '', top_hooks: o.top_hooks || '' } }];"
+      },
+      "id": "75eb3e27-93c6-534d-91f3-6e76ba939131",
+      "name": "Insights row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Insights",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "51254998-1d91-5fa3-a907-a02c03e14060",
+      "name": "Write Insights",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        3120,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('⚙️ Settings').first().json.TELEGRAM_CHAT_ID }}",
+        "text": "={{ '📊 Week ' + $('Insights row').first().json.week + '\\n\\n' + $('Insights row').first().json.summary + '\\n\\n➕ ' + $('Insights row').first().json.do_more + '\\n➖ ' + $('Insights row').first().json.do_less }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "1381f7df-f3a4-5911-aadd-4b4c1efa71e0",
+      "name": "Send weekly review",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3360,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "Daily 06:10": {
+      "main": [
+        [
+          {
+            "node": "⚙️ Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run now (test)": {
+      "main": [
+        [
+          {
+            "node": "⚙️ Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚙️ Settings": {
+      "main": [
+        [
+          {
+            "node": "Read Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Log": {
+      "main": [
+        [
+          {
+            "node": "Posts to measure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Posts to measure": {
+      "main": [
+        [
+          {
+            "node": "Fetch analytics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch analytics": {
+      "main": [
+        [
+          {
+            "node": "Normalize metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize metrics": {
+      "main": [
+        [
+          {
+            "node": "Write Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Weekly review (Claude) · model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Weekly review (Claude)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Weekly review (Claude) · JSON": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Weekly review (Claude)",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Metrics": {
+      "main": [
+        [
+          {
+            "node": "Read Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Metrics": {
+      "main": [
+        [
+          {
+            "node": "Read Clicks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Clicks": {
+      "main": [
+        [
+          {
+            "node": "Read Sales",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Sales": {
+      "main": [
+        [
+          {
+            "node": "Insights prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insights prompt": {
+      "main": [
+        [
+          {
+            "node": "Weekly review (Claude)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Weekly review (Claude)": {
+      "main": [
+        [
+          {
+            "node": "Insights row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insights row": {
+      "main": [
+        [
+          {
+            "node": "Write Insights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Insights": {
+      "main": [
+        [
+          {
+            "node": "Send weekly review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Dubai",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "tags": [
+    {
+      "name": "mycrystalcode"
+    },
+    {
+      "name": "analytics"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "promptVersion": "26ca0efdae"
+  }
+}

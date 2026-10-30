@@ -1,0 +1,1834 @@
+{
+  "version": "1.0",
+  "generated": "2026-10-30",
+  "doc": "B-platform-content.md",
+  "pillars": [
+    {
+      "id": "P1",
+      "key": "patterns",
+      "name": "Same Behavior, Different Reasons",
+      "name_ar": "السلوك نفسه، والأسباب مختلفة",
+      "funnel": "reach",
+      "share_pct": 25,
+      "audience": "Pattern explorer (primary); Self-discovery seeker",
+      "best_format": "Reel-first (R01, R08 pattern mode) ~55%; carousels C01, C08 ~45%",
+      "cta_default": "T0",
+      "cta_allowed": [
+        "T0",
+        "T1",
+        "T2"
+      ],
+      "utm_pillar": "patterns",
+      "job": "Stop the scroll with a behavior everyone recognizes (saying yes, overthinking, doing it all yourself), then show that the reason behind it differs per person. This is the brand's signature idea and the honest curiosity gap: which reason is yours depends on your answers.",
+      "sources": [
+        "landing difference block (approved)",
+        "quiz Q11/Q12 lines",
+        "pattern labels (display-labels.ts)"
+      ]
+    },
+    {
+      "id": "P2",
+      "key": "mirror",
+      "name": "Which Line Is Yours? (the questionnaire as content)",
+      "name_ar": "أي عبارة تشبهك؟",
+      "funnel": "reach",
+      "share_pct": 20,
+      "audience": "Self-discovery seeker (primary); Pattern explorer",
+      "best_format": "Carousel-first (C02) ~60%; reel R02 ~40%",
+      "cta_default": "T0",
+      "cta_allowed": [
+        "T0",
+        "T2"
+      ],
+      "utm_pillar": "patterns",
+      "job": "Publish the real quiz questions and options (founder-written, already in both languages) as interactive mirrors. Comments with a number are the cheapest engagement there is, and every post doubles as proof that the product is specific, not a horoscope.",
+      "sources": [
+        "quizContent.en.ts / quizContent.ar.ts (Q1-Q12 + section intros)"
+      ]
+    },
+    {
+      "id": "P3",
+      "key": "crystals",
+      "name": "The Crystal Shortcut",
+      "name_ar": "الطريق المختصر إلى الحجر",
+      "funnel": "reach",
+      "share_pct": 15,
+      "audience": "Crystal enthusiast (primary); Energy-curious",
+      "best_format": "Carousel-first (C04) ~60%; reel R03 ~40%",
+      "cta_default": "T1",
+      "cta_allowed": [
+        "T1",
+        "T2"
+      ],
+      "utm_pillar": "crystals",
+      "job": "Turn the Crystal Library's 'what people misunderstand' and 'when it may not be what you need' sections into myth-flips: the same wish (love, protection, abundance, calm) can come from opposite places. Wins the crystal audience without a single efficacy claim and leads to 'the person first, the stone second'.",
+      "sources": [
+        "shared/crystals/*.ts misunderstood + fit + facts + perspective sections"
+      ]
+    },
+    {
+      "id": "P4",
+      "key": "centers",
+      "name": "Seven Centers, Read Gently",
+      "name_ar": "سبعة مراكز، بقراءة هادئة",
+      "funnel": "trust",
+      "share_pct": 15,
+      "audience": "Energy-curious (primary); Self-discovery seeker",
+      "best_format": "Carousel C03 ~50%; reel R04 ~50%",
+      "cta_default": "T1",
+      "cta_allowed": [
+        "T1",
+        "T2"
+      ],
+      "utm_pillar": "centers",
+      "job": "Teach the seven centers through the founder's approved lessons (outgrow vs. awareness, one image per center). Positions MCC as thoughtful and premium, not woo, and sets up 'you know the seven centers, but what about yours?'.",
+      "sources": [
+        "landing centres block (approved themes)",
+        "centre_lessons_en/ar (approved 2026-10-11)"
+      ]
+    },
+    {
+      "id": "P5",
+      "key": "inside",
+      "name": "Inside a Reading",
+      "name_ar": "داخل القراءة",
+      "funnel": "convert",
+      "share_pct": 15,
+      "audience": "Warm viewers from all four segments",
+      "best_format": "Carousel C05/C07 ~50%; reels R05 (screen) + R06 (founder) ~50%",
+      "cta_default": "T2",
+      "cta_allowed": [
+        "T1",
+        "T2",
+        "T3"
+      ],
+      "utm_pillar": "sample | founder",
+      "job": "Answer 'what do I actually get?' with zero reviews: the illustrative Lina pages, the email arriving, Lite vs Full, pay-at-the-end, and the founder saying plainly that MCC just launched. Proof of product replaces social proof.",
+      "sources": [
+        "landing sample/pricing/faq blocks",
+        "Lina sample pages (labeled fictional)",
+        "founder on camera"
+      ]
+    },
+    {
+      "id": "P6",
+      "key": "receiving",
+      "name": "Giving, Receiving & the Abundance Pattern",
+      "name_ar": "العطاء والتلقّي ونمط الوفرة",
+      "funnel": "trust -> convert",
+      "share_pct": 10,
+      "audience": "Pattern explorer + the money angle (Full buyers)",
+      "best_format": "Reels R07, R08 ~60%; carousel C06 ~40%",
+      "cta_default": "T3",
+      "cta_allowed": [
+        "T0",
+        "T3"
+      ],
+      "utm_pillar": "receiving | abundance",
+      "job": "The receiving question (compliments, help, the bill) is universal and lands strongly in Gulf hospitality culture; it bridges to the Abundance Pattern loop (need, belief, feeling, response, result), the strongest Full-only chapter. Always 'not a prediction of your financial future'.",
+      "sources": [
+        "landing receiving + abundance blocks (approved)",
+        "quiz Q4/Q5"
+      ]
+    }
+  ],
+  "cta_tiers": [
+    {
+      "id": "T0",
+      "name": "Engage",
+      "goal": "saves, sends, comments; no link",
+      "en": [
+        "Save this for the next time you say yes before the question is finished.",
+        "Send this to someone who needs it today.",
+        "Which one sounds closest? Comment 1, 2 or 3."
+      ],
+      "ar": [
+        "للحفظ، للمرة القادمة التي تسبق فيها «نعم» نهاية السؤال.",
+        "لمن يحتاج هذه الكلمات اليوم: أرسلها له.",
+        "أي واحد أقرب؟ التعليق برقم ١ أو ٢ أو ٣."
+      ],
+      "dm_keyword_variant": {
+        "en": "Comment PATTERN and we'll send you one question that hints at which pattern runs yours.",
+        "ar": "تعليق بكلمة «نمط» يصلك بعده سؤال واحد في الرسائل الخاصة، يلمّح إلى النمط الذي يحرّكك."
+      }
+    },
+    {
+      "id": "T1",
+      "name": "Follow + free value",
+      "goal": "follows, profile visits, sample/library clicks",
+      "en": [
+        "Follow @my.crystal.code for the next one. Sample reading and the free Crystal Library: link in bio."
+      ],
+      "ar": [
+        "المزيد على ‎@my.crystal.code. عيّنة القراءة ومكتبة الكريستال المجانية: الرابط في البايو."
+      ],
+      "link": {
+        "en": "https://www.mycrystalcode.com (#sample) or /crystals",
+        "ar": "https://www.mycrystalcode.com/ar or /ar/crystals"
+      }
+    },
+    {
+      "id": "T2",
+      "name": "MCC Lite $8.88",
+      "goal": "first purchase (low friction)",
+      "en": [
+        "Your 12 answers. Your 7 energy centers. MCC Lite, $8.88. Link in bio.",
+        "The 12 questions come first. You only pay when you're ready to see your reading.",
+        "Start with Lite. If you want the deeper reading later, you only pay the difference."
+      ],
+      "ar": [
+        "١٢ إجابة، وسبعة مراكز طاقة تخصّك. كريستال كود لايت بـ $8.88. الرابط في البايو.",
+        "الأسئلة الاثنا عشر أولًا، والدفع فقط عند الاستعداد لرؤية قراءتك.",
+        "البداية مع لايت، والترقية إلى القراءة الكاملة لاحقًا بفرق السعر فقط."
+      ],
+      "link": {
+        "en": "https://www.mycrystalcode.com/crystal-match",
+        "ar": "https://www.mycrystalcode.com/crystal-match?lang=ar"
+      }
+    },
+    {
+      "id": "T3",
+      "name": "MCC Full $18.88 launch price",
+      "goal": "Full purchase / Lite-to-Full upgrade",
+      "en": [
+        "The Abundance Pattern is inside MCC Full. $18.88 launch price (list $24.88). Link in bio.",
+        "Your pattern under pressure and the seven-day reset are chapters of MCC Full. $18.88 launch price (list $24.88)."
+      ],
+      "ar": [
+        "نمط الوفرة جزء من القراءة الكاملة: $18.88 سعر الإطلاق بدلًا من $24.88. الرابط في البايو.",
+        "نمطك تحت الضغط وإعادة الضبط لسبعة أيام فصلان في القراءة الكاملة: $18.88 سعر الإطلاق بدلًا من $24.88."
+      ],
+      "link": {
+        "en": "https://www.mycrystalcode.com/quiz",
+        "ar": "https://www.mycrystalcode.com/quiz?lang=ar"
+      },
+      "rule": "Only when the post is about a Full-only chapter: Abundance Pattern, pattern under pressure, seven-day reset (matches A §2)."
+    }
+  ],
+  "hooks": [
+    {
+      "id": "H01",
+      "pillar": "P1",
+      "hook_type": "contrast",
+      "source": "approved",
+      "en": "Same behavior. Different reasons.",
+      "ar": "السلوك نفسه. والأسباب مختلفة.",
+      "note": "Signature line; C01/R01."
+    },
+    {
+      "id": "H02",
+      "pillar": "P1",
+      "hook_type": "open_loop",
+      "source": "approved idea",
+      "en": "Three people can't say no. Not one of them for the same reason.",
+      "ar": "ثلاثة أشخاص يصعب عليهم قول «لا». ولا أحد منهم للسبب نفسه.",
+      "note": ""
+    },
+    {
+      "id": "H03",
+      "pillar": "P1",
+      "hook_type": "question",
+      "source": "approved",
+      "en": "You know what you do. But do you know what's driving it?",
+      "ar": "نعرف ما نفعله. لكن هل نعرف ما الذي يحرّكه؟",
+      "note": "AR uses the site's first-person plural."
+    },
+    {
+      "id": "H04",
+      "pillar": "P1",
+      "hook_type": "question",
+      "source": "approved",
+      "en": "You notice the pattern. But what keeps it going?",
+      "ar": "النمط واضح لك. لكن ما الذي يُبقيه مستمرًا؟",
+      "note": ""
+    },
+    {
+      "id": "H05",
+      "pillar": "P1",
+      "hook_type": "myth_flip",
+      "source": "new",
+      "en": "People-pleasing isn't one pattern. It's at least three.",
+      "ar": "إرضاء الآخرين ليس نمطًا واحدًا، بل ثلاثة على الأقل.",
+      "note": "Search keyword: people pleasing / إرضاء الآخرين."
+    },
+    {
+      "id": "H06",
+      "pillar": "P1",
+      "hook_type": "myth_flip",
+      "source": "new",
+      "en": "Overthinking every decision? The decision might not be the problem.",
+      "ar": "تفكير زائد قبل كل قرار؟ ربما القرار نفسه ليس المشكلة.",
+      "note": "Search keyword: overthinking / التفكير الزائد."
+    },
+    {
+      "id": "H07",
+      "pillar": "P1",
+      "hook_type": "quote",
+      "source": "quiz Q11",
+      "en": "\"It's easier if I just do it myself.\" Same sentence, three different reasons.",
+      "ar": "«أسهل أن أنجزه بنفسي». الجملة نفسها، وثلاثة أسباب مختلفة.",
+      "note": ""
+    },
+    {
+      "id": "H08",
+      "pillar": "P1",
+      "hook_type": "question",
+      "source": "quiz Q11",
+      "en": "Ever pull back right when things start going well?",
+      "ar": "في اللحظة التي تبدأ فيها الأمور بالتحسّن، يأتي التراجع. لماذا؟",
+      "note": "AR in nominal form: no gendered 'you'."
+    },
+    {
+      "id": "H09",
+      "pillar": "P1",
+      "hook_type": "identity",
+      "source": "report labels",
+      "en": "The Over Giver, in 5 quiet moments.",
+      "ar": "نمط العطاء المُفرِط في خمس لحظات صغيرة.",
+      "note": "Template: swap {Pattern} from PATTERNS."
+    },
+    {
+      "id": "H10",
+      "pillar": "P2",
+      "hook_type": "question",
+      "source": "quiz Q12",
+      "en": "When no one is listening, which thought has been loudest lately?",
+      "ar": "حين لا يسمعك أحد، أي فكرة كانت الأعلى صوتًا مؤخرًا؟",
+      "note": "Use only the non-distress options."
+    },
+    {
+      "id": "H11",
+      "pillar": "P2",
+      "hook_type": "scenario",
+      "source": "quiz Q5",
+      "en": "Someone compliments you. What's the first thing out of your mouth?",
+      "ar": "أحدهم يمدحك. ما أول جملة تخرج منك؟",
+      "note": ""
+    },
+    {
+      "id": "H12",
+      "pillar": "P2",
+      "hook_type": "invitation",
+      "source": "quiz section D",
+      "en": "Pick the line that feels a little too familiar.",
+      "ar": "أي عبارة تبدو مألوفة أكثر من اللازم؟",
+      "note": ""
+    },
+    {
+      "id": "H13",
+      "pillar": "P2",
+      "hook_type": "question",
+      "source": "quiz Q2",
+      "en": "When life hits you, how long until you feel like yourself again?",
+      "ar": "حين تعصف بك الحياة، كم من الوقت يلزم للعودة إلى نفسك؟",
+      "note": ""
+    },
+    {
+      "id": "H14",
+      "pillar": "P2",
+      "hook_type": "scenario",
+      "source": "quiz Q3",
+      "en": "Someone brings their bad mood into the room. How long does it stay with you?",
+      "ar": "شخص يدخل بمزاجه الثقيل إلى المكان. كم يبقى أثره معك؟",
+      "note": ""
+    },
+    {
+      "id": "H15",
+      "pillar": "P2",
+      "hook_type": "scenario",
+      "source": "quiz Q11",
+      "en": "Someone asks what you want, and you freeze a little. Familiar?",
+      "ar": "«ماذا أريد؟» سؤال يبدو بسيطًا، إلى أن يُطرح عليّ.",
+      "note": "AR first person."
+    },
+    {
+      "id": "H16",
+      "pillar": "P2",
+      "hook_type": "question",
+      "source": "quiz Q1",
+      "en": "Honestly: how has this week actually been?",
+      "ar": "بصراحة: كيف كان هذا الأسبوع فعلًا؟",
+      "note": "Good Sunday/Monday post."
+    },
+    {
+      "id": "H17",
+      "pillar": "P2",
+      "hook_type": "question",
+      "source": "quiz Q6",
+      "en": "When you need to say what you really feel, what usually happens?",
+      "ar": "حين يحين وقت قول ما في القلب فعلًا، ماذا يحدث عادةً؟",
+      "note": ""
+    },
+    {
+      "id": "H18",
+      "pillar": "P3",
+      "hook_type": "myth_flip",
+      "source": "library",
+      "en": "Before you buy rose quartz for love, read this.",
+      "ar": "قبل شراء الكوارتز الوردي «من أجل الحب»، هذه الفكرة أولًا.",
+      "note": "Search: rose quartz meaning / معنى الكوارتز الوردي."
+    },
+    {
+      "id": "H19",
+      "pillar": "P3",
+      "hook_type": "myth_flip",
+      "source": "library",
+      "en": "Citrine isn't a money magnet. Here's what it actually stands for.",
+      "ar": "السترين ليس مغناطيسًا للمال. وهذا ما يرمز إليه فعلًا.",
+      "note": "Negates the claim; never imply the opposite."
+    },
+    {
+      "id": "H20",
+      "pillar": "P3",
+      "hook_type": "quote",
+      "source": "library",
+      "en": "\"I need protection, so I need black obsidian.\" Not so fast.",
+      "ar": "«أمتصّ طاقة الجميع، إذن أحتاج إلى التورمالين الأسود». ليس بهذه البساطة.",
+      "note": "AR deliberately swaps stone + wish: no 'protection' framing in Arabic."
+    },
+    {
+      "id": "H21",
+      "pillar": "P3",
+      "hook_type": "contrast",
+      "source": "library",
+      "en": "The same crystal can be exactly right for one person and the opposite of what another needs.",
+      "ar": "الحجر نفسه قد يناسب شخصًا تمامًا، ويكون عكس ما يحتاجه شخص آخر.",
+      "note": ""
+    },
+    {
+      "id": "H22",
+      "pillar": "P3",
+      "hook_type": "myth_flip",
+      "source": "library",
+      "en": "A busy mind doesn't always need amethyst.",
+      "ar": "العقل المزدحم لا يحتاج دائمًا إلى الجمشت.",
+      "note": ""
+    },
+    {
+      "id": "H23",
+      "pillar": "P3",
+      "hook_type": "question",
+      "source": "approved",
+      "en": "What if choosing a crystal started with understanding yourself?",
+      "ar": "ماذا لو بدأ اختيار الكريستال بفهم الذات؟",
+      "note": ""
+    },
+    {
+      "id": "H24",
+      "pillar": "P3",
+      "hook_type": "curiosity_fact",
+      "source": "library",
+      "en": "Most citrine sold today started out as amethyst.",
+      "ar": "معظم السترين المُباع اليوم بدأ جمشتًا.",
+      "note": "From the amethyst article facts."
+    },
+    {
+      "id": "H25",
+      "pillar": "P4",
+      "hook_type": "question",
+      "source": "approved",
+      "en": "You know about the seven energy centers. But what about yours?",
+      "ar": "مراكز الطاقة السبعة معروفة. لكن ماذا عن مراكزك أنت؟",
+      "note": ""
+    },
+    {
+      "id": "H26",
+      "pillar": "P4",
+      "hook_type": "statement",
+      "source": "approved",
+      "en": "Seven centers. Seven dimensions of your experience.",
+      "ar": "سبعة مراكز. سبعة أبعاد لتجربتك.",
+      "note": ""
+    },
+    {
+      "id": "H27",
+      "pillar": "P4",
+      "hook_type": "statement",
+      "source": "quiz section C",
+      "en": "Your body often knows what your mind is still trying to explain.",
+      "ar": "جسدك يعرف غالبًا ما لا يزال عقلك يحاول تفسيره.",
+      "note": "Add 'Reflective, not medical.' on screen."
+    },
+    {
+      "id": "H28",
+      "pillar": "P4",
+      "hook_type": "image",
+      "source": "centre lessons",
+      "en": "A tree doesn't stand firm because the wind is still.",
+      "ar": "الشجرة لا تثبت لأن الريح ساكنة، بل لأن جذورها عميقة.",
+      "note": "Root."
+    },
+    {
+      "id": "H29",
+      "pillar": "P4",
+      "hook_type": "myth_flip",
+      "source": "centre lessons",
+      "en": "Your Throat center isn't only about speaking up.",
+      "ar": "مركز الحلق لا يتعلّق بالكلام وحده.",
+      "note": "Throat: honesty with yourself first, listening as much as speaking."
+    },
+    {
+      "id": "H30",
+      "pillar": "P4",
+      "hook_type": "image",
+      "source": "centre lessons",
+      "en": "The heart is like the breath: it can't live on breathing out alone.",
+      "ar": "القلب كالنَّفَس: لا يعيش بالزفير وحده.",
+      "note": "Heart."
+    },
+    {
+      "id": "H31",
+      "pillar": "P5",
+      "hook_type": "question",
+      "source": "approved",
+      "en": "Curious what a personal reading actually looks like?",
+      "ar": "كيف تبدو القراءة الشخصية فعلًا؟",
+      "note": "AR needs the Arabic sample (or the EN-sample label)."
+    },
+    {
+      "id": "H32",
+      "pillar": "P5",
+      "hook_type": "statement",
+      "source": "new",
+      "en": "12 questions. One private reading. Here's what's inside.",
+      "ar": "١٢ سؤالًا. قراءة خاصة واحدة. وهذا ما بداخلها.",
+      "note": ""
+    },
+    {
+      "id": "H33",
+      "pillar": "P5",
+      "hook_type": "curiosity",
+      "source": "sample",
+      "en": "Lina isn't real. Her reading shows you what a real one looks like.",
+      "ar": "لينا شخصية خيالية، لكن قراءتها تُظهر شكل القراءة الحقيقي.",
+      "note": "Always 'illustrative sample'."
+    },
+    {
+      "id": "H34",
+      "pillar": "P5",
+      "hook_type": "choice",
+      "source": "approved pricing",
+      "en": "$8.88 or $18.88: how deeply would you like to explore?",
+      "ar": "$8.88 أم $18.88؟ ما العمق الذي يناسبك في الاستكشاف؟",
+      "note": ""
+    },
+    {
+      "id": "H35",
+      "pillar": "P5",
+      "hook_type": "transparency",
+      "source": "new",
+      "en": "We just launched. No reviews yet. So here's exactly what you get.",
+      "ar": "أطلقنا للتو، ولا مراجعات بعد. لذلك هذا بالضبط ما تتضمّنه القراءة.",
+      "note": "Founder reel R06."
+    },
+    {
+      "id": "H36",
+      "pillar": "P6",
+      "hook_type": "question",
+      "source": "approved",
+      "en": "You know how to give. But what happens when it's your turn to receive?",
+      "ar": "العطاء سهل عليك. لكن ماذا يحدث حين يأتي دورك في التلقّي؟",
+      "note": ""
+    },
+    {
+      "id": "H37",
+      "pillar": "P6",
+      "hook_type": "question",
+      "source": "approved",
+      "en": "What if your money block isn't where you think it is?",
+      "ar": "ماذا لو كانت نقطة التعثّر في علاقتك بالمال بمكان غير الذي تتوقعه؟",
+      "note": "Money: disclaimer mandatory."
+    },
+    {
+      "id": "H38",
+      "pillar": "P6",
+      "hook_type": "statement",
+      "source": "approved",
+      "en": "A need. A belief. A feeling. A response. A result.",
+      "ar": "حاجة. معتقد. شعور. استجابة. نتيجة.",
+      "note": ""
+    },
+    {
+      "id": "H39",
+      "pillar": "P6",
+      "hook_type": "quote",
+      "source": "quiz Q5",
+      "en": "\"No, no, it's fine.\" Why is that the first thing we say when someone offers help?",
+      "ar": "«لا لا، ما له داعي». لماذا هي أول ما نقوله حين يعرض أحدهم المساعدة؟",
+      "note": "AR quote in Khaleeji, narration in white MSA."
+    },
+    {
+      "id": "H40",
+      "pillar": "P6",
+      "hook_type": "scenario",
+      "source": "new (Gulf)",
+      "en": "Someone insists on paying the bill. What happens inside you?",
+      "ar": "أحدهم يصرّ على دفع الفاتورة. ماذا يحدث في داخلك؟",
+      "note": "The 'bill fight' is a strong Gulf receiving moment."
+    }
+  ],
+  "banks": {
+    "behaviors": [
+      {
+        "behavior": "Struggling to say no",
+        "behavior_ar": "صعوبة قول «لا»",
+        "approved": true,
+        "reasons": [
+          "Fears disappointing someone they love.",
+          "Doubts their right to make a different choice.",
+          "Worries what might happen if they lose control of the situation."
+        ],
+        "reasons_ar": [
+          "أحدهم يخشى أن يخذل شخصًا يحبّه.",
+          "وآخر يشكّ في حقّه في اتخاذ خيار مختلف.",
+          "وثالث يقلق مما قد يحدث إن فقد السيطرة على الموقف."
+        ]
+      },
+      {
+        "behavior": "Doing everything yourself",
+        "behavior_ar": "القيام بكل شيء بنفسك",
+        "reasons": [
+          "It feels easier than explaining it to someone else.",
+          "If they're not the one holding it together, things seem to go wrong.",
+          "Asking for help feels like owing something back."
+        ],
+        "reasons_ar": [
+          "لأن شرح الأمر لشخص آخر يبدو أصعب من إنجازه.",
+          "لأن الأمور تبدو وكأنها ستنهار إن لم يُمسك بها بنفسه.",
+          "لأن طلب المساعدة يبدو كدَين ينتظر السداد."
+        ]
+      },
+      {
+        "behavior": "Overthinking decisions",
+        "behavior_ar": "التفكير الزائد قبل كل قرار",
+        "reasons": [
+          "Afraid of choosing wrong and living with it.",
+          "Not yet sure what they actually want.",
+          "Trusts everyone's opinion more than their own knowing."
+        ],
+        "reasons_ar": [
+          "الخوف من الاختيار الخاطئ ومن العيش معه.",
+          "عدم الوضوح بعد حول ما يريده فعلًا.",
+          "الثقة بآراء الجميع أكثر من المعرفة الداخلية."
+        ]
+      },
+      {
+        "behavior": "Pulling back when things start going well",
+        "behavior_ar": "التراجع حين تبدأ الأمور بالتحسّن",
+        "reasons": [
+          "Waiting for what hurt before to happen again.",
+          "Not feeling they've done enough to deserve it yet.",
+          "Success means being seen, and being seen feels exposed."
+        ],
+        "reasons_ar": [
+          "انتظار أن يتكرر ما جرح من قبل.",
+          "الشعور بعدم الاستحقاق بعد.",
+          "النجاح يعني الظهور، والظهور يبدو انكشافًا."
+        ]
+      },
+      {
+        "behavior": "Keeping feelings in",
+        "behavior_ar": "الاحتفاظ بالمشاعر في الداخل",
+        "reasons": [
+          "Silence feels safer than conflict.",
+          "Doesn't want to be a burden.",
+          "Hasn't had a quiet moment to know what they actually feel."
+        ],
+        "reasons_ar": [
+          "الصمت يبدو أكثر أمانًا من الخلاف.",
+          "عدم الرغبة في أن يكون عبئًا على أحد.",
+          "لم تتح لحظة هدوء بعد لمعرفة الشعور الحقيقي."
+        ]
+      },
+      {
+        "behavior": "Brushing off compliments",
+        "behavior_ar": "التهرّب من المديح",
+        "reasons": [
+          "Feels an instant need to give something back.",
+          "Wonders what the other person wants in return.",
+          "Receiving simply feels unfamiliar."
+        ],
+        "reasons_ar": [
+          "الشعور الفوري بضرورة ردّ الجميل.",
+          "التساؤل عمّا يريده الطرف الآخر في المقابل.",
+          "لأن التلقّي ببساطة غير مألوف."
+        ]
+      },
+      {
+        "behavior": "Always busy, never off",
+        "behavior_ar": "الانشغال الدائم",
+        "reasons": [
+          "Believes that if they stop, everything falls apart.",
+          "Feels they have to be useful for people to keep choosing them.",
+          "Quiet makes room for feelings they'd rather not meet yet."
+        ],
+        "reasons_ar": [
+          "الاعتقاد بأن كل شيء سينهار عند التوقف.",
+          "الشعور بضرورة تقديم الفائدة ليبقى الناس متمسكين به.",
+          "الهدوء يفتح بابًا لمشاعر لم يحن وقت لقائها بعد."
+        ]
+      }
+    ],
+    "centers": [
+      {
+        "key": "root",
+        "en": "Root",
+        "ar": "الجذر",
+        "theme_en": "Security and stability",
+        "theme_ar": "الأمان والاستقرار",
+        "notice_en": "It's hard to relax until everything feels certain.",
+        "notice_ar": "صعب الاسترخاء قبل أن يصبح كل شيء مضمونًا.",
+        "lesson_en": "Finding safety within yourself, even when you can't guarantee what happens around you.",
+        "lesson_ar": "الأمان يمكن أن يُوجد في الداخل، حتى حين لا يمكن ضمان ما يحدث في الخارج.",
+        "image": "A tree doesn't stand firm because the wind is still, but because its roots run deep.",
+        "image_ar": "الشجرة لا تثبت لأن الريح ساكنة، بل لأن جذورها عميقة.",
+        "broll": "tree in wind, roots in soil"
+      },
+      {
+        "key": "sacral",
+        "en": "Sacral",
+        "ar": "العَجُز",
+        "theme_en": "Emotions and creativity",
+        "theme_ar": "المشاعر والإبداع",
+        "notice_en": "Joy feels like a reward you earn after the list is done.",
+        "notice_ar": "الفرح يبدو مكافأة لا تأتي إلا بعد إنهاء القائمة.",
+        "lesson_en": "Living life as an experience to be felt, not a list of duties waiting to be done.",
+        "lesson_ar": "الحياة تجربة تُحَسّ ويُستمتع بها، لا قائمة واجبات تنتظر الإنجاز.",
+        "image": "Still water stagnates; flowing water renews itself.",
+        "image_ar": "الماء الراكد يأسن، والماء الجاري يتجدّد.",
+        "broll": "stream flowing over stones"
+      },
+      {
+        "key": "solar_plexus",
+        "en": "Solar Plexus",
+        "ar": "الضفيرة الشمسية",
+        "theme_en": "Confidence and personal power",
+        "theme_ar": "الثقة والقوة الشخصية",
+        "notice_en": "A mistake can feel like proof about you, not information.",
+        "notice_ar": "الخطأ يبدو دليلًا على الذات، لا معلومة نتعلّم منها.",
+        "lesson_en": "Your power comes from choosing and acting with awareness, not from controlling outcomes.",
+        "lesson_ar": "القوة تأتي من الاختيار والتصرّف بوعي، لا من السيطرة على النتائج.",
+        "image": "The sun doesn't force anything to grow. It gives it light.",
+        "image_ar": "الشمس لا تُجبر شيئًا على النمو، لكنها تمنحه الضوء.",
+        "broll": "sunlight on a sprouting plant"
+      },
+      {
+        "key": "heart",
+        "en": "Heart",
+        "ar": "القلب",
+        "theme_en": "Love, compassion, giving and receiving",
+        "theme_ar": "الحب والتعاطف والعطاء والتلقّي",
+        "notice_en": "Giving is easy. Receiving feels unfamiliar.",
+        "notice_ar": "العطاء سهل، أما التلقّي فغير مألوف.",
+        "lesson_en": "Your worth needs no proof.",
+        "lesson_ar": "القيمة الذاتية لا تحتاج إلى إثبات.",
+        "image": "The heart is like the breath: it lives by taking in and giving out together.",
+        "image_ar": "القلب كالنَّفَس: يعيش بالأخذ والعطاء معًا.",
+        "broll": "slow breath visualised as light expanding and contracting"
+      },
+      {
+        "key": "throat",
+        "en": "Throat",
+        "ar": "الحلق",
+        "theme_en": "Communication and self-expression",
+        "theme_ar": "التواصل والتعبير عن الذات",
+        "notice_en": "You say the easy thing, then feel heavy later.",
+        "notice_ar": "قول الإجابة الأسهل، ثم الشعور بالثقل لاحقًا.",
+        "lesson_en": "Honest expression doesn't threaten your belonging.",
+        "lesson_ar": "التعبير الصادق لا يهدّد الانتماء ولا محبة من حولنا.",
+        "image": "An honest word in its place is stronger than many words spoken to please.",
+        "image_ar": "كلمة صادقة في مكانها أقوى من كلمات كثيرة تُقال للإرضاء.",
+        "broll": "a single ripple spreading across dark water"
+      },
+      {
+        "key": "third_eye",
+        "en": "Third Eye",
+        "ar": "العين الثالثة",
+        "theme_en": "Clarity and intuition",
+        "theme_ar": "الوضوح والحدس",
+        "notice_en": "You go in circles, doubting whichever way you lean.",
+        "notice_ar": "الدوران في حلقات، والشك في أي اتجاه نميل إليه.",
+        "lesson_en": "Listening to intuition alongside reason, so neither hides the other.",
+        "lesson_ar": "الإصغاء إلى الحدس إلى جانب العقل، فلا يحجب أحدهما الآخر.",
+        "image": "Only still water reflects the image clearly.",
+        "image_ar": "وحده الماء الساكن يعكس الصورة بوضوح.",
+        "broll": "moon reflected in perfectly still water"
+      },
+      {
+        "key": "crown",
+        "en": "Crown",
+        "ar": "التاج",
+        "theme_en": "Meaning and spiritual connection",
+        "theme_ar": "المعنى والاتصال الروحي",
+        "notice_en": "Some parts of life feel right. Others don't fit anymore.",
+        "notice_ar": "بعض جوانب الحياة تبدو صحيحة، وأخرى لم تعد تناسب.",
+        "lesson_en": "Your life's value isn't limited to your roles and achievements.",
+        "lesson_ar": "قيمة الحياة لا تقتصر على الأدوار والإنجازات.",
+        "image": "A Crown in balance rests on a firm Root: fully on the earth, fully connected to the sky.",
+        "image_ar": "التاج المتوازن يرتكز على جذر ثابت: حضور كامل على الأرض، واتصال كامل بالسماء.",
+        "broll": "night sky over a still desert horizon"
+      }
+    ],
+    "crystals": [
+      {
+        "slug": "amethyst",
+        "en": "Amethyst",
+        "ar": "الجمشت",
+        "centers": "third_eye, crown",
+        "shortcut_wish": "a busy mind",
+        "restriction": null
+      },
+      {
+        "slug": "rose-quartz",
+        "en": "Rose Quartz",
+        "ar": "الكوارتز الوردي",
+        "centers": "heart",
+        "shortcut_wish": "love",
+        "restriction": null
+      },
+      {
+        "slug": "citrine",
+        "en": "Citrine",
+        "ar": "السترين",
+        "centers": "solar_plexus",
+        "shortcut_wish": "abundance",
+        "restriction": null
+      },
+      {
+        "slug": "carnelian",
+        "en": "Carnelian",
+        "ar": "العقيق الأحمر",
+        "centers": "sacral",
+        "shortcut_wish": "no motivation",
+        "restriction": null
+      },
+      {
+        "slug": "lapis-lazuli",
+        "en": "Lapis Lazuli",
+        "ar": "اللازورد",
+        "centers": "throat, third_eye",
+        "shortcut_wish": "can't express yourself",
+        "restriction": null
+      },
+      {
+        "slug": "turquoise",
+        "en": "Turquoise",
+        "ar": "الفيروز",
+        "centers": "throat, heart",
+        "shortcut_wish": "can't find the words",
+        "restriction": null
+      },
+      {
+        "slug": "malachite",
+        "en": "Malachite",
+        "ar": "المالاكيت",
+        "centers": "heart, solar_plexus",
+        "shortcut_wish": "feeling stuck",
+        "restriction": null
+      },
+      {
+        "slug": "hematite",
+        "en": "Hematite",
+        "ar": "الهيماتيت",
+        "centers": "root",
+        "shortcut_wish": "feeling scattered",
+        "restriction": null
+      },
+      {
+        "slug": "smoky-quartz",
+        "en": "Smoky Quartz",
+        "ar": "الكوارتز الدخاني",
+        "centers": "root",
+        "shortcut_wish": "feeling overwhelmed",
+        "restriction": null
+      },
+      {
+        "slug": "garnet",
+        "en": "Garnet",
+        "ar": "الغارنيت",
+        "centers": "root, sacral",
+        "shortcut_wish": "low energy",
+        "restriction": null
+      },
+      {
+        "slug": "red-jasper",
+        "en": "Red Jasper",
+        "ar": "اليشب الأحمر",
+        "centers": "root",
+        "shortcut_wish": "needing strength to keep going",
+        "restriction": null
+      },
+      {
+        "slug": "bloodstone",
+        "en": "Bloodstone",
+        "ar": "حجر الدم",
+        "centers": "root, sacral",
+        "shortcut_wish": "needing strength",
+        "restriction": null
+      },
+      {
+        "slug": "mahogany-obsidian",
+        "en": "Mahogany Obsidian",
+        "ar": "الأوبسيديان الماهوغاني",
+        "centers": "root, sacral",
+        "shortcut_wish": "needing grounding",
+        "restriction": null
+      },
+      {
+        "slug": "black-onyx",
+        "en": "Black Onyx",
+        "ar": "الأونيكس الأسود",
+        "centers": "root",
+        "shortcut_wish": "wanting stronger boundaries",
+        "restriction": null
+      },
+      {
+        "slug": "black-tourmaline",
+        "en": "Black Tourmaline",
+        "ar": "التورمالين الأسود",
+        "centers": "root",
+        "shortcut_wish": "absorbing everyone's moods",
+        "restriction": null
+      },
+      {
+        "slug": "black-obsidian",
+        "en": "Black Obsidian",
+        "ar": "الأوبسيديان الأسود",
+        "centers": "root",
+        "shortcut_wish": "needing protection",
+        "restriction": "EN only: in AR avoid 'protection' framing (evil-eye association, see D 1.1)"
+      },
+      {
+        "slug": "shungite",
+        "en": "Shungite",
+        "ar": "الشونغيت",
+        "centers": "root",
+        "shortcut_wish": "needing protection",
+        "restriction": "EN only: in AR avoid 'protection' framing"
+      },
+      {
+        "slug": "apache-tear",
+        "en": "Apache Tear",
+        "ar": "دموع الأباتشي",
+        "centers": "root",
+        "shortcut_wish": "grief",
+        "restriction": "Sensitive: grief. Founder review before posting; never in AR auto-queue"
+      }
+    ],
+    "patterns": [
+      {
+        "key": "overgiver",
+        "en": "The Over Giver",
+        "ar_label_m": "المُعطي المُفرِط",
+        "ar_label_f": "المُعطية المُفرِطة",
+        "ar_public": "نمط العطاء المُفرِط",
+        "seed_en": [
+          "You're always taking care of something or someone; by the time you notice what you need, you're already empty.",
+          "You can accept help only when you feel you've done enough to deserve it."
+        ],
+        "steady_en": "I can stay open without losing myself.",
+        "steady_ar": "يمكنني إبقاء قلبي مفتوحًا دون أن أفقد ذاتي."
+      },
+      {
+        "key": "people_pleaser",
+        "en": "The Peace Keeper",
+        "ar_label_m": "صانع السلام",
+        "ar_label_f": "صانعة السلام",
+        "ar_public": "نمط صنع السلام",
+        "seed_en": [
+          "When someone asks what you want, you freeze a little, say the easy thing, then feel heavy later.",
+          "You try to say it without really saying it."
+        ],
+        "steady_en": "I say it clearly, and I can stay steady while I do.",
+        "steady_ar": "أقوله بوضوح، وأبقى ثابتًا وأنا أقوله."
+      },
+      {
+        "key": "overthinker",
+        "en": "The Over Thinker",
+        "ar_label_m": "المفكّر المُفرِط",
+        "ar_label_f": "المفكّرة المُفرِطة",
+        "ar_public": "نمط التفكير المُفرِط",
+        "seed_en": [
+          "Your mind keeps running, even when you're trying to rest.",
+          "You go in circles and keep doubting whichever way you lean."
+        ],
+        "steady_en": "I give myself a moment, then I usually know what feels right.",
+        "steady_ar": "أمنح نفسي لحظة، ثم أعرف عادةً ما هو الصواب."
+      },
+      {
+        "key": "controller",
+        "en": "The Controller",
+        "ar_label_m": "المُسيطر المُفرِط",
+        "ar_label_f": "المُسيطرة المُفرِطة",
+        "ar_public": "نمط السيطرة",
+        "seed_en": [
+          "You can't relax until everything is handled.",
+          "It feels easier to do it yourself than to explain it to someone else."
+        ],
+        "steady_en": "I trust the answer when it comes. I don't need to fight myself for it.",
+        "steady_ar": "أثق في الإجابة عندما تظهر، ولست بحاجة إلى محاربة نفسي من أجلها."
+      },
+      {
+        "key": "self_saboteur",
+        "en": "The Comfort Zone Guardian",
+        "ar_label_m": "حارس منطقة الراحة",
+        "ar_label_f": "حارسة منطقة الراحة",
+        "ar_public": "نمط حراسة منطقة الراحة",
+        "seed_en": [
+          "Right when things start going well, you pull back or make it harder than it needs to be.",
+          "A quiet thought: 'I'm going to ruin this right before it works.'"
+        ],
+        "steady_en": "The past still exists, but it doesn't run the whole room anymore.",
+        "steady_ar": "الماضي لا يزال موجودًا، لكنه لم يعد يسيطر على المشهد."
+      },
+      {
+        "key": "blocked_creator",
+        "en": "The Unreleased Creator",
+        "ar_label_m": "المبدع المؤجَّل",
+        "ar_label_f": "المبدعة المؤجَّلة",
+        "ar_public": "نمط الإبداع المؤجَّل",
+        "seed_en": [
+          "You have ideas you care about, but something stops you when it's time to finish or share them."
+        ],
+        "steady_en": "When something wants to be made, I usually follow it.",
+        "steady_ar": "عندما يكون هناك شيء يريد أن يتجسّد، أتبعه عادةً."
+      },
+      {
+        "key": "isolator",
+        "en": "The Walled Heart",
+        "ar_label_m": "المُنعزل المُفرِط",
+        "ar_label_f": "المُنعزلة المُفرِطة",
+        "ar_public": "نمط الانعزال",
+        "seed_en": [
+          "You have people around you, but letting someone close feels more tiring than handling it yourself."
+        ],
+        "steady_en": "I can be honest, even when it's tender.",
+        "steady_ar": "يمكنني التعبير بصدق، حتى في اللحظات الحساسة."
+      }
+    ],
+    "money_scenarios": [
+      "Setting your price for a freelance project",
+      "Asking for a raise or a better offer",
+      "A friend insists on paying the bill (the Gulf 'bill fight')",
+      "Saying yes to an opportunity that feels bigger than you",
+      "Spending on yourself without justifying it",
+      "Being offered help, a gift or a discount"
+    ],
+    "quiz_exclusions": [
+      "Q8 option 1 ('I feel a bit empty...')",
+      "Q12 option 1 ('Something bad is about to happen.')",
+      "Q12 option 4 ('What hurt me before is going to happen again.') as a standalone hook",
+      "Q11 options 1 and 7 (sleep / rest) as hooks: they drift toward health",
+      "Q9 option 5 ('Wired and buzzy') and the v2 'numb or disconnected' option"
+    ]
+  },
+  "hashtags": {
+    "P1": {
+      "en": [
+        "#peoplepleaser",
+        "#howtosayno",
+        "#selfawareness",
+        "#patterns",
+        "#mycrystalcode"
+      ],
+      "en_alt": [
+        "#overthinking",
+        "#boundaries",
+        "#innerwork",
+        "#selfdiscovery"
+      ],
+      "ar": [
+        "#كريستال_كود",
+        "#اكتشاف_الذات",
+        "#الوعي_الذاتي",
+        "#ارضاء_الاخرين",
+        "#تطوير_الذات"
+      ],
+      "ar_alt": [
+        "#التفكير_الزائد",
+        "#فهم_الذات",
+        "#وعي"
+      ]
+    },
+    "P2": {
+      "en": [
+        "#selfdiscovery",
+        "#selfreflection",
+        "#journalprompts",
+        "#mycrystalcode"
+      ],
+      "en_alt": [
+        "#knowyourself",
+        "#innerwork",
+        "#reflection"
+      ],
+      "ar": [
+        "#كريستال_كود",
+        "#اكتشاف_الذات",
+        "#تأمل_ذاتي",
+        "#اسئلة_عميقة"
+      ],
+      "ar_alt": [
+        "#فهم_الذات",
+        "#وعي"
+      ]
+    },
+    "P3": {
+      "en": [
+        "#crystals",
+        "#crystalmeanings",
+        "#{stone}",
+        "#crystaltok",
+        "#mycrystalcode"
+      ],
+      "en_alt": [
+        "#crystalcollection",
+        "#crystallibrary",
+        "#crystalcommunity"
+      ],
+      "ar": [
+        "#كريستال_كود",
+        "#الكريستال",
+        "#معاني_الاحجار",
+        "#{stone_ar}"
+      ],
+      "ar_alt": [
+        "#احجار_كريمة",
+        "#احجار_طبيعية"
+      ]
+    },
+    "P4": {
+      "en": [
+        "#chakras",
+        "#energycenters",
+        "#sevenchakras",
+        "#spiritualwellness",
+        "#mycrystalcode"
+      ],
+      "en_alt": [
+        "#chakrameaning",
+        "#{center}chakra",
+        "#selfdiscovery"
+      ],
+      "ar": [
+        "#كريستال_كود",
+        "#مراكز_الطاقة",
+        "#الشاكرات",
+        "#الشاكرات_السبع"
+      ],
+      "ar_alt": [
+        "#وعي",
+        "#اكتشاف_الذات"
+      ]
+    },
+    "P5": {
+      "en": [
+        "#mycrystalcode",
+        "#crystalreading",
+        "#chakrareading",
+        "#selfdiscovery"
+      ],
+      "en_alt": [
+        "#personalizedreading",
+        "#energyreading"
+      ],
+      "ar": [
+        "#كريستال_كود",
+        "#قراءة_شخصية",
+        "#مراكز_الطاقة",
+        "#اكتشاف_الذات"
+      ],
+      "ar_alt": [
+        "#الشاكرات"
+      ]
+    },
+    "P6": {
+      "en": [
+        "#relationshipwithmoney",
+        "#receiving",
+        "#selfworth",
+        "#mycrystalcode"
+      ],
+      "en_alt": [
+        "#moneymindset",
+        "#peoplepleaser",
+        "#giving"
+      ],
+      "ar": [
+        "#كريستال_كود",
+        "#علاقتي_بالمال",
+        "#التلقي",
+        "#تقدير_الذات"
+      ],
+      "ar_alt": [
+        "#العطاء",
+        "#الوعي_المالي"
+      ]
+    }
+  },
+  "banned_hashtags": [
+    "#crystalhealing",
+    "#chakrahealing",
+    "#healingcrystals",
+    "#energyhealing",
+    "#manifestmoney",
+    "#moneymagnet",
+    "#lawofattraction",
+    "#manifestation",
+    "#anxietyrelief",
+    "#depression",
+    "#therapy",
+    "#mentalhealth",
+    "#astrology",
+    "#horoscope",
+    "#العلاج_بالطاقة",
+    "#العلاج_بالاحجار",
+    "#جلب_الرزق",
+    "#جلب_الحظ",
+    "#العين_والحسد",
+    "#الابراج",
+    "#علم_الفلك_الروحي",
+    "#طاقة_شفائية"
+  ],
+  "search_keywords": {
+    "P1": {
+      "en": [
+        "people pleasing",
+        "how to say no",
+        "overthinking",
+        "setting boundaries",
+        "why do I always say yes"
+      ],
+      "ar": [
+        "إرضاء الآخرين",
+        "كيف أقول لا",
+        "التفكير الزائد",
+        "وضع الحدود",
+        "فهم الذات"
+      ]
+    },
+    "P2": {
+      "en": [
+        "self discovery questions",
+        "self reflection questions",
+        "journal prompts",
+        "know yourself"
+      ],
+      "ar": [
+        "أسئلة لاكتشاف الذات",
+        "أسئلة عميقة",
+        "تأمل ذاتي",
+        "اكتشاف الذات"
+      ]
+    },
+    "P3": {
+      "en": [
+        "{stone} meaning",
+        "crystal meanings",
+        "which crystal is right for me",
+        "crystals for beginners"
+      ],
+      "ar": [
+        "معنى حجر {stone_ar}",
+        "معاني الأحجار",
+        "أي حجر يناسبني",
+        "الكريستال"
+      ]
+    },
+    "P4": {
+      "en": [
+        "7 chakras explained",
+        "chakra meaning",
+        "{center} chakra",
+        "energy centers"
+      ],
+      "ar": [
+        "الشاكرات السبع",
+        "مراكز الطاقة",
+        "معنى الشاكرات",
+        "شاكرا {center_ar}"
+      ]
+    },
+    "P5": {
+      "en": [
+        "chakra reading",
+        "crystal reading",
+        "personalized reading",
+        "what is my crystal"
+      ],
+      "ar": [
+        "قراءة شخصية",
+        "قراءة مراكز الطاقة",
+        "كريستال كود"
+      ]
+    },
+    "P6": {
+      "en": [
+        "relationship with money",
+        "hard to receive compliments",
+        "money mindset",
+        "accepting help"
+      ],
+      "ar": [
+        "علاقتي بالمال",
+        "صعوبة تقبّل المديح",
+        "التلقي",
+        "تقدير الذات"
+      ]
+    }
+  },
+  "posting_slots": [
+    {
+      "slot": "A",
+      "lang": "en",
+      "utc": "14:00",
+      "jitter_min": 20,
+      "cron_utc": "0 14 * * *",
+      "local": "14:00 London · 09:00 New York · 17:00 Riyadh · 18:00 Dubai",
+      "why": "Gulf English speakers after work, UK afternoon, US morning; >= 4h before slot B."
+    },
+    {
+      "slot": "B",
+      "lang": "ar",
+      "utc": "18:30",
+      "jitter_min": 20,
+      "cron_utc": "30 18 * * *",
+      "local": "21:30 Riyadh/Doha/Kuwait · 22:30 Dubai/Muscat",
+      "why": "Gulf prime time is roughly 21:00-00:30 local."
+    }
+  ],
+  "calendar_14d": [
+    {
+      "day": 1,
+      "date": "2026-11-02",
+      "weekday": "Mon",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "R01",
+      "format": "reel",
+      "pillar": "P1",
+      "hook_id": "H02",
+      "cta_tier": "T0",
+      "topic": "Struggling to say no (approved three reasons)",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 1,
+      "date": "2026-11-02",
+      "weekday": "Mon",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "C01",
+      "format": "carousel",
+      "pillar": "P1",
+      "hook_id": "H01",
+      "cta_tier": "T1",
+      "topic": "Struggling to say no (approved AR block)",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-11-03",
+      "weekday": "Tue",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "C05",
+      "format": "carousel",
+      "pillar": "P5",
+      "hook_id": "H31",
+      "cta_tier": "T1",
+      "topic": "Lina walkthrough; pin to grid",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-11-03",
+      "weekday": "Tue",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "R02",
+      "format": "reel",
+      "pillar": "P2",
+      "hook_id": "H11",
+      "cta_tier": "T0",
+      "topic": "Q5: someone compliments you",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 3,
+      "date": "2026-11-04",
+      "weekday": "Wed",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "R02",
+      "format": "reel",
+      "pillar": "P2",
+      "hook_id": "H10",
+      "cta_tier": "T0",
+      "topic": "Q12: loudest thought (options 2,3,5,6,9,10)",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 3,
+      "date": "2026-11-04",
+      "weekday": "Wed",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "C04",
+      "format": "carousel",
+      "pillar": "P3",
+      "hook_id": "H24",
+      "cta_tier": "T1",
+      "topic": "Amethyst: busy-mind shortcut; slide-6 fact: most citrine began as amethyst",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 4,
+      "date": "2026-11-05",
+      "weekday": "Thu",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "C01",
+      "format": "carousel",
+      "pillar": "P1",
+      "hook_id": "H05",
+      "cta_tier": "T1",
+      "topic": "People-pleasing: three reasons",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 4,
+      "date": "2026-11-05",
+      "weekday": "Thu",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "R01",
+      "format": "reel",
+      "pillar": "P1",
+      "hook_id": "H02",
+      "cta_tier": "T0",
+      "topic": "Struggling to say no",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 5,
+      "date": "2026-11-06",
+      "weekday": "Fri",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "R05",
+      "format": "reel",
+      "pillar": "P5",
+      "hook_id": "H32",
+      "cta_tier": "T2",
+      "topic": "Watch the Lina reading open",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 5,
+      "date": "2026-11-06",
+      "weekday": "Fri",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "C02",
+      "format": "carousel",
+      "pillar": "P2",
+      "hook_id": "H14",
+      "cta_tier": "T0",
+      "topic": "Q3: someone's mood in your space",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 6,
+      "date": "2026-11-07",
+      "weekday": "Sat",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "C02",
+      "format": "carousel",
+      "pillar": "P2",
+      "hook_id": "H16",
+      "cta_tier": "T0",
+      "topic": "Q1: how has this week actually been",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 6,
+      "date": "2026-11-07",
+      "weekday": "Sat",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "R07",
+      "format": "reel",
+      "pillar": "P6",
+      "hook_id": "H40",
+      "cta_tier": "T0",
+      "topic": "The bill fight (Gulf receiving)",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 7,
+      "date": "2026-11-08",
+      "weekday": "Sun",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "R04",
+      "format": "reel",
+      "pillar": "P4",
+      "hook_id": "H28",
+      "cta_tier": "T1",
+      "topic": "Root: the tree and the wind",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 7,
+      "date": "2026-11-08",
+      "weekday": "Sun",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "C03",
+      "format": "carousel",
+      "pillar": "P4",
+      "hook_id": "H25",
+      "cta_tier": "T2",
+      "topic": "All seven centers (AR Lite copy, no birth chart)",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 8,
+      "date": "2026-11-09",
+      "weekday": "Mon",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "C04",
+      "format": "carousel",
+      "pillar": "P3",
+      "hook_id": "H18",
+      "cta_tier": "T1",
+      "topic": "Rose quartz: the love shortcut",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 8,
+      "date": "2026-11-09",
+      "weekday": "Mon",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "R03",
+      "format": "reel",
+      "pillar": "P3",
+      "hook_id": "H21",
+      "cta_tier": "T1",
+      "topic": "Lapis lazuli: 'can't express yourself'",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 9,
+      "date": "2026-11-10",
+      "weekday": "Tue",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "R07",
+      "format": "reel",
+      "pillar": "P6",
+      "hook_id": "H36",
+      "cta_tier": "T3",
+      "topic": "Compliment / help offered -> Full (receiving + Abundance)",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 9,
+      "date": "2026-11-10",
+      "weekday": "Tue",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "C07",
+      "format": "carousel",
+      "pillar": "P5",
+      "hook_id": "H34",
+      "cta_tier": "T2",
+      "topic": "Lite vs Full (AR, no birth chart)",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 10,
+      "date": "2026-11-11",
+      "weekday": "Wed",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "C06",
+      "format": "carousel",
+      "pillar": "P6",
+      "hook_id": "H37",
+      "cta_tier": "T3",
+      "topic": "Setting your price: the loop",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 10,
+      "date": "2026-11-11",
+      "weekday": "Wed",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "R08",
+      "format": "reel",
+      "pillar": "P1",
+      "hook_id": "H08",
+      "cta_tier": "T0",
+      "topic": "Pattern mode: pulling back when things go well",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 11,
+      "date": "2026-11-12",
+      "weekday": "Thu",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "R03",
+      "format": "reel",
+      "pillar": "P3",
+      "hook_id": "H20",
+      "cta_tier": "T1",
+      "topic": "Black obsidian: the protection shortcut (EN only)",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 11,
+      "date": "2026-11-12",
+      "weekday": "Thu",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "C08",
+      "format": "carousel",
+      "pillar": "P1",
+      "hook_id": "H09",
+      "cta_tier": "T2",
+      "topic": "نمط صنع السلام (Peace Keeper) in 5 moments",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 12,
+      "date": "2026-11-13",
+      "weekday": "Fri",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "C03",
+      "format": "carousel",
+      "pillar": "P4",
+      "hook_id": "H26",
+      "cta_tier": "T2",
+      "topic": "All seven centers (EN)",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 12,
+      "date": "2026-11-13",
+      "weekday": "Fri",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "R04",
+      "format": "reel",
+      "pillar": "P4",
+      "hook_id": "H30",
+      "cta_tier": "T1",
+      "topic": "Heart: the breath",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 13,
+      "date": "2026-11-14",
+      "weekday": "Sat",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "C08",
+      "format": "carousel",
+      "pillar": "P1",
+      "hook_id": "H09",
+      "cta_tier": "T2",
+      "topic": "The Over Giver in 5 quiet moments",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 13,
+      "date": "2026-11-14",
+      "weekday": "Sat",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "R02",
+      "format": "reel",
+      "pillar": "P2",
+      "hook_id": "H15",
+      "cta_tier": "T0",
+      "topic": "Q11: 'what do I want?'",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 14,
+      "date": "2026-11-15",
+      "weekday": "Sun",
+      "slot": "A",
+      "lang": "en",
+      "utc_time": "14:00",
+      "formula_id": "R06",
+      "format": "reel",
+      "pillar": "P5",
+      "hook_id": "H35",
+      "cta_tier": "T2",
+      "topic": "Founder: we just launched, here's what you get",
+      "platform_warmup_days_1_14": "instagram",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    },
+    {
+      "day": 14,
+      "date": "2026-11-15",
+      "weekday": "Sun",
+      "slot": "B",
+      "lang": "ar",
+      "utc_time": "18:30",
+      "formula_id": "C02",
+      "format": "carousel",
+      "pillar": "P2",
+      "hook_id": "H12",
+      "cta_tier": "T0",
+      "topic": "Q11 lines: pick the one that's too familiar",
+      "platform_warmup_days_1_14": "tiktok",
+      "platform_steady_state": [
+        "instagram",
+        "tiktok"
+      ]
+    }
+  ]
+}

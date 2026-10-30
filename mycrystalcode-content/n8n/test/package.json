@@ -1,0 +1,8 @@
+{
+  "name": "mcc-workflow-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Runs the autopilot's Code nodes against stubs and renders the slides (local Chromium or Gotenberg)",
+  "scripts": { "test": "node run-tests.js" },
+  "dependencies": { "luxon": "3.5.0", "playwright": "^1.48.0" }
+}

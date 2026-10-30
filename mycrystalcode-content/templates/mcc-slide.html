@@ -1,10 +1,14 @@
 <!doctype html>
+<meta charset="utf-8">
 <!--
   My Crystal Code — social slide template (carousels 1080x1350, reel covers 1080x1920).
 
   One file renders every layout in English or Arabic. n8n injects the slide JSON by replacing
   the data token inside <script id="mcc-data"> (escape "</" as "<\/"), sends the HTML to the renderer, and waits
-  for `body[data-ready="1"]` (set after web fonts load) before taking the screenshot.
+  for `body[data-ready="1"]` (set after web fonts and images load) before taking the screenshot.
+  Gotenberg form fields used by the workflow: width, height, clip=true, format, failOnConsoleExceptions=true,
+  waitForExpression="document.body.getAttribute('data-ready') === '1' || document.body.hasAttribute('data-error')".
+  A failed image sets data-error and throws, so the render fails instead of publishing a blank frame.
 
   Spec: mycrystalcode-content/agency/C-design-system.md (sections 1-3). Colors come from the
   site's tokens.css; nothing outside that palette is used.
@@ -17,14 +21,16 @@
     quote    { question, prompt? }
     split    { behavior, reasons: [string, string, string] }
     centers  { title?, centers: [{ key, name, state, note }] }   state: care|working|rising|flowing
+             one center = the single-center variant: { centers: [{ key, name, state, note, body }] }
     sample   { title, image, callout? }                   image: URL of a real lina-0X.webp page
     cta      { offer?: "both"|"lite"|"full", button? }
-    reel_cover { eyebrow?, headline, image? }             1080x1920
+    reel_cover { eyebrow?, headline, image?, overlay? }   1080x1920; also used for each reel beat.
+               overlay: true renders text + scrim on a transparent background (PNG with
+               omitBackground) so mcc-reel can lay it over AI video.
   Wrap the emphasised last word(s) of a headline in *asterisks*.
 -->
 <html lang="en">
 <head>
-<meta charset="utf-8">
 <meta name="viewport" content="width=1080">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,7 +78,7 @@ html[lang="ar"] {
   --f-meta: 'IBM Plex Sans Arabic', sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { width: 1080px; background: var(--scene); }
+html, body { width: 1080px; overflow: hidden; background: var(--scene); }
 body { font-family: var(--f-body); -webkit-font-smoothing: antialiased; }
 .slide { position: relative; width: 1080px; height: 1350px; overflow: hidden; }
 .slide.reel { height: 1920px; }
@@ -162,6 +168,17 @@ html[lang="ar"] .quote .q { font-style: normal; font-weight: 600; line-height: 1
 .chip { display: inline-flex; align-items: center; gap: 12px; padding: 8px 18px; border-radius: 100px; font-size: 26px; font-weight: 500; color: var(--on-scene); white-space: nowrap; }
 .chip b { width: 14px; height: 14px; border-radius: 50%; }
 .row .note { font-size: 30px; color: var(--on-scene-2); margin-top: 6px; }
+.solo { position: absolute; top: 280px; inset-inline: 96px; display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 2; }
+.solo .bignode { width: 120px; height: 120px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 10px rgba(255, 255, 255, .06), 0 0 80px currentColor; }
+.solo .name { font-family: var(--f-display); font-weight: 600; font-size: 96px; margin-top: 44px; }
+html[lang="ar"] .solo .name { font-size: 79px; }
+.solo .chip { margin-top: 18px; font-size: 30px; }
+.scale { position: relative; width: 888px; height: 18px; border-radius: 9px; margin-top: 54px; background: linear-gradient(90deg, #fae3df 0 25%, #f9f0d9 25% 50%, #def2f3 50% 75%, #faeadb 75% 100%); }
+html[lang="ar"] .scale { transform: scaleX(-1); }
+.scale i { position: absolute; top: -6px; width: 30px; height: 30px; border-radius: 50%; background: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, .4); }
+.scale-labels { width: 888px; display: flex; justify-content: space-between; margin-top: 14px; font-family: var(--f-meta); font-size: 26px; color: var(--violet-light); letter-spacing: .12em; }
+html[lang="ar"] .scale-labels { letter-spacing: 0; }
+.solo .body { margin-top: 44px; font-size: 38px; max-width: 860px; }
 .footnote { position: absolute; top: 1170px; inset-inline: 96px; font-size: 28px; color: var(--violet-light); }
 
 /* ---- L7 sample ---- */
@@ -176,7 +193,9 @@ html[lang="ar"] .frame { transform: rotate(2deg); }
 /* ---- L8 cta ---- */
 .cta .logo { margin-top: 40px; filter: var(--halo-crystal); }
 .cta .tagline { font-size: 64px; margin-top: 30px; }
-.prices { display: flex; gap: 48px; margin-top: 44px; }
+.cta .box > * { flex-shrink: 0; }
+.prices { display: flex; gap: 48px; margin-top: 44px; justify-content: center; }
+.price { flex: none; }
 .price { width: 420px; padding: 34px 30px; border-radius: 24px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .12); text-align: center; }
 .price.featured { border: 1.5px solid transparent; background: linear-gradient(#141030, #141030) padding-box, var(--brand-gradient) border-box; }
 .price.single { width: 888px; }
@@ -191,6 +210,8 @@ html[lang="ar"] .frame { transform: rotate(2deg); }
 .legal { position: absolute; top: 1250px; inset-inline: 96px; text-align: center; font-size: 26px; color: rgba(242, 238, 248, .6); z-index: 4; }
 
 /* ---- reel cover 1080x1920, text in the universal reel box x 90-900, y 270-1248 ---- */
+html.overlay, html.overlay body { background: transparent; }
+.slide.reel.clear { background: transparent; color: var(--on-scene); }
 .reel .bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
 .reel .scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10, 10, 26, .25) 0%, rgba(10, 10, 26, .1) 35%, rgba(10, 10, 26, .82) 70%, rgba(10, 10, 26, .95) 100%); }
 .reel .rbox { position: absolute; left: 90px; width: 810px; top: 420px; height: 828px; display: flex; flex-direction: column; justify-content: flex-end; z-index: 2; }
@@ -209,7 +230,9 @@ html[lang="ar"] .reel .rbox { left: auto; right: 180px; }
   var d = raw.indexOf('__MCC_DATA__') === 0 ? (window.MCC_PREVIEW || {}) : JSON.parse(raw);
   var AR = d.lang === 'ar';
   document.documentElement.lang = AR ? 'ar' : 'en';
-  document.documentElement.dir = AR ? 'rtl' : 'ltr';
+  // RTL goes on #root, never on <html> or <body>: their direction propagates to the viewport,
+  // which moves the page origin and makes Gotenberg's clipped screenshot come back empty.
+  document.getElementById('root').dir = AR ? 'rtl' : 'ltr';
 
   // Prices mirror shared/commerce/tierPrices.ts on the site. Update both when the launch offer ends.
   var PRICES = d.prices || { lite: '$8.88', full: '$18.88', fullList: '$24.88', launch: true };
@@ -337,6 +360,16 @@ html[lang="ar"] .reel .rbox { left: auto; right: 180px; }
     },
     centers: function () {
       var rows = (d.centers || []).slice(0, 7);
+      if (rows.length === 1) {
+        // Single-center variant: one large node, the state chip and the report's scale bar.
+        var c = rows[0], sc = STATE_COLOR[c.state] || '#5cc4cc', pin = { care: 12, rising: 37, flowing: 62, working: 88 }[c.state] || 62;
+        return '<section class="slide scene centers">' + stars(1350, d.index) + '<div class="box"><div class="eyebrow">' + esc(eyebrowText()) + '</div></div>' +
+          '<div class="solo"><div class="bignode" style="color:' + (CHAKRA[c.key] || '#8a6dc9') + '"></div><div class="name">' + esc(c.name) + '</div>' +
+          '<span class="chip" style="background:' + sc + '29"><b style="background:' + sc + '"></b>' + esc(T.states[c.state] || c.state) + '</span>' +
+          '<div class="scale"><i style="left:calc(' + pin + '% - 15px)"></i></div><div class="scale-labels"><span>' + (AR ? 'انغلاق' : 'SHUTDOWN') + '</span><span>' + (AR ? 'جهد زائد' : 'OVER-EFFORT') + '</span></div>' +
+          (c.note ? '<p class="body balance">' + rich(c.body || c.note) + '</p>' : '') + '</div>' +
+          '<div class="footnote">' + T.footnote + '</div>' + footer({ dark: true }) + '</section>';
+      }
       return '<section class="slide scene centers">' + stars(1350, d.index) + '<div class="box"><div class="eyebrow">' + esc(eyebrowText()) + '</div>' +
         (d.title ? '<h2 class="display title balance" style="font-size:' + (AR ? 52 : 64) + 'px">' + rich(d.title) + '</h2>' : '') + '</div>' +
         '<div class="spine"></div><div class="rows">' + rows.map(function (c) {
@@ -367,6 +400,12 @@ html[lang="ar"] .reel .rbox { left: auto; right: 180px; }
     },
     reel_cover: function () {
       var px = tier(d.headline, [[28, 132], [44, 112], [60, 96]]);
+      if (d.overlay) {
+        document.documentElement.classList.add('overlay');
+        return '<section class="slide reel clear"><div class="scrim"></div><div class="rbox">' + (d.eyebrow ? '<div><span class="pill">' + esc(d.eyebrow) + '</span></div>' : '') +
+          '<h1 class="display headline balance" style="font-size:' + px + 'px">' + rich(d.headline) + '</h1></div>' +
+          '<div class="rbrand brand" style="color:#fdfcff">' + logo(36, 50, true) + 'My Crystal Code</div></section>';
+      }
       return '<section class="slide scene reel">' + (d.image ? '<div class="bg" style="background-image:url(\'' + esc(d.image) + '\')"></div>' : stars(1920, d.index) + '<div class="layer" style="display:grid;place-items:center">' + seed(1000, '#b7a3e6', .25, .12) + '</div>') +
         '<div class="scrim"></div><div class="rbox">' + (d.eyebrow ? '<div><span class="pill">' + esc(d.eyebrow) + '</span></div>' : '') +
         '<h1 class="display headline balance" style="font-size:' + px + 'px">' + rich(d.headline) + '</h1></div>' +
@@ -377,8 +416,17 @@ html[lang="ar"] .reel .rbox { left: auto; right: 180px; }
   var render = L[d.layout] || L.cover;
   document.getElementById('root').innerHTML = render();
   // The renderer waits for this flag, so fallback fonts never reach a published slide.
-  var imgs = Array.prototype.slice.call(document.images).map(function (im) { return im.complete ? Promise.resolve() : new Promise(function (ok) { im.onload = im.onerror = ok; }); });
-  Promise.all([document.fonts.ready].concat(imgs)).then(function () { document.body.setAttribute('data-ready', '1'); });
+  // Fail closed: a missing image throws (Gotenberg's failOnConsoleExceptions rejects the render)
+  // and the ready flag is never set, so a slide with a blank frame cannot be published.
+  var imgs = Array.prototype.slice.call(document.images).map(function (im) {
+    return new Promise(function (ok, ko) {
+      if (im.complete && im.naturalWidth) return ok();
+      im.onload = ok;
+      im.onerror = function () { ko(new Error('MCC image failed to load: ' + String(im.src).slice(0, 120))); };
+    });
+  });
+  Promise.all([document.fonts.ready].concat(imgs)).then(function () { document.body.setAttribute('data-ready', '1'); },
+    function (e) { document.body.setAttribute('data-error', e.message); setTimeout(function () { throw e; }); });
 })();
 </script>
 </body>

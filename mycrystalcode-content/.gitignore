@@ -1,0 +1,3 @@
+node_modules/
+stack/.env
+n8n/test/out/

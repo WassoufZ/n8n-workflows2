@@ -1,0 +1,192 @@
+{
+  "name": "MCC · Link tracker (story / DM / bio redirects)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Link tracker\n`https://<your-n8n>/webhook/go?p=<post_id>&s=instagram&m=story&d=lite&l=en`\nLogs the click to **Clicks** and redirects to the site with UTMs (d = home|lite|full|sample|crystals).\nThe autopilot's Telegram message gives the post_id for each new post.",
+        "height": 200,
+        "width": 600,
+        "color": 5
+      },
+      "id": "03c01c42-47e3-5be5-95df-b0163993acbc",
+      "name": "README",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "path": "go",
+        "httpMethod": "GET",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "db397813-b895-5ee0-96a9-8a453eae41e1",
+      "name": "GET /go",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "bbf77115-fd0f-5482-ac59-4cc00c0e3147"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "38a7621c-b96c-50cd-ab75-ea44cf0fe703",
+              "name": "SHEET_ID",
+              "value": "PASTE_GOOGLE_SHEET_ID",
+              "type": "string"
+            },
+            {
+              "id": "c7ddf6b4-79f9-5035-8f77-8430fb2d3cd8",
+              "name": "SITE",
+              "value": "https://www.mycrystalcode.com",
+              "type": "string"
+            },
+            {
+              "id": "a310fbb5-83fb-57f2-97c7-b5d97e69609d",
+              "name": "TIMEZONE",
+              "value": "Asia/Dubai",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "94d87d06-4ef6-584c-a960-2692ef67a1cf",
+      "name": "⚙️ Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Click tracker for story/DM/bio links (agency/A §3): /webhook/go?p=<post_id>&s=<instagram|tiktok>\n// &m=<story|dm|bio>&d=<home|lite|full|sample|crystals>&l=<en|ar>. Logs the click, then 302s to\n// the site with UTMs, so clicks are countable even before the site keeps UTMs.\nconst S = $('⚙️ Settings').first().json;\nconst q = $input.first().json.query || {};\nconst clean = (v, re, dflt) => (re.test(String(v || '')) ? String(v) : dflt);\nconst post = clean(q.p, /^[a-z0-9-]{3,60}$/i, 'unknown');\nconst source = clean(q.s, /^(instagram|tiktok)$/, 'instagram');\nconst medium = clean(q.m, /^(story|dm|bio|comment)$/, 'bio');\nconst lang = clean(q.l, /^(en|ar)$/, 'en');\nconst dest = clean(q.d, /^(home|lite|full|sample|crystals)$/, 'home');\nconst PATHS = { home: lang === 'ar' ? '/ar' : '/', lite: '/crystal-match', full: '/quiz', sample: lang === 'ar' ? '/ar' : '/#sample', crystals: lang === 'ar' ? '/ar/crystals' : '/crystals' };\nconst path = PATHS[dest];\nconst [base, hash] = path.split('#');\nconst params = new URLSearchParams({ ...(lang === 'ar' && !base.startsWith('/ar') ? { lang: 'ar' } : {}), utm_source: source, utm_medium: medium, utm_campaign: 'mcc_tracker', utm_content: post, utm_term: lang });\nconst location = `${S.SITE}${base}?${params}${hash ? '#' + hash : ''}`;\nreturn [{ json: { ts: $now.setZone(S.TIMEZONE).toISO(), post_id: post, source, medium, lang, dest, location } }];\n"
+      },
+      "id": "c46c3791-dc1b-579f-8d93-af4baec309a0",
+      "name": "Build redirect",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "redirect",
+        "redirectURL": "={{ $json.location }}",
+        "options": {}
+      },
+      "id": "d6cd29cc-6b23-51bc-ae72-40a914dfb75d",
+      "name": "Redirect",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Clicks",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "fcd9adc4-2c9d-55aa-98b3-399251b1161e",
+      "name": "Log click",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        720,
+        100
+      ],
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "GET /go": {
+      "main": [
+        [
+          {
+            "node": "⚙️ Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚙️ Settings": {
+      "main": [
+        [
+          {
+            "node": "Build redirect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build redirect": {
+      "main": [
+        [
+          {
+            "node": "Redirect",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log click",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Dubai",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "tags": [
+    {
+      "name": "mycrystalcode"
+    },
+    {
+      "name": "analytics"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "promptVersion": "26ca0efdae"
+  }
+}

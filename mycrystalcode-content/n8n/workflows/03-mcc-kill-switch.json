@@ -1,0 +1,431 @@
+{
+  "name": "MCC · Kill switch (Telegram /pause /resume /status)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Kill switch\nSend `/pause <reason>` to stop all posting immediately, `/resume <reason>` to restart,\n`/status` to see the Control sheet. Only IDs in ADMIN_TELEGRAM_IDS are obeyed.\nUse a **separate bot** from the approval bot if you prefer; one bot works because approvals use link buttons.",
+        "height": 200,
+        "width": 600,
+        "color": 5
+      },
+      "id": "a3399dc1-c324-5c4b-ae35-49073f878b83",
+      "name": "README",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "1860ef0a-cae3-5558-88cd-deb48f14392c",
+      "name": "Telegram command",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "38a7621c-b96c-50cd-ab75-ea44cf0fe703",
+              "name": "SHEET_ID",
+              "value": "PASTE_GOOGLE_SHEET_ID",
+              "type": "string"
+            },
+            {
+              "id": "064ae61f-771f-5d00-a825-51c73d1e9cc4",
+              "name": "ADMIN_TELEGRAM_IDS",
+              "value": "PASTE_YOUR_TELEGRAM_USER_ID",
+              "type": "string"
+            },
+            {
+              "id": "a310fbb5-83fb-57f2-97c7-b5d97e69609d",
+              "name": "TIMEZONE",
+              "value": "Asia/Dubai",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3f0a5a08-084e-5878-ae49-edc8d8d88b31",
+      "name": "⚙️ Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Telegram commands for the kill switch (agency/D §3.5): /pause <reason>, /resume <reason>,\n// /status. Only allowlisted Telegram user IDs may change anything; resuming needs a reason.\nconst S = $('⚙️ Settings').first().json;\nconst msg = $input.first().json.message || {};\nconst text = String(msg.text || '').trim();\nconst from = String(msg.from?.id || '');\nconst allowed = String(S.ADMIN_TELEGRAM_IDS || '').split(/[,\\s]+/).filter(Boolean);\nconst [cmd, ...rest] = text.split(/\\s+/);\nconst reason = rest.join(' ');\nconst reply = (t) => [{ json: { action: 'reply', chat_id: msg.chat?.id, reply: t } }];\nif (!['/pause', '/resume', '/status'].includes(cmd)) return [];\nif (!allowed.includes(from)) return reply('Not authorised.');\nif (cmd === '/status') return [{ json: { action: 'status', chat_id: msg.chat?.id } }];\nif (cmd === '/resume' && !reason) return reply('Resuming needs a reason: /resume <why it is safe now>');\nconst now = $now.setZone(S.TIMEZONE).toISO();\nconst updates = cmd === '/pause'\n  ? [['global_enabled', 'FALSE'], ['paused_reason', reason || 'paused from Telegram'], ['paused_by', from], ['paused_at', now]]\n  : [['global_enabled', 'TRUE'], ['paused_reason', ''], ['resumed_reason', reason], ['resumed_by', from], ['resumed_at', now]];\nreturn updates.map(([key, value]) => ({ json: { action: 'update', chat_id: msg.chat?.id, key, value, reply: cmd === '/pause' ? `⏸ Paused. Nothing will be posted until /resume. Reason: ${reason || '-'}` : `▶️ Resumed. Reason: ${reason}` } }));\n"
+      },
+      "id": "ce71629f-45c7-539d-bfe1-1f1be9bbfc4e",
+      "name": "Parse command",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "658d0527-f3cc-52b2-89e3-a702762fb2f1",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "update",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "update"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "60195820-06be-5ad8-b52e-9117c8852902",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "status",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "status"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b89b7897-44fd-569c-9810-a6429acf2264",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "reply",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reply"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "04e9c637-658c-5241-848e-558adbc7ddf7",
+      "name": "Action",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Control",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "key": "={{ $json.key }}",
+            "value": "={{ $json.value }}"
+          },
+          "matchingColumns": [
+            "key"
+          ],
+          "schema": [
+            {
+              "id": "key",
+              "displayName": "key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "value",
+              "displayName": "value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "70058c9f-fa58-55ad-8354-3e3bf4981e9e",
+      "name": "Update Control",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        960,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Parse command').first().json.chat_id }}",
+        "text": "={{ $('Parse command').first().json.reply }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "d025800b-ac33-57ff-921b-207b38970836",
+      "name": "Confirm",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        -160
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Control",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "8deada50-360c-5555-8353-f341d9feb1b0",
+      "name": "Read Control",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        960,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Formats the Control sheet for /status.\nconst rows = $input.all().map((i) => i.json).filter((r) => r.key);\nconst chat = $('Parse command').first().json.chat_id;\nreturn [{ json: { chat_id: chat, reply: 'Control:\\n' + rows.map((r) => `${r.key}: ${r.value}`).join('\\n') } }];\n"
+      },
+      "id": "5ef04abb-a313-5d39-ae4a-35aa7870e8ee",
+      "name": "Format status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.reply }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "3164aaf3-0cd1-51db-a15f-f8e133b9c4c8",
+      "name": "Send status",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.reply }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "c8c00dcb-dd3e-5988-9cdf-a8030b52de27",
+      "name": "Reply",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        960,
+        160
+      ]
+    }
+  ],
+  "connections": {
+    "Telegram command": {
+      "main": [
+        [
+          {
+            "node": "⚙️ Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚙️ Settings": {
+      "main": [
+        [
+          {
+            "node": "Parse command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse command": {
+      "main": [
+        [
+          {
+            "node": "Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Action": {
+      "main": [
+        [
+          {
+            "node": "Update Control",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Read Control",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Control": {
+      "main": [
+        [
+          {
+            "node": "Confirm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Control": {
+      "main": [
+        [
+          {
+            "node": "Format status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format status": {
+      "main": [
+        [
+          {
+            "node": "Send status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Dubai",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "tags": [
+    {
+      "name": "mycrystalcode"
+    },
+    {
+      "name": "governance"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "promptVersion": "26ca0efdae"
+  }
+}

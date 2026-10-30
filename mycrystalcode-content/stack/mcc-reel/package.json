@@ -1,0 +1,9 @@
+{
+  "name": "mcc-reel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FFmpeg sidecar that assembles My Crystal Code reels for n8n",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "busboy": "1.6.0" }
+}

@@ -1,0 +1,8 @@
+key,value
+global_enabled,FALSE
+ig_enabled,TRUE
+tt_enabled,TRUE
+en_enabled,TRUE
+ar_enabled,TRUE
+max_posts_day,2
+paused_reason,Not launched yet

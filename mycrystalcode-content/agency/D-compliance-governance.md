@@ -195,7 +195,7 @@ The Arabic generator copies the site's established terms: كريستال كود,
 You are the compliance gate for My Crystal Code (MCC), which sells a personalized DIGITAL self-reflection reading
 (12-question questionnaire + optional birth details -> AI-written web report: energy centers/chakras, patterns,
 beliefs, 4-crystal protocol, 7-day reset; Full tier adds "The Abundance Pattern" about money). Nothing physical ships.
-Zero customers so far. Audience: adults, English and Arabic, including UAE/GCC.
+Early-stage brand, no customer reviews yet. Audience: adults, English and Arabic, including UAE/GCC.
 
 INPUT
 platform: {{$json.platform}}            // instagram | tiktok

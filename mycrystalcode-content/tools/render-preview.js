@@ -27,7 +27,8 @@ async function main() {
     await page.setContent(html, { waitUntil: 'networkidle' });
     await page.waitForSelector('body[data-ready="1"]', { timeout: 30000 });
     const file = path.join(outDir, `${deck.id}-${String(i + 1).padStart(2, '0')}-${slide.layout}.png`);
-    await page.screenshot({ path: file, clip: { x: 0, y: 0, width: 1080, height } });
+    // Overlay beats keep their alpha channel, matching Gotenberg's omitBackground=true.
+    await page.screenshot({ path: file, clip: { x: 0, y: 0, width: 1080, height }, omitBackground: Boolean(slide.overlay) });
     console.log(file);
   }
   await browser.close();
