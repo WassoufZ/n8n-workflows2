@@ -106,8 +106,12 @@ comment if you like. Use the story/DM link from the "✅" message for stories.
 
 ## 8. Verify these against the live docs (could not be confirmed from here)
 
-The workflow is built and tested against stubs and real Gotenberg, but these vendor details were not
-reachable from the build environment:
+What was verified while building: all four workflows import into n8n **2.45.7**; the Code-node
+features they rely on (binary buffers, re-attaching binaries across nodes, `isExecuted`, Luxon) were
+executed in that n8n; the slide pipeline renders through a real **Gotenberg 8** with the exact form
+fields (including Arabic, transparent reel frames and the fail-closed broken-image path); `mcc-reel`
+assembled real MP4s in both modes; `n8n/test` passes 7/7. These vendor details were not reachable
+from the build environment:
 
 1. **Upload-Post field names** beyond `user`, `platform[]`, `title`, `photos[]`, `video` (which come from
    existing working workflows): `description`, TikTok `post_mode` (`MEDIA_UPLOAD` = drafts),
