@@ -1,0 +1,385 @@
+<!doctype html>
+<!--
+  My Crystal Code — social slide template (carousels 1080x1350, reel covers 1080x1920).
+
+  One file renders every layout in English or Arabic. n8n injects the slide JSON by replacing
+  the data token inside <script id="mcc-data"> (escape "</" as "<\/"), sends the HTML to the renderer, and waits
+  for `body[data-ready="1"]` (set after web fonts load) before taking the screenshot.
+
+  Spec: mycrystalcode-content/agency/C-design-system.md (sections 1-3). Colors come from the
+  site's tokens.css; nothing outside that palette is used.
+
+  Slide JSON (fields by layout):
+    common   { lang: "en"|"ar", layout, index, total, eyebrow? }
+    cover    { headline, sub?, glyph?: "transmutation"|"seed"|"metatron"|"crystal" }
+    statement{ statement, support? }
+    list     { title, items: [{ text, sub? }] }            3-5 items
+    quote    { question, prompt? }
+    split    { behavior, reasons: [string, string, string] }
+    centers  { title?, centers: [{ key, name, state, note }] }   state: care|working|rising|flowing
+    sample   { title, image, callout? }                   image: URL of a real lina-0X.webp page
+    cta      { offer?: "both"|"lite"|"full", button? }
+    reel_cover { eyebrow?, headline, image? }             1080x1920
+  Wrap the emphasised last word(s) of a headline in *asterisks*.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=El+Messiri:wght@600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@500&display=block" rel="stylesheet">
+<style>
+:root {
+  --scene: #0a0a1a;
+  --scene-base: linear-gradient(158deg, #1a0f30 0%, #100b22 46%, #0a0f1e 100%);
+  --aura-scene:
+    radial-gradient(1100px 820px at 12% 4%, rgba(102, 54, 155, 0.42), transparent 58%),
+    radial-gradient(1000px 900px at 92% 96%, rgba(20, 184, 166, 0.14), transparent 60%),
+    radial-gradient(900px 700px at 60% 50%, rgba(138, 109, 201, 0.1), transparent 68%);
+  --aura-dawn:
+    radial-gradient(1200px 900px at 50% 118%, rgba(232, 138, 45, 0.16), transparent 62%),
+    radial-gradient(900px 700px at 78% 108%, rgba(226, 96, 76, 0.1), transparent 60%);
+  --aura-paper: radial-gradient(1000px 700px at 50% -10%, rgba(138, 109, 201, 0.12), transparent 60%);
+  --brand-gradient: linear-gradient(140deg, #180c33 0%, #43206f 33%, #7b62bd 66%, #53b9c8 100%);
+  --display-gradient: linear-gradient(118deg, #ffffff 0%, #8fd6d0 42%, #b7a3e6 72%, #8a6dc9 100%);
+  --cta-gradient: linear-gradient(135deg, #66369b, #8a6dc9 60%, #14b8a6);
+  --halo-crystal: drop-shadow(0 0 26px rgba(92, 196, 204, 0.3)) drop-shadow(0 0 52px rgba(102, 54, 155, 0.28));
+  --on-scene: #fdfcff;
+  --on-scene-2: rgba(242, 238, 248, 0.72);
+  --violet-light: #b7a3e6;
+  --teal-light: #8fd6d0;
+  --ink: #2a1f3d;
+  --ink-2: #2d2d2d;
+  --ink-3: #555555;
+  --paper: #fafaf7;
+  --paper-2: #f3f0ea;
+  --rule-soft: #e8e3d8;
+  --rule: #d8d2c5;
+  --purple: #66369b;
+  --violet: #8a6dc9;
+  --state-care: #e2604c;
+  --state-working: #e88a2d;
+  --state-rising: #d9a51a;
+  --state-flowing: #5cc4cc;
+  --f-display: 'Cormorant Garamond', Georgia, serif;
+  --f-body: 'Inter', sans-serif;
+  --f-meta: 'Roboto Mono', monospace;
+}
+html[lang="ar"] {
+  --f-display: 'El Messiri', 'IBM Plex Sans Arabic', sans-serif;
+  --f-body: 'IBM Plex Sans Arabic', sans-serif;
+  --f-meta: 'IBM Plex Sans Arabic', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; background: var(--scene); }
+body { font-family: var(--f-body); -webkit-font-smoothing: antialiased; }
+.slide { position: relative; width: 1080px; height: 1350px; overflow: hidden; }
+.slide.reel { height: 1920px; }
+.scene { background: var(--aura-scene), var(--scene-base); color: var(--on-scene); }
+.scene.dawn { background: var(--aura-dawn), var(--aura-scene), var(--scene-base); }
+.paper { background: var(--aura-paper), var(--paper); color: var(--ink); }
+.paper::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 10px; background: var(--brand-gradient); z-index: 3; }
+.layer { position: absolute; inset: 0; pointer-events: none; }
+.box { position: absolute; inset-inline: 96px; top: 110px; bottom: 120px; display: flex; flex-direction: column; z-index: 2; }
+.center { align-items: center; text-align: center; }
+.balance { text-wrap: balance; overflow-wrap: normal; hyphens: none; }
+
+/* Emphasis word: the gradient last word(s) of a headline. */
+.em { background: var(--display-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.paper .em { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; }
+html[lang="ar"] .em { padding-block: .15em; }
+
+.eyebrow { font-family: var(--f-meta); font-weight: 500; font-size: 30px; letter-spacing: .22em; text-transform: uppercase; color: var(--teal-light); }
+.paper .eyebrow { color: var(--purple); }
+html[lang="ar"] .eyebrow, html[lang="ar"] .mono { letter-spacing: 0; text-transform: none; }
+.mono { font-family: var(--f-meta); font-weight: 500; letter-spacing: .08em; }
+
+.display { font-family: var(--f-display); font-weight: 600; line-height: 1.06; letter-spacing: -.01em; }
+html[lang="ar"] .display { line-height: 1.35; letter-spacing: 0; }
+.body { font-size: 38px; line-height: 1.45; color: var(--on-scene-2); }
+.paper .body { color: var(--ink-2); }
+html[lang="ar"] .body { line-height: 1.7; }
+
+/* Footer band y 1236-1296. */
+.footer { position: absolute; inset-inline: 96px; top: 1236px; height: 60px; display: flex; align-items: center; justify-content: space-between; z-index: 4; }
+.brand { display: flex; align-items: center; gap: 16px; font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 30px; }
+.brand svg { width: 36px; height: 50px; }
+.handle { font-family: 'Roboto Mono', monospace; font-weight: 500; font-size: 28px; letter-spacing: .08em; color: var(--violet-light); }
+.paper .handle { color: var(--ink-3); }
+
+/* ---- L1 cover ---- */
+.cover .focal { position: absolute; top: 290px; left: 50%; transform: translateX(-50%); filter: var(--halo-crystal); z-index: 2; }
+.pill { display: inline-block; padding: 14px 30px; border-radius: 100px; border: 1.5px solid rgba(138, 109, 201, .4); background: rgba(255, 255, 255, .04); font-family: var(--f-meta); font-size: 28px; letter-spacing: .16em; text-transform: uppercase; color: var(--teal-light); }
+html[lang="ar"] .pill { letter-spacing: 0; }
+.cover .pill { position: absolute; top: 600px; left: 50%; transform: translateX(-50%); white-space: nowrap; z-index: 2; }
+.cover .headline { position: absolute; top: 690px; inset-inline: 96px; height: 400px; display: flex; align-items: center; justify-content: center; text-align: center; z-index: 2; }
+.cover .sub { position: absolute; top: 1100px; inset-inline: 120px; text-align: center; font-size: 36px; line-height: 1.4; color: var(--on-scene-2); z-index: 2; }
+.swipe { position: absolute; top: 1180px; inset-inline-end: 96px; font-family: var(--f-meta); font-size: 28px; color: var(--violet-light); letter-spacing: .12em; text-transform: uppercase; z-index: 2; }
+html[lang="ar"] .swipe { letter-spacing: 0; }
+
+/* ---- L2 statement ---- */
+.numeral { position: absolute; top: 20px; inset-inline-end: 60px; font-family: var(--f-display); font-weight: 600; font-size: 360px; line-height: 1; color: var(--ink); opacity: .06; z-index: 1; }
+.grow { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-bottom: 60px; }
+.statement .text { margin-top: 0; }
+.statement .support { margin-top: 48px; font-size: 38px; line-height: 1.45; color: var(--ink-2); max-width: 820px; }
+.motif-corner { position: absolute; bottom: 140px; inset-inline-end: 96px; opacity: .14; z-index: 1; }
+
+/* ---- L3 list ---- */
+.list .title { margin-top: 30px; }
+.list ol { list-style: none; }
+.list li { display: flex; gap: 32px; align-items: flex-start; padding: 30px 0; border-bottom: 1.5px solid var(--rule-soft); }
+.list li:last-child { border-bottom: 0; }
+.disc { flex: 0 0 64px; height: 64px; border-radius: 50%; border: 1.5px solid var(--rule); display: grid; place-items: center; font-family: var(--f-display); font-weight: 600; font-size: 30px; color: var(--purple); }
+.list .item { font-weight: 500; color: var(--ink); line-height: 1.32; }
+.list .itemsub { font-size: 32px; color: var(--ink-3); margin-top: 8px; line-height: 1.4; }
+
+/* ---- L4 quote ---- */
+.quote .orb { position: absolute; width: 900px; height: 900px; left: 90px; top: 70px; background: radial-gradient(circle, rgba(20, 184, 166, .22) 0%, transparent 66%); }
+.quote .mark { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 220px; line-height: .8; margin-top: 70px; }
+.quote .q { font-family: var(--f-display); font-weight: 500; font-style: italic; line-height: 1.15; margin-top: 60px; }
+html[lang="ar"] .quote .q { font-style: normal; font-weight: 600; line-height: 1.45; }
+.quote .prompt { margin-top: auto; margin-bottom: 30px; font-size: 28px; color: var(--teal-light); letter-spacing: .16em; text-transform: uppercase; }
+
+/* ---- L5 split ---- */
+.split .behavior { font-size: 76px; margin-top: 26px; }
+.split .rule { height: 1.5px; background: var(--brand-gradient); margin: 44px 0 40px; }
+.split .label { font-size: 28px; color: var(--violet-light); letter-spacing: .2em; text-transform: uppercase; }
+.cards { display: flex; flex-direction: column; gap: 24px; margin-top: 30px; }
+.card { position: relative; display: flex; align-items: center; gap: 30px; min-height: 200px; padding: 28px 36px; border-radius: 20px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .11); overflow: hidden; }
+.card::before { content: ''; position: absolute; inset-block: 0; inset-inline-start: 0; width: 4px; background: var(--brand-gradient); }
+.card svg { flex: 0 0 72px; }
+.card p { font-size: 38px; font-weight: 500; line-height: 1.35; color: var(--on-scene); }
+
+/* ---- L6 centers ---- */
+.centers .title { font-size: 64px; margin-top: 30px; }
+.spine { position: absolute; top: 320px; bottom: 210px; inset-inline-start: 150px; width: 3px; opacity: .55; background: linear-gradient(180deg, #8a6dc9, #4a3fa0, #3f8fc0, #4fae7a, #d1a72e, #e88a2d, #c0533f); }
+.rows { position: absolute; top: 300px; inset-inline: 96px; display: flex; flex-direction: column; gap: 0; }
+.row { display: flex; align-items: center; gap: 40px; height: 115px; }
+.node { position: relative; flex: 0 0 110px; display: grid; place-items: center; }
+.node i { width: 20px; height: 20px; border-radius: 50%; box-shadow: 0 0 0 5px rgba(255, 255, 255, .08), 0 0 18px currentColor; background: currentColor; }
+.row .name { font-family: var(--f-display); font-weight: 600; font-size: 44px; width: 300px; }
+.chip { display: inline-flex; align-items: center; gap: 12px; padding: 8px 18px; border-radius: 100px; font-size: 26px; font-weight: 500; color: var(--on-scene); white-space: nowrap; }
+.chip b { width: 14px; height: 14px; border-radius: 50%; }
+.row .note { font-size: 30px; color: var(--on-scene-2); margin-top: 6px; }
+.footnote { position: absolute; top: 1170px; inset-inline: 96px; font-size: 28px; color: var(--violet-light); }
+
+/* ---- L7 sample ---- */
+.sample .title { font-size: 72px; margin-top: 20px; }
+.frame { position: absolute; left: 210px; top: 300px; width: 660px; height: 760px; border-radius: 28px; border: 1px solid var(--rule); background: #fff; box-shadow: 0 30px 70px rgba(42, 31, 61, .18); overflow: hidden; transform: rotate(-2deg); z-index: 2; }
+html[lang="ar"] .frame { transform: rotate(2deg); }
+.frame img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.frame::after { content: ''; position: absolute; inset: auto 0 0 0; height: 120px; background: linear-gradient(180deg, rgba(250, 250, 247, 0), #fafaf7); }
+.callout { position: absolute; top: 900px; inset-inline-end: 110px; padding: 18px 28px; border-radius: 18px; background: rgba(255, 255, 255, .85); border: 1px solid rgba(138, 109, 201, .3); box-shadow: 0 12px 30px rgba(42, 31, 61, .14); font-size: 30px; font-weight: 500; color: var(--ink); z-index: 3; }
+.sample .label { position: absolute; top: 1130px; inset-inline: 96px; text-align: center; font-size: 28px; color: var(--ink-3); letter-spacing: .1em; z-index: 3; }
+
+/* ---- L8 cta ---- */
+.cta .logo { margin-top: 40px; filter: var(--halo-crystal); }
+.cta .tagline { font-size: 64px; margin-top: 30px; }
+.prices { display: flex; gap: 48px; margin-top: 44px; }
+.price { width: 420px; padding: 34px 30px; border-radius: 24px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .12); text-align: center; }
+.price.featured { border: 1.5px solid transparent; background: linear-gradient(#141030, #141030) padding-box, var(--brand-gradient) border-box; }
+.price.single { width: 888px; }
+.price .tier { font-family: 'Roboto Mono', monospace; font-size: 26px; letter-spacing: .14em; color: var(--violet-light); }
+.price .amt { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 120px; line-height: 1.05; }
+.price .was { font-size: 34px; color: var(--violet-light); text-decoration: line-through; margin-inline-end: 12px; }
+.price .offer { font-family: var(--f-meta); font-size: 26px; color: var(--teal-light); letter-spacing: .12em; }
+.price .what { font-size: 30px; color: var(--on-scene-2); margin-top: 10px; line-height: 1.35; }
+.button { margin-top: 50px; width: 640px; height: 112px; border-radius: 100px; background: var(--cta-gradient); display: grid; place-items: center; font-size: 40px; font-weight: 600; color: #fff; box-shadow: 0 18px 40px rgba(102, 54, 155, .35); }
+.cta .handle-big { margin-top: 40px; font-family: 'Roboto Mono', monospace; font-weight: 500; font-size: 44px; color: var(--on-scene); }
+.cta .site { margin-top: 8px; font-size: 30px; color: var(--violet-light); }
+.legal { position: absolute; top: 1250px; inset-inline: 96px; text-align: center; font-size: 26px; color: rgba(242, 238, 248, .6); z-index: 4; }
+
+/* ---- reel cover 1080x1920, text in the universal reel box x 90-900, y 270-1248 ---- */
+.reel .bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.reel .scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10, 10, 26, .25) 0%, rgba(10, 10, 26, .1) 35%, rgba(10, 10, 26, .82) 70%, rgba(10, 10, 26, .95) 100%); }
+.reel .rbox { position: absolute; left: 90px; width: 810px; top: 420px; height: 828px; display: flex; flex-direction: column; justify-content: flex-end; z-index: 2; }
+html[lang="ar"] .reel .rbox { left: auto; right: 180px; }
+.reel .headline { margin-top: 28px; }
+.reel .rbrand { position: absolute; left: 90px; top: 1290px; z-index: 2; }
+</style>
+</head>
+<body>
+<script id="mcc-data" type="application/json">__MCC_DATA__</script>
+<div id="root"></div>
+<script>
+(function () {
+  'use strict';
+  var raw = document.getElementById('mcc-data').textContent.trim();
+  var d = raw.indexOf('__MCC_DATA__') === 0 ? (window.MCC_PREVIEW || {}) : JSON.parse(raw);
+  var AR = d.lang === 'ar';
+  document.documentElement.lang = AR ? 'ar' : 'en';
+  document.documentElement.dir = AR ? 'rtl' : 'ltr';
+
+  // Prices mirror shared/commerce/tierPrices.ts on the site. Update both when the launch offer ends.
+  var PRICES = d.prices || { lite: '$8.88', full: '$18.88', fullList: '$24.88', launch: true };
+  var T = AR ? {
+    // Arabic strings follow the site's own copy (landing.ar.ts, display-labels.ts).
+    swipe: 'اسحب ←', sameBehavior: 'السلوك نفسه', differentReasons: 'والأسباب مختلفة',
+    footnote: 'تأملي، وليس قياسًا طبيًا.', sampleLabel: 'عيّنة توضيحية · لينا شخصية خيالية',
+    legal: 'إرشاد تأملي، وليس نصيحة طبية أو نفسية أو مالية.', lite: 'لايت', full: 'الكاملة',
+    liteWhat: 'قصة طاقتك + ٤ كريستالات', fullWhat: 'القراءة الأعمق + إعادة ضبط لسبعة أيام', launch: 'سعر الإطلاق',
+    button: 'ابدأ قراءتي ←', tagline: 'كريستال كود | *فكّ شفرتك*',
+    states: { care: 'يطلب العناية', working: 'يعمل فوق طاقته', rising: 'يستعيد تدفقه بلطف', flowing: 'يتدفق بحرية' }
+  } : {
+    swipe: 'Swipe →', sameBehavior: 'Same behavior', differentReasons: 'Different reasons',
+    footnote: 'Reflective, not a medical measurement.', sampleLabel: 'Illustrative sample · Lina is fictional',
+    legal: 'Reflective guidance, not medical, psychological or financial advice.', lite: 'MCC LITE', full: 'MCC FULL',
+    liteWhat: 'Your energy snapshot + 4 crystals', fullWhat: 'The deeper reading + 7\u2011day reset', launch: 'LAUNCH PRICE',
+    button: 'Begin my reading →', tagline: 'My Crystal Code | *Decode Yours*',
+    states: { care: 'Calling for Care', working: 'Working Too Hard', rising: 'Gently Rising', flowing: 'Flowing Freely' }
+  };
+  var STATE_COLOR = { care: '#e2604c', working: '#e88a2d', rising: '#d9a51a', flowing: '#5cc4cc' };
+  var CHAKRA = { crown: '#8a6dc9', thirdEye: '#4a3fa0', throat: '#3f8fc0', heart: '#4fae7a', solarPlexus: '#d1a72e', sacral: '#e88a2d', root: '#c0533f' };
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  // *word* -> gradient emphasis; Latin runs (prices, handles) are isolated in Arabic.
+  function rich(s) {
+    var h = esc(s).replace(/\*([^*]+)\*/g, '<span class="em">$1</span>');
+    return AR ? h.replace(/([$@][\w.\/$@-]+)/g, '<bdi>$1</bdi>') : h;
+  }
+  function len(s) { return Array.from(String(s || '').replace(/\*/g, '')).length; }
+  function num(n) { var s = String(n).padStart(2, '0'); return AR ? s.replace(/\d/g, function (x) { return '٠١٢٣٤٥٦٧٨٩'[x]; }) : s; }
+  // Size tiers from the design spec; Arabic display type runs at 0.82x.
+  function tier(text, steps) {
+    var n = len(text), px = steps[steps.length - 1][1];
+    for (var i = 0; i < steps.length; i++) { if (n <= steps[i][0]) { px = steps[i][1]; break; } }
+    return AR ? Math.round(px * 0.82) : px;
+  }
+
+  // ---- Owned geometry (procedural, matching the brand components) ----
+  var gid = 0;
+  function gradDef(id) { return '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#43206f"/><stop offset=".5" stop-color="#7b62bd"/><stop offset="1" stop-color="#53b9c8"/></linearGradient></defs>'; }
+  function stroke(color) { if (color !== 'gradient') return { defs: '', s: color }; var id = 'g' + (++gid); return { defs: gradDef(id), s: 'url(#' + id + ')' }; }
+  function seed(size, color, w, opacity) {
+    var k = stroke(color), r = 16, c = '<circle cx="50" cy="50" r="' + r + '"/>';
+    for (var i = 0; i < 6; i++) { var a = (i * 60 - 90) * Math.PI / 180; c += '<circle cx="' + (50 + r * Math.cos(a)).toFixed(2) + '" cy="' + (50 + r * Math.sin(a)).toFixed(2) + '" r="' + r + '"/>'; }
+    c += '<circle cx="50" cy="50" r="' + (2 * r) + '"/>';
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 100 100" style="opacity:' + (opacity || 1) + '">' + k.defs + '<g fill="none" stroke="' + k.s + '" stroke-width="' + (w || 1) + '">' + c + '</g></svg>';
+  }
+  function metatron(size, color, w) {
+    var k = stroke(color), pts = [[50, 50]], c = '', l = '';
+    for (var i = 0; i < 6; i++) { var a = (i * 60 - 90) * Math.PI / 180; pts.push([50 + 20 * Math.cos(a), 50 + 20 * Math.sin(a)]); pts.push([50 + 40 * Math.cos(a), 50 + 40 * Math.sin(a)]); }
+    pts.forEach(function (p) { c += '<circle cx="' + p[0].toFixed(2) + '" cy="' + p[1].toFixed(2) + '" r="6.5"/>'; });
+    for (var x = 0; x < pts.length; x++) for (var y = x + 1; y < pts.length; y++) l += '<line x1="' + pts[x][0].toFixed(2) + '" y1="' + pts[x][1].toFixed(2) + '" x2="' + pts[y][0].toFixed(2) + '" y2="' + pts[y][1].toFixed(2) + '"/>';
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 100 100">' + k.defs + '<g fill="none" stroke="' + k.s + '" stroke-width="' + (w || .6) + '" opacity=".9">' + l + c + '</g></svg>';
+  }
+  function transmutation(size, color, w) {
+    var k = stroke(color), R = 36;
+    function tri(o) { var p = []; for (var i = 0; i < 3; i++) { var a = (o + i * 120) * Math.PI / 180; p.push((50 + R * Math.cos(a)).toFixed(2) + ',' + (50 + R * Math.sin(a)).toFixed(2)); } return p.join(' '); }
+    var v = '';
+    for (var i = 0; i < 6; i++) { var a = (-90 + i * 60) * Math.PI / 180; v += '<circle cx="' + (50 + R * Math.cos(a)).toFixed(2) + '" cy="' + (50 + R * Math.sin(a)).toFixed(2) + '" r="3"/>'; }
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 100 100">' + k.defs + '<g fill="none" stroke="' + k.s + '" stroke-width="' + (w || 1.2) + '"><circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="' + R + '"/><polygon points="' + tri(-90) + '"/><polygon points="' + tri(90) + '"/><circle cx="50" cy="50" r="12"/>' + v + '</g></svg>';
+  }
+  // MCC crystal mark: the owned logo geometry (client-public/src/components/mcc-icon-*.svg).
+  function logo(w, h, white) {
+    var id = 'lg' + (++gid), fill = white ? '#ffffff' : 'url(#' + id + ')';
+    return '<svg width="' + w + '" height="' + h + '" viewBox="0 0 500 690"><defs><linearGradient id="' + id + '" x1=".5" y1="0" x2=".5" y2="1"><stop offset="0" stop-color="#3ea8b2"/><stop offset="1" stop-color="#8b6fde"/></linearGradient>' +
+      '<mask id="m' + id + '" maskUnits="userSpaceOnUse" x="0" y="0" width="500" height="690"><polygon points="250.86 18.97 492.36 341.89 251.9 671.03 6.95 343.62" fill="white"/><g stroke="black" stroke-width="10" stroke-linecap="round" fill="none"><line x1="250.86" y1="18.97" x2="124.25" y2="396.06"/><line x1="250.86" y1="18.97" x2="249.83" y2="372.6"/><line x1="250.86" y1="18.97" x2="374.37" y2="396.75"/><polyline points="124.25 396.06 249.83 372.6 374.37 396.75"/><line x1="6.95" y1="343.62" x2="124.25" y2="396.06"/><line x1="492.36" y1="341.89" x2="374.37" y2="396.75"/><line x1="124.25" y1="396.06" x2="251.9" y2="671.02"/><line x1="249.83" y1="372.6" x2="251.9" y2="671.02"/><line x1="374.37" y1="396.75" x2="251.9" y2="671.02"/></g></mask></defs>' +
+      '<rect width="500" height="690" fill="' + fill + '" mask="url(#m' + id + ')"/></svg>';
+  }
+  // Deterministic sparse starfield (seeded by the slide index so a carousel stays consistent).
+  function stars(h, seedN) {
+    var s = (seedN || 7) * 9301 + 49297, out = '';
+    function r() { s = (s * 9301 + 49297) % 233280; return s / 233280; }
+    for (var i = 0; i < 70; i++) out += '<circle cx="' + Math.round(r() * 1080) + '" cy="' + Math.round(r() * h) + '" r="' + (r() * 1.6 + .4).toFixed(1) + '" fill="#fdfcff" opacity="' + (r() * .5 + .15).toFixed(2) + '"/>';
+    return '<svg class="layer" width="1080" height="' + h + '" style="opacity:.6">' + out + '</svg>';
+  }
+  function eyebrowText() { return d.eyebrow ? (d.total ? num(d.index) + ' / ' + num(d.total) + ' · ' : '') + d.eyebrow : ''; }
+  function footer(opts) {
+    opts = opts || {};
+    var dark = opts.dark;
+    return '<div class="footer"><div class="brand" style="color:' + (dark ? '#fdfcff' : '#2a1f3d') + '">' + logo(36, 50, dark) + 'My Crystal Code</div>' + (opts.noHandle ? '' : '<div class="handle"><bdi>@my.crystal.code</bdi></div>') + '</div>';
+  }
+
+  var L = {
+    cover: function () {
+      var g = d.glyph || 'transmutation';
+      var focal = g === 'crystal' ? logo(190, 262) : g === 'seed' ? seed(260, 'gradient', 1.4) : g === 'metatron' ? metatron(280, 'gradient', .7) : transmutation(260, 'gradient', 1.4);
+      var px = tier(d.headline, [[28, 132], [44, 112], [60, 96]]);
+      return '<section class="slide scene cover">' + stars(1350, d.index) +
+        '<div class="layer" style="display:grid;place-items:start center;padding-top:-20px"><div style="margin-top:-20px;transform:rotate(' + ((d.index || 1) * 7 % 15) + 'deg)">' + seed(980, '#b7a3e6', .25, .10) + '</div></div>' +
+        '<div class="focal">' + focal + '</div>' +
+        (d.eyebrow ? '<div class="pill">' + esc(d.eyebrow) + '</div>' : '') +
+        '<div class="headline"><h1 class="display balance" style="font-size:' + px + 'px">' + rich(d.headline) + '</h1></div>' +
+        (d.sub ? '<p class="sub balance">' + rich(d.sub) + '</p>' : '') +
+        '<div class="swipe">' + T.swipe + '</div>' + footer({ dark: true, noHandle: true }) + '</section>';
+    },
+    statement: function () {
+      var px = tier(d.statement, [[60, 88], [100, 72], [140, 60]]);
+      return '<section class="slide paper statement"><div class="numeral">' + num(d.index || 2) + '</div>' +
+        '<div class="box"><div class="eyebrow">' + esc(eyebrowText()) + '</div>' +
+        '<div class="grow"><h2 class="display text balance" style="font-size:' + px + 'px">' + rich(d.statement) + '</h2>' +
+        (d.support ? '<p class="support">' + rich(d.support) + '</p>' : '') + '</div></div>' +
+        '<div class="motif-corner">' + seed(220, '#66369b', 1.2) + '</div>' + footer() + '</section>';
+    },
+    list: function () {
+      var items = (d.items || []).slice(0, 5), big = items.length < 5, fs = big ? 40 : 34;
+      return '<section class="slide paper list"><div class="box"><div class="eyebrow">' + esc(eyebrowText()) + '</div>' +
+        '<h2 class="display title balance" style="font-size:' + (AR ? 59 : 72) + 'px">' + rich(d.title) + '</h2><div class="grow"><ol>' +
+        items.map(function (it, i) { return '<li><span class="disc">' + num(i + 1) + '</span><div><div class="item" style="font-size:' + fs + 'px">' + rich(it.text) + '</div>' + (it.sub ? '<div class="itemsub">' + rich(it.sub) + '</div>' : '') + '</div></li>'; }).join('') +
+        '</ol></div></div>' + footer() + '</section>';
+    },
+    quote: function () {
+      var px = tier(d.question, [[70, 84], [110, 68]]);
+      return '<section class="slide scene quote">' + stars(1350, d.index) + '<div class="orb"></div><div class="box center">' +
+        (d.eyebrow ? '<div class="eyebrow">' + esc(eyebrowText()) + '</div>' : '') +
+        '<div class="mark em">' + (AR ? '”' : '“') + '</div><p class="q balance" style="font-size:' + px + 'px">' + rich(d.question) + '</p>' +
+        (d.prompt ? '<div class="prompt mono">' + esc(d.prompt) + '</div>' : '') + '</div>' + footer({ dark: true }) + '</section>';
+    },
+    split: function () {
+      var glyphs = [seed(72, '#b7a3e6', 1.6), metatron(72, '#8fd6d0', 1), transmutation(72, '#b7a3e6', 2)];
+      return '<section class="slide scene split">' + stars(1350, d.index) + '<div class="box"><div class="eyebrow">' + esc(d.eyebrow || T.sameBehavior) + '</div>' +
+        '<h2 class="display behavior balance" style="font-size:' + (AR ? 62 : 76) + 'px">' + rich(d.behavior) + '</h2><div class="rule"></div>' +
+        '<div class="label mono">' + T.differentReasons + '</div><div class="cards">' +
+        (d.reasons || []).slice(0, 3).map(function (r, i) { return '<div class="card">' + glyphs[i] + '<p>' + rich(r) + '</p></div>'; }).join('') +
+        '</div></div>' + footer({ dark: true }) + '</section>';
+    },
+    centers: function () {
+      var rows = (d.centers || []).slice(0, 7);
+      return '<section class="slide scene centers">' + stars(1350, d.index) + '<div class="box"><div class="eyebrow">' + esc(eyebrowText()) + '</div>' +
+        (d.title ? '<h2 class="display title balance" style="font-size:' + (AR ? 52 : 64) + 'px">' + rich(d.title) + '</h2>' : '') + '</div>' +
+        '<div class="spine"></div><div class="rows">' + rows.map(function (c) {
+          var sc = STATE_COLOR[c.state] || '#5cc4cc';
+          return '<div class="row"><div class="node" style="color:' + (CHAKRA[c.key] || '#8a6dc9') + '"><i></i></div><div class="name">' + esc(c.name) + '</div><div>' +
+            '<span class="chip" style="background:' + sc + '29"><b style="background:' + sc + '"></b>' + esc(T.states[c.state] || c.state) + '</span>' +
+            (c.note ? '<div class="note">' + rich(c.note) + '</div>' : '') + '</div></div>';
+        }).join('') + '</div><div class="footnote">' + T.footnote + '</div>' + footer({ dark: true }) + '</section>';
+    },
+    sample: function () {
+      return '<section class="slide paper sample"><div class="box center"><div class="eyebrow">' + esc(eyebrowText()) + '</div>' +
+        '<h2 class="display title balance" style="font-size:' + (AR ? 59 : 72) + 'px">' + rich(d.title) + '</h2></div>' +
+        '<div class="frame"><img src="' + esc(d.image) + '" alt=""></div>' +
+        (d.callout ? '<div class="callout">' + rich(d.callout) + '</div>' : '') +
+        '<div class="label mono">' + T.sampleLabel + '</div>' + footer() + '</section>';
+    },
+    cta: function () {
+      var offer = d.offer || 'both';
+      var lite = '<div class="price' + (offer === 'lite' ? ' single' : '') + '"><div class="tier">' + T.lite + '</div><div class="amt"><bdi>' + PRICES.lite + '</bdi></div><div class="what">' + T.liteWhat + '</div></div>';
+      var full = '<div class="price featured' + (offer === 'full' ? ' single' : '') + '"><div class="tier">' + T.full + '</div><div class="amt"><bdi>' + PRICES.full + '</bdi></div>' +
+        (PRICES.launch ? '<div><span class="was"><bdi>' + PRICES.fullList + '</bdi></span><span class="offer">' + T.launch + '</span></div>' : '') + '<div class="what">' + T.fullWhat + '</div></div>';
+      return '<section class="slide scene dawn cta">' + stars(1350, d.index) + '<div class="box center" style="top:90px">' +
+        '<div class="logo">' + logo(88, 121) + '</div><div class="display tagline">' + rich(d.tagline || T.tagline) + '</div>' +
+        '<div class="prices">' + (offer === 'lite' ? lite : offer === 'full' ? full : lite + full) + '</div>' +
+        '<div class="button">' + esc(d.button || T.button) + '</div>' +
+        '<div class="handle-big"><bdi>@my.crystal.code</bdi></div><div class="site"><bdi>mycrystalcode.com' + (AR ? '/ar' : '') + '</bdi></div></div>' +
+        '<div class="legal">' + T.legal + '</div></section>';
+    },
+    reel_cover: function () {
+      var px = tier(d.headline, [[28, 132], [44, 112], [60, 96]]);
+      return '<section class="slide scene reel">' + (d.image ? '<div class="bg" style="background-image:url(\'' + esc(d.image) + '\')"></div>' : stars(1920, d.index) + '<div class="layer" style="display:grid;place-items:center">' + seed(1000, '#b7a3e6', .25, .12) + '</div>') +
+        '<div class="scrim"></div><div class="rbox">' + (d.eyebrow ? '<div><span class="pill">' + esc(d.eyebrow) + '</span></div>' : '') +
+        '<h1 class="display headline balance" style="font-size:' + px + 'px">' + rich(d.headline) + '</h1></div>' +
+        '<div class="rbrand brand" style="color:#fdfcff">' + logo(36, 50, true) + 'My Crystal Code</div></section>';
+    }
+  };
+
+  var render = L[d.layout] || L.cover;
+  document.getElementById('root').innerHTML = render();
+  // The renderer waits for this flag, so fallback fonts never reach a published slide.
+  var imgs = Array.prototype.slice.call(document.images).map(function (im) { return im.complete ? Promise.resolve() : new Promise(function (ok) { im.onload = im.onerror = ok; }); });
+  Promise.all([document.fonts.ready].concat(imgs)).then(function () { document.body.setAttribute('data-ready', '1'); });
+})();
+</script>
+</body>
+</html>

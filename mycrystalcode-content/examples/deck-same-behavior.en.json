@@ -1,0 +1,15 @@
+{
+  "id": "same-behavior-en",
+  "lang": "en",
+  "formula": "same_behavior_different_reasons",
+  "slides": [
+    { "layout": "cover", "eyebrow": "For the pattern explorer", "headline": "You know what you do. But do you know what's *driving it?*", "sub": "Three people. One habit. Three very different reasons.", "glyph": "transmutation" },
+    { "layout": "split", "behavior": "Struggling to *say no.*", "reasons": ["One fears disappointing someone they love.", "Another doubts their right to make a different choice.", "A third worries about losing control of the situation."] },
+    { "layout": "statement", "eyebrow": "The point", "statement": "The behavior looks the same. The patterns behind it may be *completely different.*", "support": "That's why generic descriptions rarely land. Your context changes the interpretation." },
+    { "layout": "list", "eyebrow": "Sound familiar?", "title": "When receiving feels *harder than giving*", "items": [ { "text": "You deflect a compliment within seconds." }, { "text": "You say \"I'm fine\" before you've checked." }, { "text": "Help feels like a debt you need to repay." }, { "text": "You give first, so you never have to ask." } ] },
+    { "layout": "quote", "eyebrow": "Sit with this", "question": "What if the question isn't whether you're generous, but what *receiving* means to you?", "prompt": "Save it for later" },
+    { "layout": "centers", "eyebrow": "An illustrative map", "title": "Seven centers. *Seven themes.*", "centers": [ { "key": "crown", "name": "Crown", "state": "flowing", "note": "Meaning and connection" }, { "key": "thirdEye", "name": "Third Eye", "state": "rising", "note": "Clarity and intuition" }, { "key": "throat", "name": "Throat", "state": "care", "note": "Saying what you need" }, { "key": "heart", "name": "Heart", "state": "working", "note": "Giving and receiving" }, { "key": "solarPlexus", "name": "Solar Plexus", "state": "rising", "note": "Confidence and power" }, { "key": "sacral", "name": "Sacral", "state": "flowing", "note": "Emotion and creativity" }, { "key": "root", "name": "Root", "state": "working", "note": "Security and stability" } ] },
+    { "layout": "sample", "eyebrow": "See before you buy", "title": "Inside a *reading*", "image": "https://www.mycrystalcode.com/sample/lina-02-your-pattern.webp", "callout": "Your pattern, under pressure." },
+    { "layout": "cta", "offer": "both" }
+  ]
+}
