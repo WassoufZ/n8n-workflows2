@@ -2,7 +2,7 @@
 
 **Prepared by:** The Agency (Multi-Platform Publisher, Video Optimization Specialist, Agents Orchestrator)
 **Research date:** 2026-10-30
-**Input:** `../01-brand-brief.md`. Solo founder, zero revenue so far, bilingual EN/AR, one IG account and one TikTok account (`@my.crystal.code`).
+**Input:** `../01-brand-brief.md`. Solo founder, early stage, bilingual EN/AR, one IG account and one TikTok account (`@my.crystal.code`).
 **Target volume:** about 2 posts/day = **60 posts/month** (planned as 30 carousels + 30 reels, each cross-posted to IG and TikTok, alternating EN/AR).
 
 > **How to read the confidence flags**
