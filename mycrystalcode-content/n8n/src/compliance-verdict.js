@@ -3,7 +3,7 @@
 const gate = $('Gate A: validate copy').first().json;
 const v = $input.first().json.output;
 if (!v || typeof v.pass !== 'boolean' || !Array.isArray(v.issues)) {
-  return [{ json: { ok: false, stage: 'compliance', issues: ['Compliance check returned malformed output (treated as a fail).'], post: gate.post } }];
+  return [{ json: { ok: false, stage: 'compliance', issues: [`Compliance check returned no valid verdict (treated as a fail): ${$input.first().json.llm?.error || 'malformed'}`], post: gate.post } }];
 }
 const serious = v.issues.filter((i) => i.severity === 'blocker' || i.severity === 'major');
 const ok = v.pass === true && serious.length === 0;

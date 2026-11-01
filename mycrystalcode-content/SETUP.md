@@ -1,30 +1,49 @@
 # Setup: My Crystal Code content autopilot
 
-About 2–3 hours the first time. You end up with: every day at 18:00 and 22:30 (Dubai) a branded
-carousel or reel is written, checked, rendered and sent to your Telegram; you tap **✅ Publish**;
-it goes to Instagram and lands in TikTok drafts.
+About 2–3 hours the first time. Then, twice a day (18:00 and 22:30 Dubai), a branded carousel or
+reel is written, checked, rendered and published to Instagram and TikTok by itself. You get a
+Telegram preview with a private **stop link**; if you do nothing, it publishes after 3 hours.
 
 ```
-Queue (Google Sheet) ─► Claude writes 1 post from a formula ─► Gate A (limits + claims blocklist)
-   ─► Claude compliance check ─► render: Gotenberg (slides) / mcc-reel + ElevenLabs (+ fal.ai clip)
-   ─► Claude vision QA ─► Telegram preview + Approve ─► kill switch re-check ─► Upload-Post ─► Log
-any failed gate → one corrective rewrite → else "held" + Telegram alert
+Queue (Google Sheet) ─► AI writes 1 post from a formula ─► Gate A (limits + claims blocklist)
+   ─► AI compliance check ─► render: Gotenberg (slides) / reels: Azure voice + CogVideoX clip + mcc-reel
+   ─► AI visual QA ─► Telegram preview + stop link ─► wait 3 h ─► kill switch + veto re-check
+   ─► Upload-Post (Instagram + TikTok) ─► Log ─► daily metrics ─► Monday review feeds the next posts
+any failed gate → one corrective rewrite on the fallback model → else "held" + Telegram alert
 ```
 
-## 1. Accounts you need
+## 1. What it costs (prices checked on the vendors' own pages, Nov 2026)
 
-| Service | Why | Cost (Oct 2026, verify) |
+| Part | Service | Monthly |
 |---|---|---|
-| A small VPS (2 vCPU, 4 GB) + a subdomain, e.g. `n8n.mycrystalcode.com` | runs n8n + renderers | ~$6–12/mo |
-| Anthropic API key | copywriting, compliance, vision QA, weekly review | ~$10–15/mo |
-| Upload-Post (Basic) | publishes to Instagram + TikTok (already TikTok-audited) | ~$16–24/mo; free tier = 10 uploads to test |
-| Instagram **Business** account linked in Upload-Post; TikTok account linked | publishing | free |
-| Telegram bot (talk to @BotFather → `/newbot`) | previews, approvals, alerts, `/pause` | free |
-| ElevenLabs | reel voiceovers (pick one EN voice and one AR voice; have a native speaker approve the Arabic voice) | ~$5–22/mo |
-| Google account | the control sheet | free |
-| fal.ai (optional, premium reels only) | AI b-roll video | ~$1–2.50 per premium reel |
+| Server (n8n + Gotenberg + mcc-reel) | **Oracle Cloud Always Free** ARM VM (or any 2 vCPU / 4 GB VPS, ~$6–12) | $0 |
+| Public HTTPS address | **Cloudflare Tunnel** (free) | $0 |
+| Writing, visual check, weekly review | **Z.ai GLM-4.7-Flash / GLM-4.6V-Flash** (listed free on docs.z.ai) | $0 |
+| Compliance check + rewrite fallback | **Claude Haiku 5.5 / Sonnet 5.5** (Anthropic API) | ~$1–3 |
+| Voiceover (EN + Gulf Arabic) | **Azure AI Speech free tier**: 0.5M neural characters/month (~30 reels use < 25k) | $0 |
+| AI video clip per reel | **CogVideoX-3** on Z.ai, $0.20 per 10-second clip | ~$6 for 30 reels |
+| Publishing to Instagram + TikTok | **Upload-Post** Basic (public TikTok posting from day one) | ~$16 (annual) / $24 |
+| Google Sheet, Telegram | free | $0 |
+| **Total** | | **~$23–33** |
 
-## 2. Run the stack
+Upload-Post is the one part with no free equivalent: posting publicly to TikTok without it needs
+your own TikTok app approved in TikTok's audit (weeks, not guaranteed). Its free tier (10
+uploads/month) is enough to test everything first.
+
+## 2. Accounts and keys
+
+| Service | What to do | Goes into |
+|---|---|---|
+| **Z.ai** | Sign up at z.ai, create an API key | Credential "Z.ai" |
+| **Anthropic** | console.anthropic.com → API key, add $5 credit | Credential "Anthropic" |
+| **Azure** | portal.azure.com → create a **Speech** resource, pricing tier **Free F0**, note the key and region | Credential "Azure Speech", Settings `AZURE_REGION` |
+| **Upload-Post** | Sign up, connect your **Instagram Business** account and **TikTok**, create an API key and a profile | Credential "Upload-Post", Settings `UPLOADPOST_USER` |
+| **Telegram** | @BotFather → `/newbot` → token | Credential "Telegram" |
+| **Google** | One spreadsheet (step 4) | Credential "Google Sheets" |
+
+## 3. Run the stack
+
+On the server (Oracle: create an "Ampere A1" VM with Ubuntu, 2 OCPU / 12 GB is plenty, then install Docker):
 
 ```bash
 git clone <this repo> && cd mycrystalcode-content/stack
@@ -32,111 +51,115 @@ cp .env.example .env          # set N8N_HOST and N8N_ENCRYPTION_KEY (openssl ran
 docker compose up -d
 ```
 
-Put HTTPS in front of port 5678 (Telegram approvals and the link tracker need a public HTTPS URL).
-The simplest is Caddy on the same VPS — `/etc/caddy/Caddyfile`:
+HTTPS without opening ports, with Cloudflare Tunnel (free; your domain's DNS on Cloudflare):
 
+```bash
+# on the server, once:
+cloudflared tunnel login
+cloudflared tunnel create mcc
+cloudflared tunnel route dns mcc n8n.mycrystalcode.com
+cloudflared tunnel run --url http://localhost:5678 mcc     # or install it as a service
 ```
-n8n.mycrystalcode.com {
-    reverse_proxy 127.0.0.1:5678
-}
-```
 
-Gotenberg and mcc-reel are only reachable from n8n inside Docker; they are not published.
+(Already have a server with a public IP? Caddy works too: `n8n.mycrystalcode.com { reverse_proxy 127.0.0.1:5678 }`.)
+Gotenberg and mcc-reel stay private inside Docker.
 
-## 3. Create the Google Sheet
+## 4. Create the Google Sheet
 
-Create one spreadsheet with seven tabs named exactly: **Control, Queue, Log, Insights, Metrics,
-Clicks, Sales**. For each, `File → Import → Upload` the matching file from `n8n/sheet-templates/`
-("Replace current sheet"). The Queue is pre-filled with the agency's 14-day calendar (2–15 Nov 2026);
-rows marked `manual` (R05 screen recording, R06 founder to camera) are for you to film.
+One spreadsheet with eight tabs named exactly: **Control, Queue, Log, Insights, Metrics, Clicks,
+Sales, Vetoes**. For each: `File → Import → Upload` the matching CSV from `n8n/sheet-templates/`
+("Replace current sheet"). The Queue is pre-filled with the 14-day calendar (2–15 Nov 2026); rows
+marked `manual` (R05 screen recording, R06 founder to camera) are skipped by the autopilot.
 
 **Control starts with `global_enabled = FALSE`.** Nothing posts until you flip it.
-Copy the spreadsheet ID from its URL (`/d/<THIS PART>/edit`).
 
-## 4. Import the workflows
+## 5. Import the workflows
 
-In n8n: **Workflows → Import from File**, once per file in `n8n/workflows/`:
+n8n → **Workflows → Import from File**, once per file in `n8n/workflows/`:
 
 1. `01-mcc-content-autopilot.json` — the pipeline
 2. `02-mcc-analytics-learning.json` — daily metrics + Monday review
 3. `03-mcc-kill-switch.json` — `/pause`, `/resume`, `/status` in Telegram
-4. `04-mcc-link-tracker.json` — click-counting redirect for stories/DMs
+4. `04-mcc-links.json` — click tracker for story/DM links + the veto stop link
 
-In **each** workflow open **⚙️ Settings** and fill the `PASTE_…` values:
-`SHEET_ID`, `TELEGRAM_CHAT_ID` (send your bot a message, then open
-`https://api.telegram.org/bot<TOKEN>/getUpdates` and copy `chat.id`), `ADMIN_TELEGRAM_IDS` (your own
-user id, same place, `from.id`), `UPLOADPOST_USER` (the profile name in Upload-Post),
-`ELEVEN_VOICE_EN` / `ELEVEN_VOICE_AR`, and `FAL_MODEL` only if you use premium reels.
+In **each** workflow open **⚙️ Settings** and fill the `PASTE_…` values and `N8N_PUBLIC_URL`
+(your HTTPS address). `TELEGRAM_CHAT_ID`: message your bot, open
+`https://api.telegram.org/bot<TOKEN>/getUpdates`, copy `chat.id`; `ADMIN_TELEGRAM_IDS` is `from.id`.
 
-## 5. Credentials (n8n → Credentials → Add)
+## 6. Credentials (n8n → Credentials → Add)
 
 | Credential type | Name it | Fields | Used by |
 |---|---|---|---|
-| Google Sheets OAuth2 | Google Sheets | sign in | every Sheets node |
-| Anthropic | Anthropic | API key | the 3 Claude chains, "Vision QA (Claude)" |
+| Header Auth | Z.ai | Name `Authorization`, Value `Bearer <z.ai key>` | every "· GLM" node, the CogVideoX nodes |
+| Anthropic | Anthropic | API key | every "· Claude" node |
+| Header Auth | Azure Speech | Name `Ocp-Apim-Subscription-Key`, Value `<key>` | Voiceover (Azure) |
+| Header Auth | Upload-Post | Name `Authorization`, Value `Apikey <key>` | Upload-Post nodes, Fetch analytics |
 | Telegram | MCC bot | bot token | all Telegram nodes |
-| Header Auth | Upload-Post | Name `Authorization`, Value `Apikey <your key>` | Upload-Post nodes, Fetch analytics |
-| Header Auth | ElevenLabs | Name `xi-api-key`, Value `<key>` | Voiceover |
-| Header Auth | fal.ai | Name `Authorization`, Value `Key <key>` | the 3 fal nodes (premium only) |
+| Google Sheets OAuth2 | Google Sheets | sign in | every Sheets node |
+| Header Auth | ElevenLabs / fal.ai | only if you switch to them | — |
 
 Open each node with a red warning and pick its credential.
 
-## 6. First test (nothing gets published)
+## 7. The switches in ⚙️ Settings
 
-1. Control tab: set `global_enabled` to `TRUE`.
-2. In the autopilot, click **Run now (test)**. Within a few minutes you get a Telegram preview.
-3. Press **❌ Reject**. Check the Queue row now says `rejected`.
-4. Read the execution in n8n: each gate's output shows what it checked.
+| Setting | Default | Options |
+|---|---|---|
+| `COPY_PROVIDER` / `QA_PROVIDER` / `INSIGHTS_PROVIDER` | `glm` (free) | `claude` |
+| `COMPLIANCE_PROVIDER` | `claude` (Haiku, cents) | `glm` — not recommended: this is the safety gate |
+| `COPY_FALLBACK_PROVIDER` | `claude` | the corrective second draft uses this model |
+| `TTS_PROVIDER` | `azure` (voices `en-US-AvaMultilingualNeural`, `ar-AE-FatimaNeural`) | `elevenlabs`; other Gulf voices: `ar-AE-HamdanNeural`, `ar-SA-ZariyahNeural`, `ar-SA-HamedNeural` |
+| `VIDEO_PROVIDER` | `cogvideox` ($0.20/reel) | `fal` (Veo/Kling, ~$1–2.50), `none` (animated brand frames only, $0) |
+| `APPROVAL_MODE` | `veto` — publishes after `VETO_MINUTES` (180) unless you open the stop link | `approve` (you tap ✅ on every post), `none` (no preview at all) |
+| `TIKTOK_POST_MODE` | `DIRECT_POST` (public) | `MEDIA_UPLOAD` (lands in TikTok drafts) |
 
-Then test a reel: put `reel` in a Queue row's `format`, run again, reject again.
-Test the kill switch: send `/pause test` to the bot, run the autopilot — it stops at the gate.
+Every post is labelled AI-generated on both platforms (`is_ai_generated`), TikTok's "promoting my
+own business" disclosure is on (`brand_organic_toggle`), and captions end with the disclaimer.
 
-## 7. Go live
+## 8. First test (nothing gets published)
 
-Before the first real post (see `00-PLAYBOOK.md` §7 for the reasons):
-- [ ] Website: keep UTMs (or rely on the link tracker), commit a launch-price end date or leave `LAUNCH_END_DATE` empty
+1. Set `APPROVAL_MODE` to `approve` for the first runs. Control tab: `global_enabled` = `TRUE`.
+2. Click **Run now (test)** in the autopilot. A Telegram preview arrives within a few minutes.
+3. Press **❌ Reject**. The Queue row now says `rejected`.
+4. Read the execution: every gate shows what it checked, and each "· parse" node shows which model answered.
+
+Test a reel (put `reel` in a Queue row's format), the kill switch (`/pause test`, run again — it stops
+at the gate), and the veto: set `APPROVAL_MODE` back to `veto` and `VETO_MINUTES` to `2`, run, open
+the stop link — the post is not published.
+
+## 9. Go live
+
+- [ ] `APPROVAL_MODE` = `veto`, `VETO_MINUTES` = `180`; activate workflows 01–04
+- [ ] Website: keep UTMs (or rely on the link tracker); commit a launch-price end date or leave `LAUNCH_END_DATE` empty
 - [ ] UAE Advertiser Permit question answered for the account/founder
-- [ ] Arabic ElevenLabs voice approved by a native speaker
-- [ ] Bio links: `https://n8n.mycrystalcode.com/webhook/go?p=bio&s=instagram&m=bio&d=home` (and `s=tiktok`, and `l=ar` for an Arabic link)
-- [ ] Activate workflows 01–04 (toggle top right)
+- [ ] Listen to the Arabic voice once with a native speaker (switch voices in Settings if needed)
+- [ ] Bio links: `https://<your n8n>/webhook/go?p=bio&s=instagram&m=bio&d=home` (`s=tiktok` for TikTok, add `&l=ar` for Arabic)
 
-Daily routine (5 minutes): approve or reject in Telegram → open TikTok drafts → check
-**AI-generated content** and **Your brand / promotional** toggles → Post → paste the drafted first
-comment if you like. Use the story/DM link from the "✅" message for stories.
+Your daily routine is now optional: glance at the Telegram previews; open the stop link only if a
+post looks wrong. `/pause` stops everything.
 
-## 8. Verify these against the live docs (could not be confirmed from here)
+**Risk you are accepting with veto mode.** The compliance team recommended a person approve every
+post (all Arabic posts for at least 90 days), because one bad Arabic post can get the account
+restricted in the UAE. Veto mode keeps every automatic gate (blocklist, AI compliance, visual QA)
+and gives you a window to stop a post, but nothing waits for you. If you won't read the previews
+for the first weeks, consider `APPROVAL_MODE` = `approve` for Arabic until you've seen ~30 good ones.
 
-What was verified while building: all four workflows import into n8n **2.45.7**; the Code-node
-features they rely on (binary buffers, re-attaching binaries across nodes, `isExecuted`, Luxon) were
-executed in that n8n; the slide pipeline renders through a real **Gotenberg 8** with the exact form
-fields (including Arabic, transparent reel frames and the fail-closed broken-image path); `mcc-reel`
-assembled real MP4s in both modes; `n8n/test` passes 7/7. These vendor details were not reachable
-from the build environment:
+## 10. Verified while building, and what still needs a live check
 
-1. **Upload-Post field names** beyond `user`, `platform[]`, `title`, `photos[]`, `video` (which come from
-   existing working workflows): `description`, TikTok `post_mode` (`MEDIA_UPLOAD` = drafts),
-   `is_aigc`, `auto_add_music`. If their docs use different names, edit the two Upload-Post nodes.
-2. **Upload-Post analytics endpoint** (`UPLOADPOST_ANALYTICS_URL` and its query names). Until it is
-   wired, type numbers into the Metrics tab by hand; the Monday review works either way.
-3. **Claude 5.5 in n8n's Anthropic node:** if a chain errors about thinking, open its "· model" node and
-   set Thinking to Adaptive (newer node versions), or switch the model to one your node lists.
-4. **fal.ai model id** for premium reels (copy it from the model's page; e.g. a Veo 3.1 or Kling 3.0
-   text-to-video endpoint) and its input fields in `FAL_INPUT_JSON`.
-5. Instagram's API allows **10 images per carousel**; the pipeline always makes 8.
+Verified: all four workflows import into n8n **2.45.7**; the Code-node features they rely on, a
+retry loop's run handling, a JSON body sent as a prebuilt string, and a raw SSML body were executed in
+that n8n; slides render through a real **Gotenberg 8** (Arabic, transparent reel frames, fail-closed
+images); `mcc-reel` built real MP4s; `n8n/test` passes 10/10. API field names were taken from the
+vendors' current docs (Upload-Post, Z.ai, Azure, Instagram) in Nov 2026.
 
-## 9. Changing things
+Needs your accounts to confirm on the first run: real responses from GLM, Claude, Azure, CogVideoX and
+Upload-Post; how GLM-4.7-Flash writes Arabic (switch `COPY_PROVIDER` to `claude` if it reads weaker);
+Telegram previews.
 
-- Brand facts, prices, rules, formulas, hooks: edit the sources (`01-brand-brief.md`, `agency/*.md|json`,
-  `n8n/src/*.js`, `templates/mcc-slide.html`), then rebuild and re-import:
-  ```bash
-  python3 n8n/build_workflows.py
-  cd n8n/test && npm install && npx playwright --version >/dev/null && node run-tests.js
-  ```
-  (`GOTENBERG_URL=http://localhost:3000 node run-tests.js` renders through a real Gotenberg.)
-- **Prices** live in three places that must agree with the site's `shared/commerce/tierPrices.ts`:
-  the template (`PRICES`), Gate A (`PRICES`) and the brief.
-- Preview any slide JSON without n8n: `node tools/render-preview.js examples/deck-same-behavior.en.json out/`.
-- Premium reels: set `REEL_TIER` to `premium` and fill the fal.ai settings; frames become transparent
-  overlays on the AI clip.
-- Auto-publish (skips Telegram approval) is off. The governance rule is: only English carousels,
-  only after 30 approvals in a row with no edits — then set `AUTO_PUBLISH_EN` to `true`.
+## 11. Changing things
+
+- Brand facts, prices, rules, formulas: edit the sources (`01-brand-brief.md`, `agency/*`, `n8n/src/*.js`,
+  `templates/mcc-slide.html`), then `python3 n8n/build_workflows.py` and re-import.
+- Tests: `cd n8n/test && npm install && node run-tests.js` (`GOTENBERG_URL=http://localhost:3000` to render through Gotenberg).
+- **Prices** must agree with the site's `shared/commerce/tierPrices.ts` in three places: the template
+  (`PRICES`), Gate A (`PRICES`) and the brief.
+- Preview a slide deck without n8n: `node tools/render-preview.js examples/deck-same-behavior.en.json out/`.

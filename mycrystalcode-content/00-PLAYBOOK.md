@@ -63,8 +63,12 @@ text. Previews: `examples/preview-*.jpg`.
 - **Arabic and anything aimed at the UAE/GCC: no astrology, horoscopes or birth chart at all.** No magic,
   evil eye, envy or fate. (UAE advertising standards prohibit astrology advertising.)
 - Every caption ends with the disclaimer + "Made with AI". AI labels on in both apps.
-- A human approves every post (Telegram) — all Arabic posts for at least 90 days. TikTok posts land as
-  drafts; you tap Post after checking the AI-generated and "Your brand" toggles.
+- The compliance team's recommendation: a human approves every post, all Arabic posts for at least
+  90 days. **Owner's choice (Nov 2026): veto mode** — every post goes through all automatic gates,
+  arrives in Telegram with a private stop link, and publishes after 3 hours unless stopped.
+  `APPROVAL_MODE = approve` restores the per-post approval at any time.
+- Every post is labelled AI-generated on Instagram and TikTok and carries TikTok's own-business
+  disclosure (set automatically through Upload-Post).
 - Max 2 posts a day, ≥ 4 h apart. No automated likes, comments or DMs. `/pause` stops everything.
 
 ## 6. Targets and the learning loop

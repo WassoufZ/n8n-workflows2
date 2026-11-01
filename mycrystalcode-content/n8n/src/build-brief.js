@@ -11,6 +11,7 @@ const FORMULAS = /*@FORMULAS@*/[];
 const STRATEGY = /*@STRATEGY@*/{};
 const CONTRACT = /*@CONTRACT@*/'';
 const COMPLIANCE_RULES = /*@COMPLIANCE@*/'';
+const SCHEMA = /*@SCHEMA@*/{};
 
 const row = { ...input.row };
 const log = $('Read Log').all().map((i) => i.json).filter((r) => r.post_id);
@@ -86,6 +87,10 @@ angle: ${row.angle || '(choose the strongest angle from the banks)'}
 cta_tier: ${row.cta_tier || formula.cta_tier}
 notes: ${row.notes || '-'}
 ${input.feedback ? `\n=== YOUR PREVIOUS DRAFT WAS REJECTED. FIX EVERY ISSUE BELOW ===\n${input.feedback}\n` : ''}
-Return ONLY the JSON object the output schema describes. Set "formula" to "${row.formula}" and "pillar" to "${row.pillar}". Write all on-screen text, the hook, caption and voiceover in ${AR ? 'Arabic' : 'English'}. Do not put hashtags or the legal footer in "caption": the workflow appends them.`;
+Return ONLY one JSON object that matches this JSON Schema (no prose, no code fences):
+${JSON.stringify(SCHEMA)}
+ Set "formula" to "${row.formula}" and "pillar" to "${row.pillar}". Write all on-screen text, the hook, caption and voiceover in ${AR ? 'Arabic' : 'English'}. Do not put hashtags or the legal footer in "caption": the workflow appends them.`;
 
-return [{ json: { ...input, row, prompt, compliance_rules: COMPLIANCE_RULES } }];
+const system = 'You are a meticulous bilingual (English/Arabic) social copywriter. You follow the brand brief, the claims policy and the template contract exactly, and you output only valid JSON.';
+return [{ json: { ...input, row, prompt, compliance_rules: COMPLIANCE_RULES,
+  llm_job: { system, prompt, temperature: 0.7, max_tokens: 12000, attempt: input.attempt } } }];

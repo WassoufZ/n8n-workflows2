@@ -1,7 +1,8 @@
 # My Crystal Code — AI content engine for Instagram & TikTok
 
 Reels and carousels for [mycrystalcode.com](https://www.mycrystalcode.com), in English and Arabic,
-produced by n8n with a human approval tap in Telegram.
+written, checked, rendered and published by n8n on autopilot, with a Telegram preview and stop link.
+Runs for roughly $23–33 a month (free GLM models, free Azure voices, $0.20 AI clips, Upload-Post).
 
 **Start here:** [`00-PLAYBOOK.md`](00-PLAYBOOK.md) (the strategy) → [`SETUP.md`](SETUP.md) (getting it running).
 
@@ -12,7 +13,7 @@ produced by n8n with a human approval tap in Telegram.
 | `agency/` | The five specialist reports (growth, platform content, design, compliance, stack) and the formula/hook data |
 | `templates/mcc-slide.html` | The single slide template: 8 carousel layouts + reel frames, EN/AR, site brand tokens |
 | `examples/` | Example decks (JSON) and rendered previews (`preview-*.jpg`) |
-| `n8n/workflows/` | **Import these into n8n**: autopilot, analytics & weekly review, kill switch, link tracker |
+| `n8n/workflows/` | **Import these into n8n**: autopilot, analytics & weekly review, kill switch, links (click tracker + veto stop link) |
 | `n8n/src/` | The Code-node scripts (readable source of the workflow logic) |
 | `n8n/build_workflows.py` | Rebuilds `n8n/workflows/` from the sources above |
 | `n8n/sheet-templates/` | CSVs for the control Google Sheet, Queue pre-filled with the 14-day calendar |

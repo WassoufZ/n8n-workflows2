@@ -1,0 +1,434 @@
+{
+  "name": "MCC · Links (click tracker + veto stop link)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Links\n`/webhook/go?p=<post_id>&s=instagram&m=story&d=lite&l=en` logs a click to **Clicks** and redirects to the site with UTMs\n(d = home|lite|full|sample|crystals).\n`/webhook/veto?p=<post_id>&n=<nonce>` is the private stop link the autopilot sends in veto mode;\nit records the stop in **Vetoes** and the post is not published.",
+        "height": 220,
+        "width": 640,
+        "color": 5
+      },
+      "id": "a0ce6941-e486-5c84-b5f5-ac1e02b9066f",
+      "name": "README",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "path": "go",
+        "httpMethod": "GET",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "01a9c98b-8a25-591f-a04d-a99a0c9c5e8e",
+      "name": "GET /go",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "bbf77115-fd0f-5482-ac59-4cc00c0e3147"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "38a7621c-b96c-50cd-ab75-ea44cf0fe703",
+              "name": "SHEET_ID",
+              "value": "PASTE_GOOGLE_SHEET_ID",
+              "type": "string"
+            },
+            {
+              "id": "c7ddf6b4-79f9-5035-8f77-8430fb2d3cd8",
+              "name": "SITE",
+              "value": "https://www.mycrystalcode.com",
+              "type": "string"
+            },
+            {
+              "id": "a310fbb5-83fb-57f2-97c7-b5d97e69609d",
+              "name": "TIMEZONE",
+              "value": "Asia/Dubai",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e40fb215-b5c3-53b8-aabd-d563209ecc72",
+      "name": "⚙️ Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Click tracker for story/DM/bio links (agency/A §3): /webhook/go?p=<post_id>&s=<instagram|tiktok>\n// &m=<story|dm|bio>&d=<home|lite|full|sample|crystals>&l=<en|ar>. Logs the click, then 302s to\n// the site with UTMs, so clicks are countable even before the site keeps UTMs.\nconst S = $('⚙️ Settings').first().json;\nconst q = $input.first().json.query || {};\nconst clean = (v, re, dflt) => (re.test(String(v || '')) ? String(v) : dflt);\nconst post = clean(q.p, /^[a-z0-9-]{3,60}$/i, 'unknown');\nconst source = clean(q.s, /^(instagram|tiktok)$/, 'instagram');\nconst medium = clean(q.m, /^(story|dm|bio|comment)$/, 'bio');\nconst lang = clean(q.l, /^(en|ar)$/, 'en');\nconst dest = clean(q.d, /^(home|lite|full|sample|crystals)$/, 'home');\nconst PATHS = { home: lang === 'ar' ? '/ar' : '/', lite: '/crystal-match', full: '/quiz', sample: lang === 'ar' ? '/ar' : '/#sample', crystals: lang === 'ar' ? '/ar/crystals' : '/crystals' };\nconst path = PATHS[dest];\nconst [base, hash] = path.split('#');\nconst params = new URLSearchParams({ ...(lang === 'ar' && !base.startsWith('/ar') ? { lang: 'ar' } : {}), utm_source: source, utm_medium: medium, utm_campaign: 'mcc_tracker', utm_content: post, utm_term: lang });\nconst location = `${S.SITE}${base}?${params}${hash ? '#' + hash : ''}`;\nreturn [{ json: { ts: $now.setZone(S.TIMEZONE).toISO(), post_id: post, source, medium, lang, dest, location } }];\n"
+      },
+      "id": "41fbb28c-c733-58c9-b28a-0f0f5049ccb5",
+      "name": "Build redirect",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "redirect",
+        "redirectURL": "={{ $json.location }}",
+        "options": {}
+      },
+      "id": "3d67804c-61c1-5769-bdcd-89d88cf7ae7c",
+      "name": "Redirect",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Clicks",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "39b67686-5f01-5283-ba1e-8ac4fd3e84d7",
+      "name": "Log click",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        720,
+        100
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "path": "veto",
+        "httpMethod": "GET",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "e4939ce0-7ec9-50fc-95f9-ba1ce7f64ed9",
+      "name": "GET /veto",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        400
+      ],
+      "webhookId": "dfd2bc73-ac92-5feb-90ad-376834f5c873"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "38a7621c-b96c-50cd-ab75-ea44cf0fe703",
+              "name": "SHEET_ID",
+              "value": "PASTE_GOOGLE_SHEET_ID",
+              "type": "string"
+            },
+            {
+              "id": "a310fbb5-83fb-57f2-97c7-b5d97e69609d",
+              "name": "TIMEZONE",
+              "value": "Asia/Dubai",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a9b655e1-1a0f-5e6e-a309-9e7c3529cbd3",
+      "name": "⚙️ Settings (veto)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Records a tap on the private \"stop this post\" link: /webhook/veto?p=<post_id>&n=<nonce>.\n// Publish plan only honours a veto whose nonce matches the one it sent, so the link can't be guessed.\nconst S = $('⚙️ Settings (veto)').first().json;\nconst q = $input.first().json.query || {};\nconst post = /^[a-z0-9-]{3,60}$/i.test(String(q.p || '')) ? String(q.p) : '';\nconst nonce = /^[a-z0-9]{24}$/.test(String(q.n || '')) ? String(q.n) : '';\nconst ok = Boolean(post && nonce);\nreturn [{ json: { ok, ts: $now.setZone(S.TIMEZONE).toISO(), post_id: post, nonce,\n  html: ok ? `<h2>Stopped ✋</h2><p>${post} will not be published.</p>` : '<h2>Invalid link</h2>' } }];\n"
+      },
+      "id": "23ec42fb-e5ef-5446-9d91-ed288a6a1e4b",
+      "name": "Check stop link",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "497a3e8f-6b0a-590a-99ba-bd80e8614425",
+              "leftValue": "={{ $json.ok }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "d05befee-359b-58a4-b533-ad389ac79449",
+      "name": "Valid link?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('⚙️ Settings (veto)').first().json.SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Vetoes",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ts": "={{ $json.ts }}",
+            "post_id": "={{ $json.post_id }}",
+            "nonce": "={{ $json.nonce }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ts",
+              "displayName": "ts",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "post_id",
+              "displayName": "post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nonce",
+              "displayName": "nonce",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "77022799-6cda-5803-b6d6-2c85a91e1a5a",
+      "name": "Record veto",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        960,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $('Check stop link').first().json.html }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "b07d3cac-f871-5d81-8b5c-d6f3dbe465aa",
+      "name": "Confirm stop",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1200,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "GET /go": {
+      "main": [
+        [
+          {
+            "node": "⚙️ Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚙️ Settings": {
+      "main": [
+        [
+          {
+            "node": "Build redirect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build redirect": {
+      "main": [
+        [
+          {
+            "node": "Redirect",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log click",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET /veto": {
+      "main": [
+        [
+          {
+            "node": "⚙️ Settings (veto)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚙️ Settings (veto)": {
+      "main": [
+        [
+          {
+            "node": "Check stop link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check stop link": {
+      "main": [
+        [
+          {
+            "node": "Valid link?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valid link?": {
+      "main": [
+        [
+          {
+            "node": "Record veto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Confirm stop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Record veto": {
+      "main": [
+        [
+          {
+            "node": "Confirm stop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Dubai",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "tags": [
+    {
+      "name": "mycrystalcode"
+    },
+    {
+      "name": "analytics"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "promptVersion": "26ca0efdae"
+  }
+}

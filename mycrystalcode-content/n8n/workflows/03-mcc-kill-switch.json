@@ -3,8 +3,8 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Kill switch\nSend `/pause <reason>` to stop all posting immediately, `/resume <reason>` to restart,\n`/status` to see the Control sheet. Only IDs in ADMIN_TELEGRAM_IDS are obeyed.\nUse a **separate bot** from the approval bot if you prefer; one bot works because approvals use link buttons.",
-        "height": 200,
+        "content": "## Kill switch\nSend `/pause <reason>` to stop all posting immediately, `/resume <reason>` to restart,\n`/status` to see the Control sheet. Only IDs in ADMIN_TELEGRAM_IDS are obeyed.",
+        "height": 180,
         "width": 600,
         "color": 5
       },

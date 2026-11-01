@@ -3,8 +3,8 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Analytics & learning loop\nDaily: fetches per-post metrics for posts 1-8 days old into **Metrics**.\nWeekly (INSIGHTS_WEEKDAY, 1 = Monday): Claude reads Log + Metrics + Clicks + Sales and writes **Insights**,\nwhich the autopilot's brief reads before writing the next posts.\n\n⚠️ Verify the Upload-Post analytics endpoint and query names in their API docs and adjust **Fetch analytics**.\nUntil then you can type numbers into the Metrics sheet by hand; the weekly review works either way.",
-        "height": 260,
+        "content": "## Analytics & learning loop\nDaily: per-post metrics from Upload-Post (`GET /api/uploadposts/post-analytics/{request_id}`)\nfor posts 1-8 days old → **Metrics**. Weekly (INSIGHTS_WEEKDAY, 1 = Monday): the AI reads Log + Metrics + Clicks + Sales\nand writes **Insights**, which the autopilot's brief reads before writing the next posts.",
+        "height": 220,
         "width": 640,
         "color": 5
       },
@@ -71,6 +71,12 @@
               "type": "string"
             },
             {
+              "id": "295c11a4-571f-59c5-a72b-c342e57f0955",
+              "name": "N8N_PUBLIC_URL",
+              "value": "https://n8n.example.com",
+              "type": "string"
+            },
+            {
               "id": "c7ddf6b4-79f9-5035-8f77-8430fb2d3cd8",
               "name": "SITE",
               "value": "https://www.mycrystalcode.com",
@@ -95,39 +101,81 @@
               "type": "string"
             },
             {
-              "id": "950a4689-c5fa-52e4-882d-91f5b41d5fd0",
-              "name": "UPLOADPOST_USER",
-              "value": "PASTE_UPLOAD_POST_PROFILE_NAME",
+              "id": "3e5c9bab-143a-56b7-b1a7-56d54fc874b8",
+              "name": "COPY_PROVIDER",
+              "value": "glm",
               "type": "string"
             },
             {
-              "id": "3b162cf2-7819-5bf9-9ca9-eeac6945261f",
-              "name": "UPLOADPOST_ANALYTICS_URL",
-              "value": "https://api.upload-post.com/api/analytics",
+              "id": "ca2de95d-46f9-5aa5-b1e4-04341c272615",
+              "name": "COPY_FALLBACK_PROVIDER",
+              "value": "claude",
               "type": "string"
             },
             {
-              "id": "8814ab73-e34b-5632-adba-1e4b2ebec140",
-              "name": "TIKTOK_POST_MODE",
-              "value": "MEDIA_UPLOAD",
+              "id": "88ee9466-edb8-5e3d-a05f-fa8eadb87856",
+              "name": "COMPLIANCE_PROVIDER",
+              "value": "claude",
               "type": "string"
             },
             {
-              "id": "783967e2-9a86-5ecb-8a35-912d312a7e06",
-              "name": "REEL_TIER",
-              "value": "standard",
+              "id": "eab22e16-48a6-5632-a40a-8565a148f49d",
+              "name": "QA_PROVIDER",
+              "value": "glm",
               "type": "string"
             },
             {
-              "id": "cf20683b-9776-5557-b861-963cb944fa1c",
-              "name": "FAL_MODEL",
-              "value": "PASTE_FAL_MODEL_ID",
+              "id": "917e3e48-5a69-5997-acb2-e4cdb93db021",
+              "name": "INSIGHTS_PROVIDER",
+              "value": "glm",
               "type": "string"
             },
             {
-              "id": "4e293e8c-2b2c-58d2-9ae8-3840ad5074ef",
-              "name": "FAL_INPUT_JSON",
-              "value": "{\"aspect_ratio\":\"9:16\",\"duration\":\"8s\",\"generate_audio\":false}",
+              "id": "3b4f8e2d-32da-5f1c-aded-0d54a68c339f",
+              "name": "GLM_TEXT_MODEL",
+              "value": "glm-4.7-flash",
+              "type": "string"
+            },
+            {
+              "id": "9ad66d72-a81b-5548-9976-b482b9550198",
+              "name": "GLM_VISION_MODEL",
+              "value": "glm-4.6v-flash",
+              "type": "string"
+            },
+            {
+              "id": "8f7b8588-77ab-519e-b177-a7e295784a41",
+              "name": "CLAUDE_COPY_MODEL",
+              "value": "claude-sonnet-5-5",
+              "type": "string"
+            },
+            {
+              "id": "3da369f9-82e8-584d-8cb0-d1a1c536b1f7",
+              "name": "CLAUDE_CHECK_MODEL",
+              "value": "claude-haiku-5-5",
+              "type": "string"
+            },
+            {
+              "id": "b1cfc152-3f9e-5bc9-8b3a-aa437c6b607a",
+              "name": "TTS_PROVIDER",
+              "value": "azure",
+              "type": "string"
+            },
+            {
+              "id": "ba655c29-88d9-5718-9d5e-05d2210fbcde",
+              "name": "AZURE_REGION",
+              "value": "westeurope",
+              "type": "string"
+            },
+            {
+              "id": "5375a738-a8e3-5bbc-8e19-06c59f2b7f72",
+              "name": "AZURE_VOICE_EN",
+              "value": "en-US-AvaMultilingualNeural",
+              "type": "string"
+            },
+            {
+              "id": "cf6bc830-c9da-5ee1-b679-3fd9fc0df99e",
+              "name": "AZURE_VOICE_AR",
+              "value": "ar-AE-FatimaNeural",
               "type": "string"
             },
             {
@@ -149,21 +197,51 @@
               "type": "string"
             },
             {
-              "id": "4783d7b7-d155-5d7c-9e10-ebbef90c4839",
-              "name": "COPY_MODEL",
-              "value": "claude-sonnet-5-5",
+              "id": "cb5d9e59-4fa3-5bf4-a553-f36e22d04e9c",
+              "name": "VIDEO_PROVIDER",
+              "value": "cogvideox",
               "type": "string"
             },
             {
-              "id": "2afd7071-3545-59b8-8375-49d6406804fc",
-              "name": "QA_MODEL",
-              "value": "claude-sonnet-5-5",
+              "id": "cf20683b-9776-5557-b861-963cb944fa1c",
+              "name": "FAL_MODEL",
+              "value": "PASTE_FAL_MODEL_ID",
               "type": "string"
             },
             {
-              "id": "4c0bfc79-8888-501e-8d52-7334d94fcaed",
-              "name": "AUTO_PUBLISH_EN",
-              "value": "false",
+              "id": "4e293e8c-2b2c-58d2-9ae8-3840ad5074ef",
+              "name": "FAL_INPUT_JSON",
+              "value": "{\"aspect_ratio\":\"9:16\",\"duration\":\"8s\",\"generate_audio\":false}",
+              "type": "string"
+            },
+            {
+              "id": "950a4689-c5fa-52e4-882d-91f5b41d5fd0",
+              "name": "UPLOADPOST_USER",
+              "value": "PASTE_UPLOAD_POST_PROFILE_NAME",
+              "type": "string"
+            },
+            {
+              "id": "3b162cf2-7819-5bf9-9ca9-eeac6945261f",
+              "name": "UPLOADPOST_ANALYTICS_URL",
+              "value": "https://api.upload-post.com/api/uploadposts/post-analytics",
+              "type": "string"
+            },
+            {
+              "id": "8814ab73-e34b-5632-adba-1e4b2ebec140",
+              "name": "TIKTOK_POST_MODE",
+              "value": "DIRECT_POST",
+              "type": "string"
+            },
+            {
+              "id": "d338a92b-024a-5465-a1ea-8e23c4422324",
+              "name": "APPROVAL_MODE",
+              "value": "veto",
+              "type": "string"
+            },
+            {
+              "id": "5cf72a02-7275-5db8-a5d8-041548551c73",
+              "name": "VETO_MINUTES",
+              "value": "180",
               "type": "string"
             },
             {
@@ -224,7 +302,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Posts published 1-8 days ago, one item per post + platform.\nconst S = $('⚙️ Settings').first().json;\nconst now = $now.setZone(S.TIMEZONE);\nreturn $input.all().map((i) => i.json)\n  .filter((r) => r.post_id && ['published', 'tiktok_draft'].includes(r.status))\n  .map((r) => ({ ...r, age_days: Math.floor(now.diff(DateTime.fromISO(r.created_at), 'days').days) }))\n  .filter((r) => r.age_days >= 1 && r.age_days <= 8)\n  .map((r) => ({ json: { post_id: r.post_id, platform: r.platform, age_days: r.age_days, upload_response: r.upload_response } }));"
+        "jsCode": "// Posts published 1-8 days ago, one item per post + platform (Log rows are per platform).\nconst S = $('⚙️ Settings').first().json;\nconst now = $now.setZone(S.TIMEZONE);\nreturn $input.all().map((i) => i.json)\n  .filter((r) => r.post_id && r.request_id && ['published', 'tiktok_draft'].includes(r.status))\n  .map((r) => ({ ...r, age_days: Math.floor(now.diff(DateTime.fromISO(r.created_at), 'days').days) }))\n  .filter((r) => r.age_days >= 1 && r.age_days <= 8)\n  .map((r) => ({ json: { post_id: r.post_id, platform: r.platform, request_id: r.request_id, age_days: r.age_days } }));"
       },
       "id": "afca3939-b812-5253-a593-7f18d6049226",
       "name": "Posts to measure",
@@ -238,7 +316,7 @@
     {
       "parameters": {
         "method": "GET",
-        "url": "={{ $('⚙️ Settings').first().json.UPLOADPOST_ANALYTICS_URL }}",
+        "url": "={{ $('⚙️ Settings').first().json.UPLOADPOST_ANALYTICS_URL }}/{{ $json.request_id }}",
         "options": {
           "timeout": 120000
         },
@@ -248,16 +326,8 @@
         "queryParameters": {
           "parameters": [
             {
-              "name": "user",
-              "value": "={{ $('⚙️ Settings').first().json.UPLOADPOST_USER }}"
-            },
-            {
               "name": "platform",
               "value": "={{ $json.platform }}"
-            },
-            {
-              "name": "request_id",
-              "value": "={{ (() => { try { const r = JSON.parse($json.upload_response); return r.request_id || r.id || ''; } catch (e) { return ''; } })() }}"
             }
           ]
         }
@@ -274,7 +344,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Normalises whatever the analytics endpoint returns into one Metrics row per post+platform.\n// Unknown shapes are kept raw, so nothing is silently lost while the endpoint is being wired.\nconst S = $('⚙️ Settings').first().json;\nconst posts = $('Posts to measure').all();\nconst pick = (o, keys) => { for (const k of keys) { const v = k.split('.').reduce((a, p) => (a == null ? a : a[p]), o); if (v != null && v !== '') return Number(v) || 0; } return ''; };\nreturn $input.all().map((res, i) => {\n  const p = posts[i].json; const r = res.json || {};\n  return { json: {\n    key: `${p.post_id}|${p.platform}`, post_id: p.post_id, platform: p.platform, measured_at: $now.setZone(S.TIMEZONE).toISO(), age_days: p.age_days,\n    views: pick(r, ['views', 'video_views', 'plays', 'metrics.views']), reach: pick(r, ['reach', 'metrics.reach']),\n    likes: pick(r, ['likes', 'like_count', 'metrics.likes']), comments: pick(r, ['comments', 'comments_count', 'metrics.comments']),\n    shares: pick(r, ['shares', 'share_count', 'metrics.shares']), saves: pick(r, ['saved', 'saves', 'metrics.saved']),\n    profile_visits: pick(r, ['profile_visits', 'metrics.profile_visits']), follows: pick(r, ['follows', 'metrics.follows']),\n    raw: JSON.stringify(r).slice(0, 1500),\n  } };\n});\n"
+        "jsCode": "// Normalises whatever the analytics endpoint returns into one Metrics row per post+platform.\n// Unknown shapes are kept raw, so nothing is silently lost while the endpoint is being wired.\nconst S = $('⚙️ Settings').first().json;\nconst posts = $('Posts to measure').all();\nconst pick = (o, keys) => { for (const k of keys) { const v = k.split('.').reduce((a, p) => (a == null ? a : a[p]), o); if (v != null && v !== '') return Number(v) || 0; } return ''; };\nreturn $input.all().map((res, i) => {\n  const p = posts[i].json;\n  // Upload-Post GET /api/uploadposts/post-analytics/{request_id}: platforms[platform].post_metrics\n  const r = (res.json && res.json.platforms && res.json.platforms[p.platform] && res.json.platforms[p.platform].post_metrics) || res.json || {};\n  return { json: {\n    key: `${p.post_id}|${p.platform}`, post_id: p.post_id, platform: p.platform, measured_at: $now.setZone(S.TIMEZONE).toISO(), age_days: p.age_days,\n    views: pick(r, ['views', 'video_views', 'plays', 'metrics.views']), reach: pick(r, ['reach', 'metrics.reach']),\n    likes: pick(r, ['likes', 'like_count', 'metrics.likes']), comments: pick(r, ['comments', 'comments_count', 'metrics.comments']),\n    shares: pick(r, ['shares', 'share_count', 'metrics.shares']), saves: pick(r, ['saves', 'saved', 'favorites', 'metrics.saved']),\n    profile_visits: pick(r, ['profile_visits', 'metrics.profile_visits']), follows: pick(r, ['follows', 'metrics.follows']),\n    raw: JSON.stringify(r).slice(0, 1500),\n  } };\n});\n"
       },
       "id": "d2df7dd1-7ea7-54fd-85cd-1888bce109a4",
       "name": "Normalize metrics",
@@ -397,7 +467,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Weekly learning loop: joins the Log, Metrics, Clicks and Sales sheets and asks Claude what to\n// do more and less of. The autopilot's brief reads the newest Insights row.\nconst S = $('⚙️ Settings').first().json;\nif ($now.setZone(S.TIMEZONE).weekday !== Number(S.INSIGHTS_WEEKDAY || 1)) return [];\nconst all = (n) => { try { return $(n).all().map((i) => i.json); } catch (e) { return []; } };\nconst log = all('Read Log').filter((r) => r.post_id);\nconst metrics = all('Read Metrics').filter((r) => r.post_id);\nconst clicks = all('Read Clicks').filter((r) => r.post_id);\nconst sales = all('Read Sales').filter((r) => r.date || r.utm_content);\nconst byPost = {};\nlog.forEach((r) => { byPost[r.post_id] = { post_id: r.post_id, lang: r.lang, format: r.format, pillar: r.pillar, formula: r.formula, cta_tier: r.cta_tier, hook: r.hook, platforms: [] }; });\nmetrics.forEach((m) => { if (byPost[m.post_id]) byPost[m.post_id].platforms.push(m); });\nclicks.forEach((c) => { if (byPost[c.post_id]) byPost[c.post_id].clicks = (byPost[c.post_id].clicks || 0) + 1; });\nsales.forEach((s) => { const id = s.utm_content || s.post_id; if (byPost[id]) byPost[id].sales = (byPost[id].sales || 0) + 1; });\nconst rows = Object.values(byPost).slice(-60);\nconst prompt = `You are the growth analyst for My Crystal Code (a $8.88 / $18.88 digital self-discovery reading; Instagram + TikTok; English + Arabic).\nBelow are the last ${rows.length} posts with their metrics, tracked link clicks and attributed sales.\nJudge each post against the account's own median (not industry benchmarks). Prioritise: sales > link clicks > profile visits > shares/sends > saves > views.\nSay which formulas, pillars, hook styles and languages to do MORE and LESS of next week, and name the 3 best hooks to reuse with a new angle.\nIf data is too thin to conclude, say so plainly instead of guessing.\nReturn ONLY JSON: {\"summary\": string (<=600 chars), \"do_more\": string (<=400), \"do_less\": string (<=400), \"top_hooks\": string (<=400)}\n\nDATA:\n${JSON.stringify(rows)}`;\nreturn [{ json: { prompt, week: $now.setZone(S.TIMEZONE).toFormat(\"kkkk-'W'WW\") } }];\n"
+        "jsCode": "// Weekly learning loop: joins the Log, Metrics, Clicks and Sales sheets and asks Claude what to\n// do more and less of. The autopilot's brief reads the newest Insights row.\nconst S = $('⚙️ Settings').first().json;\nif ($now.setZone(S.TIMEZONE).weekday !== Number(S.INSIGHTS_WEEKDAY || 1)) return [];\nconst all = (n) => { try { return $(n).all().map((i) => i.json); } catch (e) { return []; } };\nconst log = all('Read Log').filter((r) => r.post_id);\nconst metrics = all('Read Metrics').filter((r) => r.post_id);\nconst clicks = all('Read Clicks').filter((r) => r.post_id);\nconst sales = all('Read Sales').filter((r) => r.date || r.utm_content);\nconst byPost = {};\nlog.forEach((r) => { byPost[r.post_id] = { post_id: r.post_id, lang: r.lang, format: r.format, pillar: r.pillar, formula: r.formula, cta_tier: r.cta_tier, hook: r.hook, platforms: [] }; });\nmetrics.forEach((m) => { if (byPost[m.post_id]) byPost[m.post_id].platforms.push(m); });\nclicks.forEach((c) => { if (byPost[c.post_id]) byPost[c.post_id].clicks = (byPost[c.post_id].clicks || 0) + 1; });\nsales.forEach((s) => { const id = s.utm_content || s.post_id; if (byPost[id]) byPost[id].sales = (byPost[id].sales || 0) + 1; });\nconst rows = Object.values(byPost).slice(-60);\nconst prompt = `You are the growth analyst for My Crystal Code (a $8.88 / $18.88 digital self-discovery reading; Instagram + TikTok; English + Arabic).\nBelow are the last ${rows.length} posts with their metrics, tracked link clicks and attributed sales.\nJudge each post against the account's own median (not industry benchmarks). Prioritise: sales > link clicks > profile visits > shares/sends > saves > views.\nSay which formulas, pillars, hook styles and languages to do MORE and LESS of next week, and name the 3 best hooks to reuse with a new angle.\nIf data is too thin to conclude, say so plainly instead of guessing.\nReturn ONLY JSON: {\"summary\": string (<=600 chars), \"do_more\": string (<=400), \"do_less\": string (<=400), \"top_hooks\": string (<=400)}\n\nDATA:\n${JSON.stringify(rows)}`;\nreturn [{ json: { week: $now.setZone(S.TIMEZONE).toFormat(\"kkkk-'W'WW\"),\n  llm_job: { system: 'You are a careful growth analyst. Output only the JSON requested.', prompt, temperature: 0.2, max_tokens: 3000 } } }];\n"
       },
       "id": "fb431cb1-8400-51a8-ac32-da38f92995a2",
       "name": "Insights prompt",
@@ -410,22 +480,12 @@
     },
     {
       "parameters": {
-        "promptType": "define",
-        "text": "={{ $json.prompt }}",
-        "hasOutputParser": true,
-        "messages": {
-          "messageValues": [
-            {
-              "type": "SystemMessagePromptTemplate",
-              "message": "You are a careful growth analyst. Output only the JSON requested."
-            }
-          ]
-        }
+        "jsCode": "// Model router, step 1: turns the stage's `llm_job` into a request body for the provider chosen\n// in ⚙️ Settings (<STAGE>_PROVIDER: \"glm\" = Z.ai free Flash models, \"claude\" = Anthropic).\n// The copywriter's corrective second draw switches to COPY_FALLBACK_PROVIDER, so a free-tier\n// outage or a weak first draft gets a second opinion from the other model.\nconst STAGE = \"INSIGHTS\";\nconst S = $('⚙️ Settings').first().json;\nconst item = $input.first();\nconst job = item.json.llm_job;\nif (!job || !job.prompt) throw new Error(`${STAGE}: no llm_job.prompt on the input item`);\nlet provider = String(S[`${STAGE}_PROVIDER`] || 'claude').toLowerCase();\nif (STAGE === 'COPY' && Number(job.attempt) >= 2 && S.COPY_FALLBACK_PROVIDER) provider = String(S.COPY_FALLBACK_PROVIDER).toLowerCase();\nconst images = job.images || [];\nconst model = provider === 'glm'\n  ? (images.length ? S.GLM_VISION_MODEL : S.GLM_TEXT_MODEL)\n  : (STAGE === 'COPY' ? S.CLAUDE_COPY_MODEL : S.CLAUDE_CHECK_MODEL);\n\nconst glm = {\n  model,\n  messages: [\n    { role: 'system', content: job.system },\n    { role: 'user', content: images.length\n      ? [...images.map((im) => ({ type: 'image_url', image_url: { url: `data:${im.media_type};base64,${im.data}` } })), { type: 'text', text: job.prompt }]\n      : job.prompt },\n  ],\n  temperature: job.temperature ?? 0.7,\n  max_tokens: job.max_tokens || 8000,\n  ...(images.length ? {} : { response_format: { type: 'json_object' } }),\n};\nconst claude = {\n  model, system: job.system, max_tokens: job.max_tokens || 8000, temperature: job.temperature ?? 0.7,\n  messages: [{ role: 'user', content: images.length\n    ? [...images.map((im) => ({ type: 'image', source: { type: 'base64', media_type: im.media_type, data: im.data } })), { type: 'text', text: job.prompt }]\n    : job.prompt }],\n};\nreturn [{ json: { provider, model, stage: STAGE, body: JSON.stringify(provider === 'glm' ? glm : claude) }, binary: item.binary }];\n"
       },
-      "id": "a78713ac-d62f-522c-9383-8a35fb44ecaf",
-      "name": "Weekly review (Claude)",
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.5,
+      "id": "9d256a70-45f5-564f-af9d-6b1c1e5f31f0",
+      "name": "Weekly review · request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         2640,
         100
@@ -433,37 +493,136 @@
     },
     {
       "parameters": {
-        "model": {
-          "__rl": true,
-          "mode": "id",
-          "value": "claude-haiku-5-5"
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "737d5868-4351-585c-ab0b-1653be172129",
+                    "leftValue": "={{ $json.provider }}",
+                    "rightValue": "glm",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "glm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3b5d0311-c987-5b43-8395-d4c9d4d0d6e4",
+                    "leftValue": "={{ $json.provider }}",
+                    "rightValue": "claude",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "claude"
+            }
+          ]
         },
-        "options": {
-          "maxTokensToSample": 2000,
-          "temperature": 0.2
-        }
+        "looseTypeValidation": true,
+        "options": {}
       },
-      "id": "edd1f166-688e-5712-a446-75de2f64db1e",
-      "name": "Weekly review (Claude) · model",
-      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
-      "typeVersion": 1.3,
+      "id": "8c86c710-3399-542b-a466-b10ca3c559b4",
+      "name": "Weekly review · provider",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
       "position": [
-        2560,
-        320
+        2860,
+        100
       ]
     },
     {
       "parameters": {
-        "schemaType": "manual",
-        "inputSchema": "{\n \"type\": \"object\",\n \"required\": [\n  \"summary\",\n  \"do_more\",\n  \"do_less\",\n  \"top_hooks\"\n ],\n \"properties\": {\n  \"summary\": {\n   \"type\": \"string\"\n  },\n  \"do_more\": {\n   \"type\": \"string\"\n  },\n  \"do_less\": {\n   \"type\": \"string\"\n  },\n  \"top_hooks\": {\n   \"type\": \"string\"\n  }\n }\n}"
+        "method": "POST",
+        "url": "https://api.z.ai/api/paas/v4/chat/completions",
+        "options": {
+          "timeout": 300000
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}"
       },
-      "id": "02cb3798-5859-5a05-a30c-8dbb01e973d2",
-      "name": "Weekly review (Claude) · JSON",
-      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-      "typeVersion": 1.2,
+      "id": "2aecd044-8bba-5055-8d2b-e17ce8a32a74",
+      "name": "Weekly review · GLM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        2760,
-        320
+        3080,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "options": {
+          "timeout": 300000
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "anthropicApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}"
+      },
+      "id": "41ebbb0a-05df-57df-a191-913968685630",
+      "name": "Weekly review · Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3080,
+        200
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Model router, step 2: normalises the GLM (OpenAI-style) or Claude response into\n// { output: <parsed JSON or null>, llm: { provider, model, ok, error, usage } }.\n// Unparseable output is null, which every gate treats as a fail (fail closed).\nconst REQ = \"Weekly review · request\";\nconst req = $(REQ).first().json;\nconst r = $input.first().json || {};\nlet text = '';\nif (Array.isArray(r.choices)) text = r.choices[0]?.message?.content || '';\nelse if (Array.isArray(r.content)) text = r.content.filter((c) => c.type === 'text').map((c) => c.text).join('');\nconst error = r.error ? (r.error.message || JSON.stringify(r.error)).slice(0, 500) : (text ? '' : 'empty response');\nlet output = null;\nif (text) {\n  const t = text.replace(/^\\s*```(?:json)?/i, '').replace(/```\\s*$/, '').trim();\n  const a = t.indexOf('{'), b = t.lastIndexOf('}');\n  try { output = JSON.parse(a >= 0 && b > a ? t.slice(a, b + 1) : t); } catch (e) { output = null; }\n}\nreturn [{ json: { output, llm: { provider: req.provider, model: req.model, ok: Boolean(output), error: output ? '' : (error || 'response was not valid JSON'), usage: r.usage || null } } }];\n"
+      },
+      "id": "95c65df8-8343-578a-a2ea-afc937718e21",
+      "name": "Weekly review · parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3300,
+        100
       ]
     },
     {
@@ -475,7 +634,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2880,
+        3360,
         100
       ]
     },
@@ -505,7 +664,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        3120,
+        3600,
         100
       ]
     },
@@ -522,7 +681,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        3360,
+        3840,
         100
       ]
     }
@@ -605,23 +764,52 @@
         ]
       ]
     },
-    "Weekly review (Claude) · model": {
-      "ai_languageModel": [
+    "Weekly review · request": {
+      "main": [
         [
           {
-            "node": "Weekly review (Claude)",
-            "type": "ai_languageModel",
+            "node": "Weekly review · provider",
+            "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Weekly review (Claude) · JSON": {
-      "ai_outputParser": [
+    "Weekly review · provider": {
+      "main": [
         [
           {
-            "node": "Weekly review (Claude)",
-            "type": "ai_outputParser",
+            "node": "Weekly review · GLM",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Weekly review · Claude",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Weekly review · GLM": {
+      "main": [
+        [
+          {
+            "node": "Weekly review · parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Weekly review · Claude": {
+      "main": [
+        [
+          {
+            "node": "Weekly review · parse",
+            "type": "main",
             "index": 0
           }
         ]
@@ -675,14 +863,14 @@
       "main": [
         [
           {
-            "node": "Weekly review (Claude)",
+            "node": "Weekly review · request",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Weekly review (Claude)": {
+    "Weekly review · parse": {
       "main": [
         [
           {

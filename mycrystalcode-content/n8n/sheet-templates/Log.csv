@@ -1,1 +1,1 @@
-post_id,queue_id,created_at,platform,status,lang,format,pillar,formula,cta_tier,hook,caption,link,attempt,llm_model,qa_model,prompt_version,blocklist_hits,compliance_json,vision_qa,ai_caption_disclosure,footer_present,approved,upload_response
+post_id,request_id,queue_id,created_at,platform,status,lang,format,pillar,formula,cta_tier,hook,caption,link,attempt,llm_model,compliance_model,qa_model,approval_mode,prompt_version,blocklist_hits,compliance_json,vision_qa,ai_caption_disclosure,footer_present,approved,upload_response

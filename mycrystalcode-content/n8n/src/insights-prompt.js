@@ -22,4 +22,5 @@ Return ONLY JSON: {"summary": string (<=600 chars), "do_more": string (<=400), "
 
 DATA:
 ${JSON.stringify(rows)}`;
-return [{ json: { prompt, week: $now.setZone(S.TIMEZONE).toFormat("kkkk-'W'WW") } }];
+return [{ json: { week: $now.setZone(S.TIMEZONE).toFormat("kkkk-'W'WW"),
+  llm_job: { system: 'You are a careful growth analyst. Output only the JSON requested.', prompt, temperature: 0.2, max_tokens: 3000 } } }];

@@ -195,7 +195,7 @@ def switch(flow, name, rules, pos, fallback=False):
 
 
 def http(flow, name, pos, method, url, *, auth=None, multipart=None, json_body=None, headers=None, query=None,
-         file_out=None, timeout=120000, **extra):
+         file_out=None, timeout=120000, raw_body=None, raw_type=None, **extra):
     p = {"method": method, "url": url, "options": {"timeout": timeout}}
     if auth == "header":
         p.update({"authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth"})
@@ -215,23 +215,26 @@ def http(flow, name, pos, method, url, *, auth=None, multipart=None, json_body=N
         p.update({"sendBody": True, "contentType": "multipart-form-data", "bodyParameters": {"parameters": params}})
     if json_body is not None:
         p.update({"sendBody": True, "specifyBody": "json", "jsonBody": json_body})
+    if raw_body is not None:
+        p.update({"sendBody": True, "contentType": "raw", "rawContentType": raw_type, "body": raw_body})
     if file_out:
         p["options"]["response"] = {"response": {"responseFormat": "file", "outputPropertyName": file_out}}
     return flow.add(name, "n8n-nodes-base.httpRequest", 4.2, p, pos, **extra)
 
 
-def llm_chain(flow, name, prompt_expr, system, schema, model, temperature, pos, max_tokens=8000):
-    chain = flow.add(name, "@n8n/n8n-nodes-langchain.chainLlm", 1.5, {
-        "promptType": "define", "text": prompt_expr, "hasOutputParser": True,
-        "messages": {"messageValues": [{"type": "SystemMessagePromptTemplate", "message": system}]}}, pos)
-    lm = flow.add(f"{name} · model", "@n8n/n8n-nodes-langchain.lmChatAnthropic", 1.3, {
-        "model": {"__rl": True, "mode": "id", "value": model},
-        "options": {"maxTokensToSample": max_tokens, "temperature": temperature}}, (pos[0] - 80, pos[1] + 220))
-    parser = flow.add(f"{name} · JSON", "@n8n/n8n-nodes-langchain.outputParserStructured", 1.2, {
-        "schemaType": "manual", "inputSchema": json.dumps(schema, indent=1)}, (pos[0] + 120, pos[1] + 220))
-    flow.link(lm, chain, kind="ai_languageModel")
-    flow.link(parser, chain, kind="ai_outputParser")
-    return chain
+def llm(flow, stage, label, pos):
+    """Model router: request (provider-neutral job → body) → provider switch → GLM | Claude → parse.
+    Returns (entry node, exit node). The exit item is {output, llm: {provider, model, ok, error}}."""
+    x, y = pos
+    req = code(flow, f"{label} · request", js("llm-request.js", STAGE=stage), (x, y))
+    sw = switch(flow, f"{label} · provider", [("glm", "={{ $json.provider }}", "glm"), ("claude", "={{ $json.provider }}", "claude")], (x + 220, y))
+    g = http(flow, f"{label} · GLM", (x + 440, y - 100), "POST", "https://api.z.ai/api/paas/v4/chat/completions", auth="header",
+             json_body="={{ $json.body }}", timeout=300000, onError="continueRegularOutput")
+    c = http(flow, f"{label} · Claude", (x + 440, y + 100), "POST", "https://api.anthropic.com/v1/messages", auth="anthropic",
+             headers=[("anthropic-version", "2023-06-01")], json_body="={{ $json.body }}", timeout=300000, onError="continueRegularOutput")
+    p = code(flow, f"{label} · parse", js("llm-parse.js", REQ_NODE=f"{label} · request"), (x + 660, y))
+    flow.link(req, sw); flow.link(sw, g, 0); flow.link(sw, c, 1); flow.link(g, p); flow.link(c, p)
+    return req, p
 
 
 STR = {"type": "string"}
@@ -263,53 +266,68 @@ COPY_SCHEMA = {
         "beats": {"type": "array", "description": "Exactly 5 for a reel; [] for a carousel",
                   "items": {"type": "object", "required": ["text", "seconds"], "properties": {"text": STR, "seconds": {"type": "number"}}}},
         "voiceover": {"type": "string", "description": "Reel voiceover; empty string for a carousel"},
-        "broll_prompt": {"type": "string", "description": "Reel b-roll prompt; empty string for a carousel"},
+        "broll_prompt": {"type": "string", "description": "Reel b-roll video prompt (one 9:16 shot, motion described); empty string for a carousel"},
     },
 }
-COMPLIANCE_SCHEMA = {
-    "type": "object", "required": ["pass", "issues", "fixed_caption"],
-    "properties": {
-        "pass": {"type": "boolean"},
-        "issues": {"type": "array", "items": {"type": "object", "properties": {
-            "rule": STR, "severity": {"type": "string", "enum": ["blocker", "major", "minor"]}, "field": STR,
-            "excerpt": STR, "reason": STR, "requires_regeneration": {"type": "boolean"}}}},
-        "fixed_caption": STR,
-    },
-}
-INSIGHTS_SCHEMA = {"type": "object", "required": ["summary", "do_more", "do_less", "top_hooks"],
-                   "properties": {k: STR for k in ("summary", "do_more", "do_less", "top_hooks")}}
 
 SETTINGS_VALUES = [
+    # --- accounts and addresses
     ("SHEET_ID", "PASTE_GOOGLE_SHEET_ID"),
     ("TELEGRAM_CHAT_ID", "PASTE_TELEGRAM_CHAT_ID"),
     ("ADMIN_TELEGRAM_IDS", "PASTE_YOUR_TELEGRAM_USER_ID"),
+    ("N8N_PUBLIC_URL", "https://n8n.example.com"),
     ("SITE", "https://www.mycrystalcode.com"),
     ("TIMEZONE", "Asia/Dubai"),
     ("GOTENBERG_URL", "http://gotenberg:3000"),
     ("REEL_URL", "http://mcc-reel:3900"),
-    ("UPLOADPOST_USER", "PASTE_UPLOAD_POST_PROFILE_NAME"),
-    ("UPLOADPOST_ANALYTICS_URL", "https://api.upload-post.com/api/analytics"),
-    ("TIKTOK_POST_MODE", "MEDIA_UPLOAD"),
-    ("REEL_TIER", "standard"),
-    ("FAL_MODEL", "PASTE_FAL_MODEL_ID"),
-    ("FAL_INPUT_JSON", '{"aspect_ratio":"9:16","duration":"8s","generate_audio":false}'),
+    # --- AI models: "glm" = Z.ai free Flash models, "claude" = Anthropic
+    ("COPY_PROVIDER", "glm"),
+    ("COPY_FALLBACK_PROVIDER", "claude"),
+    ("COMPLIANCE_PROVIDER", "claude"),
+    ("QA_PROVIDER", "glm"),
+    ("INSIGHTS_PROVIDER", "glm"),
+    ("GLM_TEXT_MODEL", "glm-4.7-flash"),
+    ("GLM_VISION_MODEL", "glm-4.6v-flash"),
+    ("CLAUDE_COPY_MODEL", "claude-sonnet-5-5"),
+    ("CLAUDE_CHECK_MODEL", "claude-haiku-5-5"),
+    # --- reels: voice and video
+    ("TTS_PROVIDER", "azure"),
+    ("AZURE_REGION", "westeurope"),
+    ("AZURE_VOICE_EN", "en-US-AvaMultilingualNeural"),
+    ("AZURE_VOICE_AR", "ar-AE-FatimaNeural"),
     ("ELEVEN_VOICE_EN", "PASTE_ELEVENLABS_VOICE_ID_EN"),
     ("ELEVEN_VOICE_AR", "PASTE_ELEVENLABS_VOICE_ID_AR"),
     ("ELEVEN_MODEL", "eleven_v3"),
-    ("COPY_MODEL", "claude-sonnet-5-5"),
-    ("QA_MODEL", "claude-sonnet-5-5"),
-    ("AUTO_PUBLISH_EN", "false"),
+    ("VIDEO_PROVIDER", "cogvideox"),
+    ("FAL_MODEL", "PASTE_FAL_MODEL_ID"),
+    ("FAL_INPUT_JSON", '{"aspect_ratio":"9:16","duration":"8s","generate_audio":false}'),
+    # --- publishing and approval
+    ("UPLOADPOST_USER", "PASTE_UPLOAD_POST_PROFILE_NAME"),
+    ("UPLOADPOST_ANALYTICS_URL", "https://api.upload-post.com/api/uploadposts/post-analytics"),
+    ("TIKTOK_POST_MODE", "DIRECT_POST"),
+    ("APPROVAL_MODE", "veto"),
+    ("VETO_MINUTES", "180"),
     ("LAUNCH_END_DATE", ""),
     ("INSIGHTS_WEEKDAY", "1"),
     ("PROMPT_VERSION", PROMPT_VERSION),
 ]
 
 
-def settings(flow, pos, keys=None):
+def settings(flow, pos, keys=None, name=SETTINGS):
     vals = [(k, v) for k, v in SETTINGS_VALUES if keys is None or k in keys]
-    return flow.add(SETTINGS, "n8n-nodes-base.set", 3.4, {
+    return flow.add(name, "n8n-nodes-base.set", 3.4, {
         "assignments": {"assignments": [{"id": str(uuid.uuid5(uuid.NAMESPACE_URL, k)), "name": k, "value": v, "type": "string"} for k, v in vals]},
         "options": {}}, pos)
+
+
+GOTENBERG_WAIT = [("failOnConsoleExceptions", "true"),
+                  ("waitForExpression", "document.body.getAttribute('data-ready') === '1' || document.body.hasAttribute('data-error')")]
+
+
+def gotenberg(flow, name, pos, height, fmt, extra_fields=()):
+    fields = [("files", ("bin", "data")), ("width", "1080"), ("height", str(height)), ("clip", "true"), ("format", fmt)]
+    fields += list(extra_fields) + GOTENBERG_WAIT
+    return http(flow, name, pos, "POST", f"={{{{ {S}.GOTENBERG_URL }}}}/forms/chromium/screenshot/html", multipart=fields, file_out="data")
 
 
 # ================================================================ 1. Content autopilot
@@ -318,11 +336,13 @@ def autopilot():
     X = lambda i: 240 * i  # noqa: E731
     f.note("README", (
         "## My Crystal Code · Content Autopilot\n"
-        "Daily: picks the next Queue row → Claude writes one carousel (8 slides) or reel (5 beats) from a formula →\n"
-        "**Gate A** (deterministic limits + claims blocklist) → **Compliance** (Claude) → render (Gotenberg; reels via mcc-reel)\n"
-        "→ **Visual QA** (Claude vision) → **Telegram approval** → kill switch re-read → Upload-Post (IG + TikTok drafts) → audit Log.\n"
-        "Any failed gate gets ONE corrective rewrite, then the post is held for a human.\n\n"
-        "Setup: see `mycrystalcode-content/SETUP.md`. Fill **⚙️ Settings** first; set credentials on every red node."), (-560, -420), w=700, h=300, color=5)
+        "Twice a day: picks the next Queue row → AI writes one carousel (8 slides) or reel (5 beats) from a formula →\n"
+        "**Gate A** (deterministic limits + claims blocklist) → **Compliance** (AI) → render (Gotenberg; reels: Azure voice +\n"
+        "CogVideoX clip + mcc-reel) → **Visual QA** (AI vision) → **approval mode** (veto window by default) → kill switch +\n"
+        "veto re-check → Upload-Post (Instagram + TikTok) → audit Log.\n"
+        "Every AI step goes through a router: ⚙️ Settings picks GLM (free) or Claude per step. A failed gate gets ONE corrective\n"
+        "rewrite (on the fallback model), then the post is held for a human.\n\n"
+        "Setup: `mycrystalcode-content/SETUP.md`. Fill **⚙️ Settings** first; set credentials on every red node."), (-560, -460), w=760, h=340, color=5)
     slot_a = f.add("Slot A · EN 14:00 UTC", "n8n-nodes-base.scheduleTrigger", 1.2,
                    {"rule": {"interval": [{"field": "cronExpression", "expression": "0 18 * * *"}]}}, (X(-2), 0))
     slot_b = f.add("Slot B · AR 18:30 UTC", "n8n-nodes-base.scheduleTrigger", 1.2,
@@ -346,132 +366,154 @@ def autopilot():
     f.chain(st, rc, ks, rq, rl, ri, pick)
 
     bb = code(f, "Build brief", js("build-brief.js", BRIEF=BRIEF, POLICY=POLICY, FORMULAS=FORMULAS, STRATEGY=STRATEGY,
-                                    CONTRACT=CONTRACT, COMPLIANCE=COMPLIANCE), (X(7), 100))
-    cw = llm_chain(f, "Copywriter (Claude)", "={{ $json.prompt }}",
-                   "You are a meticulous bilingual (English/Arabic) social copywriter. You follow the brand brief, the claims policy and the template contract exactly, and you output only valid JSON.",
-                   COPY_SCHEMA, "claude-sonnet-5-5", 0.7, (X(8), 100))
-    ga = code(f, "Gate A: validate copy", js("gate-a-validate.js"), (X(9), 100))
-    ok_a = if_node(f, "Copy OK?", "={{ $json.ok }}", "true", (X(10), 100))
-    comp = llm_chain(f, "Compliance (Claude)", "={{ $json.compliance_prompt }}",
-                     "You are a strict compliance reviewer. Output only the JSON object requested.",
-                     COMPLIANCE_SCHEMA, "claude-sonnet-5-5", 0, (X(11), 0), max_tokens=3000)
-    cv = code(f, "Compliance verdict", js("compliance-verdict.js"), (X(12), 0))
-    ok_c = if_node(f, "Compliance OK?", "={{ $json.ok }}", "true", (X(13), 0))
-    f.chain(pick, bb, cw, ga, ok_a)
-    f.link(ok_a, comp, 0); f.chain(comp, cv, ok_c)
+                                    CONTRACT=CONTRACT, COMPLIANCE=COMPLIANCE, SCHEMA=COPY_SCHEMA), (X(7), 100))
+    cw_in, cw_out = llm(f, "COPY", "Copywriter", (X(8), 100))
+    ga = code(f, "Gate A: validate copy", js("gate-a-validate.js"), (X(11), 100))
+    ok_a = if_node(f, "Copy OK?", "={{ $json.ok }}", "true", (X(12), 100))
+    co_in, co_out = llm(f, "COMPLIANCE", "Compliance", (X(13), -60))
+    cv = code(f, "Compliance verdict", js("compliance-verdict.js"), (X(16), -60))
+    ok_c = if_node(f, "Compliance OK?", "={{ $json.ok }}", "true", (X(17), -60))
+    f.chain(pick, bb, cw_in); f.link(cw_out, ga); f.link(ga, ok_a)
+    f.link(ok_a, co_in, 0); f.link(co_out, cv); f.link(cv, ok_c)
 
-    roh = code(f, "Retry or hold", js("retry-or-hold.js"), (X(11), 520))
-    retry = if_node(f, "Retry?", "={{ $json.retry }}", "true", (X(12), 520))
-    hold = sheet_write(f, "Hold: mark queue", "Queue", "appendOrUpdate", (X(13), 620), match="id", values={
+    roh = code(f, "Retry or hold", js("retry-or-hold.js"), (X(14), 560))
+    retry = if_node(f, "Retry?", "={{ $json.retry }}", "true", (X(15), 560))
+    hold = sheet_write(f, "Hold: mark queue", "Queue", "appendOrUpdate", (X(16), 660), match="id", values={
         "id": "={{ $json.row.id }}", "status": "held", "notes": "={{ ($json.stage + ': ' + ($json.issues || []).join(' | ')).slice(0, 900) }}"})
-    hold_n = telegram_text(f, "Hold: notify", "={{ $('Retry or hold').first().json.message }}", (X(14), 620), executeOnce=True)
+    hold_n = telegram_text(f, "Hold: notify", "={{ $('Retry or hold').first().json.message }}", (X(17), 660), executeOnce=True)
     f.link(ok_a, roh, 1); f.link(ok_c, roh, 1)
     f.link(roh, retry); f.link(retry, bb, 0); f.link(retry, hold, 1); f.link(hold, hold_n)
 
-    fmt = switch(f, "Format?", [("carousel", "={{ $json.post.format }}", "carousel"), ("reel", "={{ $json.post.format }}", "reel")], (X(14), 0))
+    fmt = switch(f, "Format?", [("carousel", "={{ $json.post.format }}", "carousel"), ("reel", "={{ $json.post.format }}", "reel")], (X(18), -60))
     f.link(ok_c, fmt, 0)
     # carousel branch
-    sh = code(f, "Slides → HTML", js("slides-html.js", TEMPLATE=TEMPLATE), (X(15), -200))
-    rs = http(f, "Render slide (Gotenberg)", (X(16), -200), "POST", f"={{{{ {S}.GOTENBERG_URL }}}}/forms/chromium/screenshot/html",
-              multipart=[("files", ("bin", "data")), ("width", "1080"), ("height", "1350"), ("clip", "true"), ("format", "jpeg"),
-                         ("quality", "92"), ("failOnConsoleExceptions", "true"), ("waitForExpression", "document.body.getAttribute('data-ready') === '1' || document.body.hasAttribute('data-error')")], file_out="data")
-    cs = code(f, "Collect slides", js("collect-slides.js"), (X(17), -200))
-    rsh = http(f, "Render contact sheet (Gotenberg)", (X(18), -200), "POST", f"={{{{ {S}.GOTENBERG_URL }}}}/forms/chromium/screenshot/html",
-               multipart=[("files", ("bin", "data")), ("width", "1080"), ("height", "700"), ("clip", "true"), ("format", "jpeg"),
-                          ("quality", "85"), ("failOnConsoleExceptions", "true"), ("waitForExpression", "document.body.getAttribute('data-ready') === '1' || document.body.hasAttribute('data-error')")], file_out="data")
-    bc = code(f, "Bundle carousel", js("bundle-carousel.js"), (X(19), -200))
+    sh = code(f, "Slides → HTML", js("slides-html.js", TEMPLATE=TEMPLATE), (X(19), -300))
+    rs = gotenberg(f, "Render slide (Gotenberg)", (X(20), -300), 1350, "jpeg", [("quality", "92")])
+    cs = code(f, "Collect slides", js("collect-slides.js"), (X(21), -300))
+    rsh = gotenberg(f, "Render contact sheet (Gotenberg)", (X(22), -300), 700, "jpeg", [("quality", "85")])
+    bc = code(f, "Bundle carousel", js("bundle-carousel.js"), (X(23), -300))
     f.link(fmt, sh, 0); f.chain(sh, rs, cs, rsh, bc)
-    # reel branch
-    bh = code(f, "Beats → HTML", js("beats-html.js", TEMPLATE=TEMPLATE), (X(15), 200))
-    rb = http(f, "Render beat (Gotenberg)", (X(16), 200), "POST", f"={{{{ {S}.GOTENBERG_URL }}}}/forms/chromium/screenshot/html",
-              multipart=[("files", ("bin", "data")), ("width", "1080"), ("height", "1920"), ("clip", "true"), ("format", "png"),
-                         ("omitBackground", "={{ $json.omit_background }}"),
-                         ("failOnConsoleExceptions", "true"), ("waitForExpression", "document.body.getAttribute('data-ready') === '1' || document.body.hasAttribute('data-error')")], file_out="data")
-    cb = code(f, "Collect beats", js("collect-beats.js"), (X(17), 200))
-    vo = http(f, "Voiceover (ElevenLabs)", (X(18), 200), "POST",
+    # reel branch: frames → voice → (AI clip) → mcc-reel
+    bh = code(f, "Beats → HTML", js("beats-html.js", TEMPLATE=TEMPLATE), (X(19), 160))
+    rb = gotenberg(f, "Render beat (Gotenberg)", (X(20), 160), 1920, "png", [("omitBackground", "={{ $json.omit_background }}")])
+    cb = code(f, "Collect beats", js("collect-beats.js"), (X(21), 160))
+    tts = switch(f, "Voice provider?", [("azure", f"={{{{ {S}.TTS_PROVIDER }}}}", "azure"), ("elevenlabs", f"={{{{ {S}.TTS_PROVIDER }}}}", "elevenlabs")], (X(22), 160))
+    az = http(f, "Voiceover (Azure)", (X(23), 60), "POST", f"=https://{{{{ {S}.AZURE_REGION }}}}.tts.speech.microsoft.com/cognitiveservices/v1",
+              auth="header", headers=[("X-Microsoft-OutputFormat", "audio-24khz-96kbitrate-mono-mp3"), ("User-Agent", "mcc-autopilot")],
+              raw_body="={{ $json.ssml }}", raw_type="application/ssml+xml", file_out="data")
+    el = http(f, "Voiceover (ElevenLabs)", (X(23), 260), "POST",
               f"=https://api.elevenlabs.io/v1/text-to-speech/{{{{ $json.post.lang === 'ar' ? {S}.ELEVEN_VOICE_AR : {S}.ELEVEN_VOICE_EN }}}}?output_format=mp3_44100_128",
               auth="header", json_body=f"={{{{ JSON.stringify({{ text: $json.post.voiceover, model_id: {S}.ELEVEN_MODEL }}) }}}}", file_out="data")
-    prem = if_node(f, "Premium reel?", f"={{{{ {S}.REEL_TIER }}}}", "equals", (X(19), 200), right="premium", kind="string")
-    fal = http(f, "fal: submit clip", (X(20), 380), "POST", f"=https://queue.fal.run/{{{{ {S}.FAL_MODEL }}}}", auth="header",
-               json_body=f"={{{{ JSON.stringify(Object.assign({{ prompt: $('Collect beats').first().json.post.broll_prompt }}, JSON.parse({S}.FAL_INPUT_JSON || '{{}}'))) }}}}")
-    fw = f.add("fal: wait", "n8n-nodes-base.wait", 1.1, {"amount": 45, "unit": "seconds"}, (X(21), 380))
-    fs = http(f, "fal: status", (X(22), 380), "GET", "={{ $('fal: submit clip').first().json.status_url }}", auth="header")
+    vid = switch(f, "Video provider?", [("cogvideox", f"={{{{ {S}.VIDEO_PROVIDER }}}}", "cogvideox"), ("fal", f"={{{{ {S}.VIDEO_PROVIDER }}}}", "fal")],
+                 (X(24), 160), fallback=True)
+    broll = "$('Collect beats').first().json.post.broll_prompt"
+    cg = http(f, "CogVideoX: submit clip", (X(25), 20), "POST", "https://api.z.ai/api/paas/v4/videos/generations", auth="header",
+              json_body=f"={{{{ JSON.stringify({{ model: 'cogvideox-3', prompt: {broll}, quality: 'quality', with_audio: false, size: '1080x1920', fps: 30, duration: 10 }}) }}}}",
+              onError="continueRegularOutput")
+    cgw = f.add("CogVideoX: wait", "n8n-nodes-base.wait", 1.1, {"amount": 40, "unit": "seconds"}, (X(26), 20))
+    cgs = http(f, "CogVideoX: status", (X(27), 20), "GET", "=https://api.z.ai/api/paas/v4/async-result/{{ $('CogVideoX: submit clip').first().json.id }}",
+               auth="header", onError="continueRegularOutput")
+    cgd = f.add("CogVideoX: done?", "n8n-nodes-base.if", 2.2, {
+        "conditions": {"options": {"caseSensitive": True, "leftValue": "", "typeValidation": "loose", "version": 2},
+                       "conditions": [
+                           {"id": "cog-done", "leftValue": "={{ $json.task_status !== 'PROCESSING' }}", "rightValue": "",
+                            "operator": {"type": "boolean", "operation": "true", "singleValue": True}},
+                           {"id": "cog-timeout", "leftValue": "={{ $runIndex }}", "rightValue": 20, "operator": {"type": "number", "operation": "gte"}}],
+                       "combinator": "or"}, "looseTypeValidation": True, "options": {}}, (X(28), 20))
+    fal = http(f, "fal: submit clip", (X(25), 300), "POST", f"=https://queue.fal.run/{{{{ {S}.FAL_MODEL }}}}", auth="header",
+               json_body=f"={{{{ JSON.stringify(Object.assign({{ prompt: {broll} }}, JSON.parse({S}.FAL_INPUT_JSON || '{{}}'))) }}}}",
+               onError="continueRegularOutput")
+    fw = f.add("fal: wait", "n8n-nodes-base.wait", 1.1, {"amount": 45, "unit": "seconds"}, (X(26), 300))
+    fs = http(f, "fal: status", (X(27), 300), "GET", "={{ $('fal: submit clip').first().json.status_url }}", auth="header",
+              onError="continueRegularOutput")
     fd = f.add("fal: done?", "n8n-nodes-base.if", 2.2, {
         "conditions": {"options": {"caseSensitive": True, "leftValue": "", "typeValidation": "loose", "version": 2},
                        "conditions": [
-                           {"id": "fal-done", "leftValue": "={{ $json.status }}", "rightValue": "COMPLETED", "operator": {"type": "string", "operation": "equals"}},
+                           {"id": "fal-done", "leftValue": "={{ !['IN_QUEUE', 'IN_PROGRESS'].includes($json.status) }}", "rightValue": "",
+                            "operator": {"type": "boolean", "operation": "true", "singleValue": True}},
                            {"id": "fal-timeout", "leftValue": "={{ $runIndex }}", "rightValue": 20, "operator": {"type": "number", "operation": "gte"}}],
-                       "combinator": "or"}, "looseTypeValidation": True, "options": {}}, (X(23), 380))
-    fr = http(f, "fal: result", (X(24), 380), "GET", "={{ $('fal: submit clip').first().json.response_url }}", auth="header",
+                       "combinator": "or"}, "looseTypeValidation": True, "options": {}}, (X(28), 300))
+    fr = http(f, "fal: result", (X(29), 300), "GET", "={{ $('fal: submit clip').first().json.response_url }}", auth="header",
               onError="continueRegularOutput")
-    ari = code(f, "Assemble reel inputs", js("assemble-reel-inputs.js"), (X(25), 200))
-    mr = http(f, "Assemble reel (mcc-reel)", (X(26), 200), "POST", f"={{{{ {S}.REEL_URL }}}}/reel",
+    ari = code(f, "Assemble reel inputs", js("assemble-reel-inputs.js"), (X(30), 160))
+    mr = http(f, "Assemble reel (mcc-reel)", (X(31), 160), "POST", f"={{{{ {S}.REEL_URL }}}}/reel",
               multipart=[("frames", ("bin", "beat_1")), ("frames", ("bin", "beat_2")), ("frames", ("bin", "beat_3")),
                          ("frames", ("bin", "beat_4")), ("frames", ("bin", "beat_5")), ("audio", ("bin", "voice")),
                          ("durations", "={{ $json.durations }}"), ("clip_url", "={{ $json.clip_url }}")], file_out="data", timeout=600000)
-    br = code(f, "Bundle reel", js("bundle-reel.js"), (X(27), 200))
-    f.link(fmt, bh, 1); f.chain(bh, rb, cb, vo, prem)
-    f.link(prem, fal, 0); f.chain(fal, fw, fs, fd); f.link(fd, fr, 0); f.link(fd, fw, 1); f.link(fr, ari)
-    f.link(prem, ari, 1); f.chain(ari, mr, br)
+    br = code(f, "Bundle reel", js("bundle-reel.js"), (X(32), 160))
+    f.link(fmt, bh, 1); f.chain(bh, rb, cb, tts)
+    f.link(tts, az, 0); f.link(tts, el, 1); f.link(az, vid); f.link(el, vid)
+    f.link(vid, cg, 0); f.chain(cg, cgw, cgs, cgd); f.link(cgd, ari, 0); f.link(cgd, cgw, 1)
+    f.link(vid, fal, 1); f.chain(fal, fw, fs, fd); f.link(fd, fr, 0); f.link(fd, fw, 1); f.link(fr, ari)
+    f.link(vid, ari, 2); f.chain(ari, mr, br)
 
     # visual QA (both formats)
-    qr = code(f, "QA request", js("qa-request.js", QA_CHECKLIST=QA_CHECKLIST), (X(28), 0))
-    vq = http(f, "Vision QA (Claude)", (X(29), 0), "POST", "https://api.anthropic.com/v1/messages", auth="anthropic",
-              headers=[("anthropic-version", "2023-06-01")], json_body="={{ $json.qa_body }}", timeout=180000)
-    qv = code(f, "QA verdict", js("qa-verdict.js"), (X(30), 0))
-    ok_q = if_node(f, "QA OK?", "={{ $json.ok }}", "true", (X(31), 0))
-    f.link(bc, qr); f.link(br, qr); f.chain(qr, vq, qv, ok_q)
+    qr = code(f, "QA request", js("qa-request.js", QA_CHECKLIST=QA_CHECKLIST), (X(33), -60))
+    qa_in, qa_out = llm(f, "QA", "Vision QA", (X(34), -60))
+    qv = code(f, "QA verdict", js("qa-verdict.js"), (X(37), -60))
+    ok_q = if_node(f, "QA OK?", "={{ $json.ok }}", "true", (X(38), -60))
+    f.link(bc, qr); f.link(br, qr); f.link(qr, qa_in); f.link(qa_out, qv); f.link(qv, ok_q)
     f.link(ok_q, roh, 1)
 
-    # approval
-    auto = if_node(f, "Auto-publish allowed?",
-                   f"={{{{ {S}.AUTO_PUBLISH_EN === 'true' && $json.post.lang === 'en' && $json.post.pillar !== 'P6' && $json.post.format === 'carousel' }}}}",
-                   "true", (X(32), 0))
-    pf = switch(f, "Preview format?", [("carousel", "={{ $json.post.format }}", "carousel"), ("reel", "={{ $json.post.format }}", "reel")], (X(33), 120))
+    # approval: veto window (default) | approve every post | none
+    mode = switch(f, "Approval mode?", [("approve", f"={{{{ {S}.APPROVAL_MODE }}}}", "approve"), ("veto", f"={{{{ {S}.APPROVAL_MODE }}}}", "veto")],
+                  (X(39), -60), fallback=True)
+    pf = switch(f, "Preview format?", [("carousel", "={{ $json.post.format }}", "carousel"), ("reel", "={{ $json.post.format }}", "reel")], (X(40), -160))
     cap = "={{ ('🆕 ' + $json.post.post_id + ' · ' + $json.post.formula + ' · ' + $json.post.cta_tier + '\\n\\n' + $json.post.caption).slice(0, 1000) }}"
     pc = f.add("Preview carousel (Telegram)", "n8n-nodes-base.telegram", 1.2, {
         "operation": "sendPhoto", "chatId": f"={{{{ {S}.TELEGRAM_CHAT_ID }}}}", "binaryData": True, "binaryPropertyName": "sheet",
-        "additionalFields": {"caption": cap}}, (X(34), 40))
+        "additionalFields": {"caption": cap}}, (X(41), -260))
     pr = f.add("Preview reel (Telegram)", "n8n-nodes-base.telegram", 1.2, {
         "operation": "sendVideo", "chatId": f"={{{{ {S}.TELEGRAM_CHAT_ID }}}}", "binaryData": True, "binaryPropertyName": "video",
-        "additionalFields": {"caption": cap}}, (X(34), 220))
+        "additionalFields": {"caption": cap}}, (X(41), -60))
+    after = switch(f, "After preview", [("approve", f"={{{{ {S}.APPROVAL_MODE }}}}", "approve"), ("veto", f"={{{{ {S}.APPROVAL_MODE }}}}", "veto")], (X(42), -160))
     ap = f.add("Approve? (Telegram)", "n8n-nodes-base.telegram", 1.2, {
         "operation": "sendAndWait", "chatId": f"={{{{ {S}.TELEGRAM_CHAT_ID }}}}",
-        "message": "={{ 'Publish ' + $('QA verdict').first().json.post.post_id + ' to ' + ($('Build brief').first().json.row.platforms || 'instagram, tiktok') + '?\\n\\nHook: ' + $('QA verdict').first().json.post.hook + '\\nTikTok goes to drafts: open the app, check the AI + promotional toggles, then post.' }}",
+        "message": "={{ 'Publish ' + $('QA verdict').first().json.post.post_id + ' to ' + ($('Build brief').first().json.row.platforms || 'instagram, tiktok') + '?\\n\\nHook: ' + $('QA verdict').first().json.post.hook }}",
         "approvalOptions": {"values": {"approvalType": "double", "approveLabel": "✅ Publish", "disapproveLabel": "❌ Reject"}},
         "options": {"limitWaitTime": {"values": {"limitType": "afterTimeInterval", "resumeAmount": 20, "resumeUnit": "hours"}}}},
-        (X(35), 120))
-    apd = if_node(f, "Approved?", "={{ $json.data && $json.data.approved }}", "true", (X(36), 120))
-    rej = sheet_write(f, "Rejected: mark queue", "Queue", "appendOrUpdate", (X(37), 320), match="id", values={
+        (X(43), -260))
+    apd = if_node(f, "Approved?", "={{ $json.data && $json.data.approved }}", "true", (X(44), -260))
+    rej = sheet_write(f, "Rejected: mark queue", "Queue", "appendOrUpdate", (X(45), -400), match="id", values={
         "id": "={{ $('Build brief').first().json.row.id }}", "status": "rejected", "post_id": "={{ $('QA verdict').first().json.post.post_id }}"})
-    f.link(ok_q, auto, 0); f.link(auto, pf, 1)
-    f.link(pf, pc, 0); f.link(pf, pr, 1); f.link(pc, ap); f.link(pr, ap); f.link(ap, apd)
-    f.link(apd, rej, 1)
+    vw = code(f, "Veto window", js("veto-window.js"), (X(43), -60))
+    vm = telegram_text(f, "Send stop link", "={{ $json.message }}", (X(44), -60))
+    vwait = f.add("Wait for veto window", "n8n-nodes-base.wait", 1.1,
+                  {"amount": "={{ $('Veto window').first().json.minutes }}", "unit": "minutes"}, (X(45), -60))
+    f.link(ok_q, mode, 0)
+    f.link(mode, pf, 0); f.link(mode, pf, 1)
+    f.link(pf, pc, 0); f.link(pf, pr, 1); f.link(pc, after); f.link(pr, after)
+    f.link(after, ap, 0); f.link(ap, apd); f.link(apd, rej, 1)
+    f.link(after, vw, 1); f.chain(vw, vm, vwait)
 
     # publish
-    rc2 = sheet_read(f, "Re-read Control", "Control", (X(37), 0), executeOnce=True)
-    pp = code(f, "Publish plan", js("publish-plan.js"), (X(38), 0))
+    rc2 = sheet_read(f, "Re-read Control", "Control", (X(46), -60), executeOnce=True)
+    rv = sheet_read(f, "Read Vetoes", "Vetoes", (X(47), -60), executeOnce=True, alwaysOutputData=True)
+    pp = code(f, "Publish plan", js("publish-plan.js"), (X(48), -60))
     pfm = switch(f, "Publish format?", [("carousel", "={{ $json.skipped ? 'skip' : $json.post.format }}", "carousel"),
-                                        ("reel", "={{ $json.skipped ? 'skip' : $json.post.format }}", "reel")], (X(39), 0), fallback=True)
+                                        ("reel", "={{ $json.skipped ? 'skip' : $json.post.format }}", "reel")], (X(49), -60), fallback=True)
+    f.link(mode, rc2, 2); f.link(apd, rc2, 0); f.link(vwait, rc2)
+    f.chain(rc2, rv, pp, pfm)
     base = [("user", f"={{{{ {S}.UPLOADPOST_USER }}}}"), ("platform[]", "={{ $json.platform }}"), ("title", "={{ $json.title }}"),
-            ("description", "={{ $json.description }}")]
-    tiktok = [("post_mode", "={{ $json.tiktok_post_mode }}"), ("is_aigc", "true"), ("auto_add_music", "true")]
-    upc = http(f, "Upload-Post: carousel", (X(40), -100), "POST", "https://api.upload-post.com/api/upload_photos", auth="header",
-               multipart=base + [("photos[]", ("bin", f"slide_{i}")) for i in range(1, 9)] + tiktok, timeout=300000,
-               onError="continueRegularOutput")
-    upr = http(f, "Upload-Post: reel", (X(40), 100), "POST", "https://api.upload-post.com/api/upload", auth="header",
-               multipart=base + [("video", ("bin", "video"))] + tiktok, timeout=600000, onError="continueRegularOutput")
-    skip = telegram_text(f, "Skipped: kill switch", "={{ '⏸ Not published (kill switch): ' + $json.post.post_id }}", (X(40), 300), executeOnce=True)
-    f.link(auto, rc2, 0); f.link(apd, rc2, 0); f.chain(rc2, pp, pfm)
+            ("tiktok_title", "={{ $json.tiktok_title }}"), ("request_id", "={{ $json.request_id }}"), ("external_id", "={{ $json.post.post_id }}"),
+            ("is_ai_generated", "true"), ("brand_organic_toggle", "true"), ("post_mode", "={{ $json.tiktok_post_mode }}"),
+            ("privacy_level", "PUBLIC_TO_EVERYONE")]
+    upc = http(f, "Upload-Post: carousel", (X(50), -160), "POST", "https://api.upload-post.com/api/upload_photos", auth="header",
+               multipart=base + [("tiktok_description", "={{ $json.tiktok_description }}"), ("instagram_alt_text", "={{ $json.alt_text }}"),
+                                 ("auto_add_music", "true")] + [("photos[]", ("bin", f"slide_{i}")) for i in range(1, 9)],
+               timeout=300000, onError="continueRegularOutput")
+    upr = http(f, "Upload-Post: reel", (X(50), 40), "POST", "https://api.upload-post.com/api/upload", auth="header",
+               multipart=base + [("media_type", "REELS"), ("video", ("bin", "video"))], timeout=600000, onError="continueRegularOutput")
+    skip = telegram_text(f, "Not published", "={{ '⏸ Not published: ' + $json.post.post_id + ' (' + $json.reason + ')' }}", (X(50), 240), executeOnce=True)
     f.link(pfm, upc, 0); f.link(pfm, upr, 1); f.link(pfm, skip, 2)
-    au = code(f, "Audit row", js("audit-row.js"), (X(41), 0))
-    wl = sheet_write(f, "Write Log", "Log", "append", (X(42), 0))
-    mq = sheet_write(f, "Mark queue", "Queue", "appendOrUpdate", (X(43), 0), match="id", executeOnce=True, values={
+    au = code(f, "Audit row", js("audit-row.js"), (X(51), -60))
+    wl = sheet_write(f, "Write Log", "Log", "append", (X(52), -60))
+    mq = sheet_write(f, "Mark queue", "Queue", "appendOrUpdate", (X(53), -60), match="id", executeOnce=True, values={
         "id": "={{ $('Build brief').first().json.row.id }}", "status": "posted", "post_id": "={{ $('Audit row').first().json.post_id }}",
         "date": "={{ $('Build brief').first().json.row.date }}", "lang": "={{ $('Build brief').first().json.row.lang }}",
         "format": "={{ $('Build brief').first().json.row.format }}", "formula": "={{ $('Build brief').first().json.row.formula }}"})
     done = telegram_text(f, "Notify published", "={{ '✅ ' + $('Audit row').all().map(r => r.json.platform + ': ' + r.json.status).join(', ') + '\\n' + $('Audit row').first().json.post_id + '\\nStory/DM link: ' + $('Audit row').first().json.link }}",
-                         (X(44), 0), executeOnce=True)
+                         (X(54), -60), executeOnce=True)
     f.link(upc, au); f.link(upr, au); f.chain(au, wl, mq, done)
     return f.build(tags=["mycrystalcode", "social"])
 
@@ -480,27 +522,23 @@ def autopilot():
 def analytics():
     f = Flow("MCC · Analytics & weekly learning loop")
     f.note("README", (
-        "## Analytics & learning loop\nDaily: fetches per-post metrics for posts 1-8 days old into **Metrics**.\n"
-        "Weekly (INSIGHTS_WEEKDAY, 1 = Monday): Claude reads Log + Metrics + Clicks + Sales and writes **Insights**,\n"
-        "which the autopilot's brief reads before writing the next posts.\n\n"
-        "⚠️ Verify the Upload-Post analytics endpoint and query names in their API docs and adjust **Fetch analytics**.\n"
-        "Until then you can type numbers into the Metrics sheet by hand; the weekly review works either way."), (-560, -380), w=640, h=260, color=5)
+        "## Analytics & learning loop\nDaily: per-post metrics from Upload-Post (`GET /api/uploadposts/post-analytics/{request_id}`)\n"
+        "for posts 1-8 days old → **Metrics**. Weekly (INSIGHTS_WEEKDAY, 1 = Monday): the AI reads Log + Metrics + Clicks + Sales\n"
+        "and writes **Insights**, which the autopilot's brief reads before writing the next posts."), (-560, -380), w=640, h=220, color=5)
     t = f.add("Daily 06:10", "n8n-nodes-base.scheduleTrigger", 1.2, {"rule": {"interval": [{"field": "cronExpression", "expression": "10 6 * * *"}]}}, (0, 0))
     m = f.add("Run now (test)", "n8n-nodes-base.manualTrigger", 1, {}, (0, 200))
     st = settings(f, (240, 100))
     rl = sheet_read(f, "Read Log", "Log", (480, 100), alwaysOutputData=True)
-    sel = code(f, "Posts to measure", """// Posts published 1-8 days ago, one item per post + platform.
+    sel = code(f, "Posts to measure", """// Posts published 1-8 days ago, one item per post + platform (Log rows are per platform).
 const S = $('⚙️ Settings').first().json;
 const now = $now.setZone(S.TIMEZONE);
 return $input.all().map((i) => i.json)
-  .filter((r) => r.post_id && ['published', 'tiktok_draft'].includes(r.status))
+  .filter((r) => r.post_id && r.request_id && ['published', 'tiktok_draft'].includes(r.status))
   .map((r) => ({ ...r, age_days: Math.floor(now.diff(DateTime.fromISO(r.created_at), 'days').days) }))
   .filter((r) => r.age_days >= 1 && r.age_days <= 8)
-  .map((r) => ({ json: { post_id: r.post_id, platform: r.platform, age_days: r.age_days, upload_response: r.upload_response } }));""", (720, 100))
-    fa = http(f, "Fetch analytics", (960, 100), "GET", f"={{{{ {S}.UPLOADPOST_ANALYTICS_URL }}}}", auth="header",
-              query=[("user", f"={{{{ {S}.UPLOADPOST_USER }}}}"), ("platform", "={{ $json.platform }}"),
-                     ("request_id", "={{ (() => { try { const r = JSON.parse($json.upload_response); return r.request_id || r.id || ''; } catch (e) { return ''; } })() }}")],
-              onError="continueRegularOutput")
+  .map((r) => ({ json: { post_id: r.post_id, platform: r.platform, request_id: r.request_id, age_days: r.age_days } }));""", (720, 100))
+    fa = http(f, "Fetch analytics", (960, 100), "GET", f"={{{{ {S}.UPLOADPOST_ANALYTICS_URL }}}}/{{{{ $json.request_id }}}}", auth="header",
+              query=[("platform", "={{ $json.platform }}")], onError="continueRegularOutput")
     mn = code(f, "Normalize metrics", js("metrics-normalize.js"), (1200, 100))
     wm = sheet_write(f, "Write Metrics", "Metrics", "appendOrUpdate", (1440, 100), match="key")
     f.link(t, st); f.link(m, st); f.chain(st, rl, sel, fa, mn, wm)
@@ -508,13 +546,12 @@ return $input.all().map((i) => i.json)
     rcl = sheet_read(f, "Read Clicks", "Clicks", (1920, 100), alwaysOutputData=True, executeOnce=True)
     rsa = sheet_read(f, "Read Sales", "Sales", (2160, 100), alwaysOutputData=True, executeOnce=True)
     ip = code(f, "Insights prompt", js("insights-prompt.js"), (2400, 100))
-    ch = llm_chain(f, "Weekly review (Claude)", "={{ $json.prompt }}", "You are a careful growth analyst. Output only the JSON requested.",
-                   INSIGHTS_SCHEMA, "claude-haiku-5-5", 0.2, (2640, 100), max_tokens=2000)
+    li, lo = llm(f, "INSIGHTS", "Weekly review", (2640, 100))
     row = code(f, "Insights row", """const o = $input.first().json.output || {};
-return [{ json: { week: $('Insights prompt').first().json.week, summary: o.summary || '', do_more: o.do_more || '', do_less: o.do_less || '', top_hooks: o.top_hooks || '' } }];""", (2880, 100))
-    wi = sheet_write(f, "Write Insights", "Insights", "append", (3120, 100))
-    tg = telegram_text(f, "Send weekly review", "={{ '📊 Week ' + $('Insights row').first().json.week + '\\n\\n' + $('Insights row').first().json.summary + '\\n\\n➕ ' + $('Insights row').first().json.do_more + '\\n➖ ' + $('Insights row').first().json.do_less }}", (3360, 100))
-    f.chain(wm, rm, rcl, rsa, ip, ch, row, wi, tg)
+return [{ json: { week: $('Insights prompt').first().json.week, summary: o.summary || '', do_more: o.do_more || '', do_less: o.do_less || '', top_hooks: o.top_hooks || '' } }];""", (3360, 100))
+    wi = sheet_write(f, "Write Insights", "Insights", "append", (3600, 100))
+    tg = telegram_text(f, "Send weekly review", "={{ '📊 Week ' + $('Insights row').first().json.week + '\\n\\n' + $('Insights row').first().json.summary + '\\n\\n➕ ' + $('Insights row').first().json.do_more + '\\n➖ ' + $('Insights row').first().json.do_less }}", (3840, 100))
+    f.chain(wm, rm, rcl, rsa, ip, li); f.chain(lo, row, wi, tg)
     return f.build(tags=["mycrystalcode", "analytics"])
 
 
@@ -523,8 +560,7 @@ def kill_switch():
     f = Flow("MCC · Kill switch (Telegram /pause /resume /status)")
     f.note("README", (
         "## Kill switch\nSend `/pause <reason>` to stop all posting immediately, `/resume <reason>` to restart,\n"
-        "`/status` to see the Control sheet. Only IDs in ADMIN_TELEGRAM_IDS are obeyed.\n"
-        "Use a **separate bot** from the approval bot if you prefer; one bot works because approvals use link buttons."), (-560, -320), w=600, h=200, color=5)
+        "`/status` to see the Control sheet. Only IDs in ADMIN_TELEGRAM_IDS are obeyed."), (-560, -320), w=600, h=180, color=5)
     t = f.add("Telegram command", "n8n-nodes-base.telegramTrigger", 1.1, {"updates": ["message"], "additionalFields": {}}, (0, 0))
     st = settings(f, (240, 0), keys={"SHEET_ID", "ADMIN_TELEGRAM_IDS", "TIMEZONE"})
     pc = code(f, "Parse command", js("kill-switch-bot.js"), (480, 0))
@@ -542,13 +578,13 @@ def kill_switch():
     return f.build(tags=["mycrystalcode", "governance"])
 
 
-# ================================================================ 4. Link tracker
+# ================================================================ 4. Links: click tracker + veto stop link
 def tracker():
-    f = Flow("MCC · Link tracker (story / DM / bio redirects)")
+    f = Flow("MCC · Links (click tracker + veto stop link)")
     f.note("README", (
-        "## Link tracker\n`https://<your-n8n>/webhook/go?p=<post_id>&s=instagram&m=story&d=lite&l=en`\n"
-        "Logs the click to **Clicks** and redirects to the site with UTMs (d = home|lite|full|sample|crystals).\n"
-        "The autopilot's Telegram message gives the post_id for each new post."), (-560, -300), w=600, h=200, color=5)
+        "## Links\n`/webhook/go?p=<post_id>&s=instagram&m=story&d=lite&l=en` logs a click to **Clicks** and redirects to the site with UTMs\n"
+        "(d = home|lite|full|sample|crystals).\n`/webhook/veto?p=<post_id>&n=<nonce>` is the private stop link the autopilot sends in veto mode;\n"
+        "it records the stop in **Vetoes** and the post is not published."), (-560, -340), w=640, h=220, color=5)
     w = f.add("GET /go", "n8n-nodes-base.webhook", 2, {"path": "go", "httpMethod": "GET", "responseMode": "responseNode", "options": {}}, (0, 0),
               webhookId=str(uuid.uuid5(uuid.NAMESPACE_URL, "mcc-go")))
     st = settings(f, (240, 0), keys={"SHEET_ID", "SITE", "TIMEZONE"})
@@ -556,6 +592,18 @@ def tracker():
     r = f.add("Redirect", "n8n-nodes-base.respondToWebhook", 1.1, {"respondWith": "redirect", "redirectURL": "={{ $json.location }}", "options": {}}, (720, -100))
     a = sheet_write(f, "Log click", "Clicks", "append", (720, 100), onError="continueRegularOutput")
     f.chain(w, st, c); f.link(c, r); f.link(c, a)
+    vw = f.add("GET /veto", "n8n-nodes-base.webhook", 2, {"path": "veto", "httpMethod": "GET", "responseMode": "responseNode", "options": {}}, (0, 400),
+               webhookId=str(uuid.uuid5(uuid.NAMESPACE_URL, "mcc-veto")))
+    st2 = settings(f, (240, 400), keys={"SHEET_ID", "TIMEZONE"}, name="⚙️ Settings (veto)")
+    vc = code(f, "Check stop link", js("veto-record.js").replace("$('⚙️ Settings')", f"$('{st2}')"), (480, 400))
+    vok = if_node(f, "Valid link?", "={{ $json.ok }}", "true", (720, 400))
+    vs = sheet_write(f, "Record veto", "Vetoes", "append", (960, 320), values={
+        "ts": "={{ $json.ts }}", "post_id": "={{ $json.post_id }}", "nonce": "={{ $json.nonce }}"})
+    f.nodes[-1]["parameters"]["documentId"]["value"] = f"={{{{ $('{st2}').first().json.SHEET_ID }}}}"
+    vr = f.add("Confirm stop", "n8n-nodes-base.respondToWebhook", 1.1, {
+        "respondWith": "text", "responseBody": "={{ $('Check stop link').first().json.html }}",
+        "options": {"responseHeaders": {"entries": [{"name": "Content-Type", "value": "text/html; charset=utf-8"}]}}}, (1200, 400))
+    f.chain(vw, st2, vc, vok); f.link(vok, vs, 0); f.link(vs, vr); f.link(vok, vr, 1)
     return f.build(tags=["mycrystalcode", "analytics"])
 
 
@@ -575,11 +623,12 @@ def sheet_templates():
                                f'"{angle}"', c["cta_tier"], c["platform_warmup_days_1_14"], status, note, ""]))
     (tpl / "Queue.csv").write_text("\n".join(lines) + "\n", encoding="utf-8")
     headers = {
-        "Log": "post_id,queue_id,created_at,platform,status,lang,format,pillar,formula,cta_tier,hook,caption,link,attempt,llm_model,qa_model,prompt_version,blocklist_hits,compliance_json,vision_qa,ai_caption_disclosure,footer_present,approved,upload_response",
+        "Log": "post_id,request_id,queue_id,created_at,platform,status,lang,format,pillar,formula,cta_tier,hook,caption,link,attempt,llm_model,compliance_model,qa_model,approval_mode,prompt_version,blocklist_hits,compliance_json,vision_qa,ai_caption_disclosure,footer_present,approved,upload_response",
         "Insights": "week,summary,do_more,do_less,top_hooks",
         "Metrics": "key,post_id,platform,measured_at,age_days,views,reach,likes,comments,shares,saves,profile_visits,follows,raw",
         "Clicks": "ts,post_id,source,medium,lang,dest,location",
         "Sales": "date,tier,amount,utm_source,utm_content,notes",
+        "Vetoes": "ts,post_id,nonce",
     }
     for name, h in headers.items():
         (tpl / f"{name}.csv").write_text(h + "\n", encoding="utf-8")
@@ -588,7 +637,10 @@ def sheet_templates():
 def main():
     OUT.mkdir(exist_ok=True)
     flows = {"01-mcc-content-autopilot.json": autopilot(), "02-mcc-analytics-learning.json": analytics(),
-             "03-mcc-kill-switch.json": kill_switch(), "04-mcc-link-tracker.json": tracker()}
+             "03-mcc-kill-switch.json": kill_switch(), "04-mcc-links.json": tracker()}
+    for old in OUT.glob("*.json"):
+        if old.name not in flows:
+            old.unlink()
     for fname, wf in flows.items():
         (OUT / fname).write_text(json.dumps(wf, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(f"{fname}: {len(wf['nodes'])} nodes")

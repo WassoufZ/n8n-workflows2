@@ -178,4 +178,5 @@ visual_description: ${post.visual_description} ${post.broll_prompt}
 cta_url: ${post.link_instagram}
 offer_config: ${JSON.stringify({ lite: 8.88, full: 18.88, full_list: 24.88, launch_end_date: S.LAUNCH_END_DATE || null })}`;
 
-return [{ json: { ok: issues.length === 0, issues, stage: 'gate_a', post, compliance_prompt: compliancePrompt } }];
+return [{ json: { ok: issues.length === 0, issues, stage: 'gate_a', post, compliance_prompt: compliancePrompt,
+  llm_job: { system: 'You are a strict compliance reviewer. Output only the JSON object requested.', prompt: compliancePrompt, temperature: 0, max_tokens: 3000 } } }];
